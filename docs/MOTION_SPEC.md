@@ -217,9 +217,24 @@ After Gates B/C (static composition approved), run **time-boxed experiments** be
 
 ### Exit criteria for prototyping
 
-- [ ] Each of MP-1…MP-4 has a keep/kill note  
-- [ ] Production motion set documented (update this file’s §4 if timings change)  
-- [ ] Bundle impact of GSAP noted if introduced  
+- [x] Each of MP-1…MP-4 has a keep/kill note  
+- [x] Production motion set documented (update this file’s §4 if timings change)  
+- [x] Bundle impact of GSAP noted if introduced  
+
+### M3 production decisions (2026-10-22)
+
+Authorization mapped experiments to homepage motion (case-study route transition deferred to M4 / Gate D).
+
+| ID | Authorization scope | Decision | Notes |
+|----|---------------------|----------|-------|
+| MP-1 | Hero typography | **Keep** | CSS `@keyframes` stagger on name lines + copy + plate; `--motion-slow` / `--motion-stagger` (70ms); reduced = static |
+| MP-2 | Project interactions | **Keep** | CSS `scale(1.02)` on media + meta accent border; `:hover` and `:focus-within` parity; no cursor-follow |
+| MP-3 | Section transitions (Work / About / Contact) | **Keep** | `MotionReveal` + `IntersectionObserver` once; opacity + 1.25rem Y; Contact Cut rule `scaleX` draw; 2.5s fallback reveal |
+| MP-4 | Navigation continuity | **Keep** | `scroll-padding-top` for sticky header; nav underline + `aria-current` via scroll spy; native smooth scroll (off when reduced) |
+| Spec MP-3 (home→case study) | — | **Defer** | No case-study routes yet; do not implement route theatre before Gate D |
+| Spec MP-4 (light/dark band) | — | **Keep (static+reveal)** | Contact Cut band already approved; motion is reveal + hairline draw only |
+
+**Dependencies:** none added (no GSAP / Lenis / WebGL). CSS + small React hooks only.
 
 ---
 

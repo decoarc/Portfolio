@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import type { SiteContent } from '@/content/types'
 import { SkipLink } from '@/components/SkipLink'
+import { useActiveSection } from '@/hooks'
 import styles from './AppShell.module.css'
 
 interface AppShellProps {
@@ -8,10 +9,13 @@ interface AppShellProps {
   children: ReactNode
 }
 
+const SECTION_IDS = ['work', 'about', 'contact']
+
 export function AppShell({ content, children }: AppShellProps) {
   const professionalSocial = content.social.filter(
     (item) => item.professionalDefault !== false,
   )
+  const activeSection = useActiveSection(SECTION_IDS)
 
   return (
     <div className={styles.shell}>
@@ -26,11 +30,21 @@ export function AppShell({ content, children }: AppShellProps) {
           </a>
           <nav className={styles.nav} aria-label="Primary">
             <ul className={styles.navList}>
-              {content.nav.map((item) => (
-                <li key={item.href}>
-                  <a href={item.href}>{item.label}</a>
-                </li>
-              ))}
+              {content.nav.map((item) => {
+                const id = item.href.replace(/^#/, '')
+                const isActive = activeSection === id
+                return (
+                  <li key={item.href}>
+                    <a
+                      href={item.href}
+                      className={isActive ? styles.navActive : undefined}
+                      aria-current={isActive ? 'true' : undefined}
+                    >
+                      {item.label}
+                    </a>
+                  </li>
+                )
+              })}
             </ul>
           </nav>
         </div>

@@ -64,7 +64,16 @@ pnpm validate     # typecheck + lint + test + build
 
 Provisional tokens in `src/styles/tokens.css` (paper/ink, accent, type, space, motion). Palette/type finalize at Gate B (browser-rendered first viewport).
 
+## Asset provenance
+
+| Asset | Source | Notes |
+|-------|--------|-------|
+| `public/images/projects/map-areas.webp` (+ `-800.webp`) | Read-only copy from `prototype/public/assets/components/Projects/map-areas.png` | Optimized with `cwebp` (q80); prototype/ not modified |
+
 ## Milestone status
 
-- **M1** — Project foundation & design system (this scaffold)
-- **M2a** — First-viewport visual prototype — **blocked until explicit approval**
+- **M1** — Project foundation & design system — complete
+- **M2a** — First-viewport visual prototype — complete (Gate B approved)
+- **M2b** — Full static homepage — complete (Gate C approved)
+- **M3** — Motion & interactions — in review
+- **M4** — Case studies — blocked until M3 approval + Gates D/E

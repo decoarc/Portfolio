@@ -24,10 +24,48 @@ export interface NavItem {
   href: string
 }
 
+export interface SiteCta {
+  label: string
+  href: string
+}
+
 export interface SiteContent {
   person: SitePerson
   social: SocialLink[]
   nav: NavItem[]
+  hero: {
+    ctaPrimary: SiteCta
+    ctaSecondary: SiteCta
+    /** Quiet Datum annotation on the Cut plate — not a badge cluster. */
+    plateAnnotation: string
+    /** Title-block focus lines (interests from brief — not proficiency claims). */
+    plateFocusLabel: string
+    plateFocus: string[]
+  }
+  work: {
+    title: string
+    intro: string
+    liveDemoLabel: string
+    caseStudySoonLabel: string
+    caseStudyLabel: string
+    previewStatusNote: string
+    moreSoonNote: string
+  }
+  about: {
+    title: string
+    lead: string
+    body: string
+    stackLabel: string
+    stack: string[]
+    exploringLabel: string
+    exploring: string[]
+  }
+  contact: {
+    title: string
+    lead: string
+    /** Optional supporting line — omit development/placeholder phrasing. */
+    note?: string
+  }
   shell: {
     skipToContent: string
     homeLandmark: string

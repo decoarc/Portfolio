@@ -13,10 +13,24 @@ describe('App shell', () => {
       screen.getByRole('heading', { level: 1, name: 'André Arcodaci' }),
     ).toBeInTheDocument()
     expect(screen.getByText('Full Stack Developer')).toBeInTheDocument()
+    expect(
+      screen.getByRole('link', { name: 'Selected work' }),
+    ).toHaveAttribute('href', '#work')
+    const contactLinks = screen.getAllByRole('link', { name: 'Contact' })
+    expect(contactLinks.length).toBeGreaterThanOrEqual(1)
+    expect(
+      contactLinks.some((link) => link.getAttribute('href') === '#contact'),
+    ).toBe(true)
     expect(screen.getByRole('navigation', { name: 'Primary' })).toBeInTheDocument()
     expect(screen.getByRole('main')).toBeInTheDocument()
     expect(
       screen.getByRole('heading', { level: 2, name: 'Selected work' }),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('heading', { level: 2, name: 'About' }),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('heading', { level: 2, name: 'Contact' }),
     ).toBeInTheDocument()
   })
 

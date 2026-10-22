@@ -1,9 +1,14 @@
 import type { ProjectCaseStudy } from '../../types'
 
 /**
- * Map Areas — stub from verified prototype facts.
+ * Map Areas — verified facts from legacy prototype.
  * Status remains preview until a full evidenced case study exists (Gate E).
- * Cover uses a local placeholder; optimized screenshot can replace later.
+ *
+ * Cover asset provenance:
+ * - Source: sibling `prototype/public/assets/components/Projects/map-areas.png`
+ *   (1200×900 PNG, ~1.1MB; PersonalProjects preview)
+ * - Optimized into Portfolio as WebP (see `public/images/projects/map-areas*.webp`)
+ * - Copied read-only from prototype; prototype/ was not modified
  */
 export const mapAreas: ProjectCaseStudy = {
   slug: 'map-areas',
@@ -15,10 +20,10 @@ export const mapAreas: ProjectCaseStudy = {
   featured: true,
   hrefLive: 'https://geo-areas-php.onrender.com/',
   coverImage: {
-    src: '/images/projects/map-areas-placeholder.svg',
-    alt: 'Placeholder plate for Map Areas project preview',
-    width: 1600,
-    height: 1000,
+    src: '/images/projects/map-areas.webp',
+    alt: 'Map Areas interface — sidebar controls beside a Leaflet map of São Paulo',
+    width: 1200,
+    height: 900,
   },
   problem:
     '[Problem statement TBD — expand with real project context before publishing.]',

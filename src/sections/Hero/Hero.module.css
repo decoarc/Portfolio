@@ -1,0 +1,516 @@
+/**
+ * Gate B refinement — stronger Cut field use, tighter mobile rhythm.
+ * Surname belongs to the charcoal field; AA is a title-block sigil (not wallpaper).
+ */
+
+.hero {
+  --field-width: min(46vw, 34rem);
+  position: relative;
+  /* Mobile: height follows content so Hero→Work is intentional, not a tall empty plate */
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  isolation: isolate;
+  background: var(--color-paper);
+  overflow: clip;
+}
+
+.stage {
+  position: relative;
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto auto auto;
+  grid-template-areas:
+    'name'
+    'copy'
+    'plate';
+  width: 100%;
+  min-height: 0;
+  padding: var(--space-3) var(--page-gutter) 0;
+  align-content: start;
+  row-gap: var(--space-3);
+}
+
+.field {
+  display: none;
+}
+
+.name {
+  grid-area: name;
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  font-size: clamp(3.25rem, 15vw, 4.25rem);
+  font-weight: 600;
+  line-height: 0.88;
+  letter-spacing: -0.05em;
+  margin: 0;
+  max-width: none;
+  text-wrap: balance;
+}
+
+.nameFirst,
+.nameRest {
+  display: block;
+}
+
+/* Mobile: surname bar + plate share one continuous Cut field */
+.nameRest {
+  color: var(--color-field-ink);
+  background: var(--color-field);
+  margin-inline: calc(var(--page-gutter) * -1);
+  padding: 0.06em var(--page-gutter) 0.1em;
+  width: calc(100% + var(--page-gutter) * 2);
+  box-sizing: border-box;
+}
+
+.copy {
+  grid-area: copy;
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  /* Mobile: copy sits in the Cut field so surname → copy → plate read as one surface */
+  margin-inline: calc(var(--page-gutter) * -1);
+  margin-top: -1px;
+  padding: var(--space-4) var(--page-gutter) var(--space-2);
+  background: var(--color-field);
+  color: var(--color-field-ink);
+}
+
+.role {
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: color-mix(in srgb, var(--color-field-ink) 78%, transparent);
+  margin: 0 0 var(--space-3);
+  max-width: none;
+}
+
+.pov {
+  font-size: var(--text-base);
+  line-height: var(--leading-snug);
+  color: color-mix(in srgb, var(--color-field-ink) 88%, transparent);
+  max-width: 36ch;
+  margin: 0 0 var(--space-5);
+}
+
+.ctaGroup {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3) var(--space-6);
+}
+
+.ctaPrimary,
+.ctaSecondary {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+}
+
+.ctaPrimary {
+  color: var(--color-field);
+  background: var(--color-field-ink);
+  padding-inline: var(--space-5);
+  border-radius: var(--radius-sm);
+}
+
+.ctaPrimary:hover {
+  color: var(--color-field);
+  background: color-mix(in srgb, var(--color-accent) 40%, var(--color-field-ink));
+}
+
+.ctaSecondary {
+  color: var(--color-field-ink);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.28em;
+}
+
+.ctaSecondary:hover {
+  color: color-mix(in srgb, var(--color-accent) 50%, var(--color-field-ink));
+}
+
+.plate {
+  grid-area: plate;
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: var(--space-4);
+  margin-inline: calc(var(--page-gutter) * -1);
+  margin-top: -1px;
+  padding: var(--space-5) var(--page-gutter) var(--space-5);
+  background: var(--color-field);
+  color: var(--color-field-ink);
+}
+
+.plateHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-4);
+  border-bottom: 1px solid
+    color-mix(in srgb, var(--color-field-ink) 18%, transparent);
+  padding-bottom: var(--space-3);
+}
+
+.plateSigil {
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  color: var(--color-field-ink);
+}
+
+.plateMeta {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-meta);
+  text-transform: uppercase;
+  color: var(--color-field-muted);
+  margin: 0;
+  max-width: none;
+}
+
+.plateBody {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  justify-content: center;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.plateFocusLabel {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-meta);
+  text-transform: uppercase;
+  color: var(--color-field-muted);
+  margin: 0;
+  max-width: none;
+}
+
+.plateFocus {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15em;
+}
+
+.plateFocus li {
+  font-family: var(--font-display);
+  font-size: var(--text-md);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: var(--color-field-ink);
+}
+
+.plateLocation {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-meta);
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--color-field-ink) 70%, transparent);
+  margin: 0;
+  max-width: none;
+  padding-top: var(--space-3);
+  border-top: 1px solid
+    color-mix(in srgb, var(--color-field-ink) 14%, transparent);
+}
+
+.plateIndex {
+  display: none;
+}
+
+/* —— Tablet+ : vertical Cut; surname sits in the field column —— */
+@media (min-width: 48rem) {
+  .hero {
+    --field-width: min(44vw, 26rem);
+    min-height: calc(100svh - var(--header-height));
+  }
+
+  .stage {
+    grid-template-columns: minmax(0, 1fr) var(--field-width);
+    grid-template-rows: auto minmax(0, 1fr);
+    grid-template-areas:
+      'name name'
+      'copy plate';
+    min-height: calc(100svh - var(--header-height));
+    padding: clamp(2rem, 5vh, 3.5rem) 0 clamp(2rem, 5vh, 3rem)
+      var(--page-gutter);
+    row-gap: 0;
+  }
+
+  .field {
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: var(--field-width);
+    background: var(--color-field);
+    z-index: 0;
+  }
+
+  .name {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) var(--field-width);
+    align-items: end;
+    width: calc(100% + var(--page-gutter));
+    margin-right: calc(var(--page-gutter) * -1);
+    font-size: clamp(3.75rem, 9vw, 6.5rem);
+  }
+
+  .nameFirst {
+    padding-right: var(--space-3);
+  }
+
+  .nameRest {
+    width: auto;
+    margin: 0;
+    padding: 0.08em var(--space-5) 0.1em var(--space-4);
+    background: transparent;
+    color: var(--color-field-ink);
+  }
+
+  .copy {
+    max-width: 28rem;
+    margin: 0;
+    padding: var(--space-6) var(--space-6) 0 0;
+    background: transparent;
+    color: var(--color-ink);
+  }
+
+  .role {
+    font-size: var(--text-base);
+    margin-bottom: var(--space-4);
+    color: var(--color-ink-muted);
+  }
+
+  .pov {
+    font-size: var(--text-md);
+    max-width: 32ch;
+    color: var(--color-ink-muted);
+  }
+
+  .ctaPrimary {
+    color: var(--color-paper-elevated);
+    background: var(--color-ink);
+  }
+
+  .ctaPrimary:hover {
+    color: var(--color-paper-elevated);
+    background: var(--color-accent);
+  }
+
+  .ctaSecondary {
+    color: var(--color-ink);
+  }
+
+  .ctaSecondary:hover {
+    color: var(--color-accent);
+  }
+
+  .plate {
+    margin: 0;
+    background: transparent;
+    padding: var(--space-4) var(--space-5) 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 0;
+    min-height: 100%;
+    height: 100%;
+  }
+
+  .plateHead {
+    flex: 0 0 auto;
+    margin-bottom: var(--space-5);
+  }
+
+  .plateBody {
+    flex: 1 1 auto;
+    min-height: 0;
+    justify-content: center;
+    gap: var(--space-4);
+  }
+
+  .plateFocus {
+    gap: clamp(0.35rem, 1.2vh, 0.85rem);
+  }
+
+  .plateFocus li {
+    font-size: clamp(1.35rem, 2.8vw, 1.85rem);
+  }
+
+  .plateLocation {
+    flex: 0 0 auto;
+    margin-top: auto;
+  }
+
+  .plateIndex {
+    display: block;
+    position: absolute;
+    top: 0;
+    bottom: 12%;
+    left: 0;
+    width: 1px;
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--color-field-ink) 35%, transparent),
+      color-mix(in srgb, var(--color-field-ink) 8%, transparent)
+    );
+  }
+}
+
+@media (min-width: 64rem) {
+  .hero {
+    --field-width: min(48vw, 36rem);
+  }
+
+  .stage {
+    padding-top: clamp(2.5rem, 6vh, 4rem);
+    padding-bottom: clamp(2.5rem, 6vh, 3.5rem);
+  }
+
+  .name {
+    font-size: clamp(5rem, 8.5vw, 8.75rem);
+  }
+
+  /* Overlap: first name bleeds into the Cut field */
+  .nameFirst {
+    margin-right: calc(var(--space-8) * -1);
+    padding-right: var(--space-8);
+    position: relative;
+    z-index: 4;
+  }
+
+  .nameRest {
+    padding-left: var(--space-6);
+  }
+
+  .copy {
+    max-width: 30rem;
+    margin-left: max(0px, calc((100vw - var(--page-max)) / 2));
+    padding-top: var(--space-7);
+  }
+
+  .pov {
+    font-size: var(--text-lg);
+    max-width: 30ch;
+    margin-bottom: var(--space-7);
+  }
+
+  .plate {
+    padding: var(--space-5) var(--space-7) 0;
+  }
+
+  .plateFocus li {
+    font-size: clamp(1.6rem, 2.1vw, 2.35rem);
+  }
+
+  .plateSigil {
+    font-size: var(--text-base);
+    color: color-mix(in srgb, var(--color-accent) 55%, var(--color-field-ink));
+  }
+}
+
+@media (min-width: 80rem) {
+  .hero {
+    --field-width: min(46vw, 38rem);
+  }
+
+  .name {
+    font-size: clamp(6rem, 9vw, 9.5rem);
+  }
+
+  .nameFirst {
+    margin-right: calc(var(--space-10) * -1.1);
+    padding-right: var(--space-10);
+  }
+}
+
+@media (max-width: 22.5rem) {
+  .name {
+    font-size: clamp(2.6rem, 13vw, 3.25rem);
+  }
+
+  .pov {
+    font-size: var(--text-sm);
+  }
+}
+
+/* —— MP-1 Hero typography entrance (CSS-only; reduced-motion = static) —— */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes heroLineIn {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 0.65rem, 0);
+    }
+
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
+  @keyframes heroPlateIn {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+
+  .nameFirst {
+    animation: heroLineIn var(--motion-slow) var(--ease-out-expressive) both;
+  }
+
+  .nameRest {
+    animation: heroLineIn var(--motion-slow) var(--ease-out-expressive) both;
+    animation-delay: var(--motion-stagger);
+  }
+
+  .role {
+    animation: heroLineIn var(--motion-medium) var(--ease-out-expressive) both;
+    animation-delay: calc(var(--motion-stagger) * 2);
+  }
+
+  .pov {
+    animation: heroLineIn var(--motion-medium) var(--ease-out-expressive) both;
+    animation-delay: calc(var(--motion-stagger) * 3);
+  }
+
+  .ctaGroup {
+    animation: heroLineIn var(--motion-medium) var(--ease-out-expressive) both;
+    animation-delay: calc(var(--motion-stagger) * 4);
+  }
+
+  .plate {
+    animation: heroPlateIn var(--motion-slow) var(--ease-ink) both;
+    animation-delay: calc(var(--motion-stagger) * 2);
+  }
+
+  .field {
+    animation: heroPlateIn var(--motion-slow) var(--ease-ink) both;
+  }
+}
