@@ -18,6 +18,7 @@ export {
   isListedProject,
   isValidSlug,
 } from './projectLinks'
+export { getProjectPeriodLabel } from './projectPeriod'
 
 const siteByLocale: Record<Locale, SiteContent> = {
   en: siteEn,

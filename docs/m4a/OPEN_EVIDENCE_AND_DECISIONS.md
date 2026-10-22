@@ -74,7 +74,8 @@
 - [x] Publication readiness: Map Areas stays `preview`  
 - [x] Explicit go-ahead for **M4b** (routes + template) — implemented; review pending  
 
-- [ ] Gate E content approval before `published` + `evidenceComplete`
+- [x] Gate E owner decisions recorded (`docs/gate-e/OWNER_DECISIONS.md`); narrative applied under **preview**  
+- [ ] Explicit approval before `published` + `evidenceComplete: true` (and before `hrefRepo`)
 
 ---
 

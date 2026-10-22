@@ -24,24 +24,38 @@ describe('App routing', () => {
     expect(screen.getByText('Case study soon')).toBeInTheDocument()
   })
 
-  it('shows a labeled preview for Map Areas without publishing TBD narrative', () => {
+  it('shows a labeled preview with Gate E narrative and no repo link', () => {
     renderAt('/work/map-areas')
 
     expect(
       screen.getByRole('heading', { level: 1, name: 'Map Areas' }),
     ).toBeInTheDocument()
     expect(screen.getByText('Project preview')).toBeInTheDocument()
+    expect(screen.getByText(/2025–2026/)).toBeInTheDocument()
     expect(
-      screen.getByText(/technical overview based on verified implementation/i),
+      screen.getByText(/learn and apply foundational GIS concepts/i),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByText(/no authentication on write endpoints/i),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByText(/bilingual PT\/EN support is a planned improvement/i),
     ).toBeInTheDocument()
     expect(screen.getAllByText('PostgreSQL/PostGIS').length).toBeGreaterThan(0)
     expect(
       screen.queryByText(/Problem statement TBD/i),
     ).not.toBeInTheDocument()
+    expect(screen.queryByRole('link', { name: 'Repository' })).toBeNull()
     expect(
-      screen.queryByText(/Responsibilities TBD/i),
-    ).not.toBeInTheDocument()
-    expect(screen.queryByRole('heading', { name: 'Project media' })).toBeNull()
+      screen.queryByRole('link', { name: 'Case study' }),
+    ).toBeNull()
+  })
+
+  it('keeps homepage publication-safe while preview narrative exists', () => {
+    renderAt('/')
+    expect(screen.getByText('Case study soon')).toBeInTheDocument()
+    expect(screen.queryByRole('link', { name: 'Case study' })).toBeNull()
+    expect(screen.queryByRole('link', { name: 'Repository' })).toBeNull()
   })
 
   it('shows in-app not found for unknown slugs', () => {

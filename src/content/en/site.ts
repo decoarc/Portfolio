@@ -72,7 +72,7 @@ export const siteEn: SiteContent = {
     mediaLabel: 'Project media',
     repoLabel: 'Repository',
     liveDemoLabel: 'Live demo',
-    yearLabel: 'Year',
+    yearLabel: 'Period',
   },
   notFound: {
     title: 'Page not found',

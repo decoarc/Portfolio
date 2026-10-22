@@ -3,6 +3,7 @@ import { Link } from 'react-router'
 import type { CaseStudyAccess } from '@/content'
 import {
   filterRealBullets,
+  getProjectPeriodLabel,
   isPlaceholderContent,
 } from '@/content'
 import type { ProjectCaseStudy, SiteContent } from '@/content/types'
@@ -35,25 +36,22 @@ function Section({
 
 /**
  * Editorial case-study template (Ledger paper + Datum meta + Cut media plate).
- * Preview access renders verified overview only — never TBD stubs as facts.
+ * Preview and published both render verified (non-TBD) sections; homepage CTAs
+ * still require published + evidenceComplete.
  */
 export function CaseStudyPage({ site, project, access }: CaseStudyPageProps) {
   const copy = site.caseStudy
   const isPreview = access === 'preview'
+  const periodLabel = getProjectPeriodLabel(project)
 
-  const problem =
-    !isPreview && !isPlaceholderContent(project.problem) ? project.problem : null
-  const responsibilities = isPreview
-    ? []
-    : filterRealBullets(project.responsibilities)
-  const implementation = isPreview
-    ? []
-    : filterRealBullets(project.implementation)
-  const challenges = isPreview ? [] : filterRealBullets(project.challenges)
-  const outcomes = isPreview ? [] : filterRealBullets(project.outcomes)
+  const problem = !isPlaceholderContent(project.problem) ? project.problem : null
+  const responsibilities = filterRealBullets(project.responsibilities)
+  const implementation = filterRealBullets(project.implementation)
+  const challenges = filterRealBullets(project.challenges)
+  const outcomes = filterRealBullets(project.outcomes)
   const gallery = project.gallery ?? []
-  /** Preview already leads with the cover — avoid duplicating it below. */
-  const showMediaSection = !isPreview || gallery.length > 0
+  /** Cover already leads the page — only show a media section for extra gallery. */
+  const showMediaSection = gallery.length > 0
 
   const isWebp = project.coverImage.src.endsWith('.webp')
   const src800 = isWebp
@@ -83,10 +81,10 @@ export function CaseStudyPage({ site, project, access }: CaseStudyPageProps) {
 
         <header className={styles.hero}>
           <div className={styles.heroCopy}>
-            {!isPreview && project.year ? (
+            {periodLabel ? (
               <p className={styles.metaRow}>
                 <span>
-                  {copy.yearLabel} {project.year}
+                  {copy.yearLabel} {periodLabel}
                 </span>
               </p>
             ) : null}
@@ -212,20 +210,6 @@ export function CaseStudyPage({ site, project, access }: CaseStudyPageProps) {
         {showMediaSection ? (
           <Section id="media" title={copy.mediaLabel}>
             <ul className={styles.gallery}>
-              {!isPreview ? (
-                <li>
-                  <figure className={styles.galleryFigure}>
-                    <img
-                      src={project.coverImage.src}
-                      alt={project.coverImage.alt}
-                      width={project.coverImage.width}
-                      height={project.coverImage.height}
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </figure>
-                </li>
-              ) : null}
               {gallery.map((asset) => (
                 <li key={asset.src}>
                   <figure className={styles.galleryFigure}>

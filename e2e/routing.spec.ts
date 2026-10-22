@@ -29,9 +29,11 @@ test.describe('M4b routing', () => {
       page.getByRole('heading', { level: 1, name: 'Map Areas' }),
     ).toBeVisible()
     await expect(page.getByText('Project preview')).toBeVisible()
+    await expect(page.getByText(/2025–2026/)).toBeVisible()
     await expect(
-      page.getByText(/technical overview based on verified implementation/i),
+      page.getByText(/learn and apply foundational GIS concepts/i),
     ).toBeVisible()
+    await expect(page.getByRole('link', { name: 'Repository' })).toHaveCount(0)
     await expect(page.getByText(/Problem statement TBD/i)).toHaveCount(0)
     const cover = page.locator('article figure.cover img, article figure img').first()
     await expect(cover).toBeVisible()

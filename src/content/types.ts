@@ -107,7 +107,13 @@ export interface ProjectSummary {
   title: string
   tagline: string
   stack: string[]
+  /**
+   * Single calendar year when work fits one year.
+   * Prefer `period` for inclusive spans such as 2025–2026.
+   */
   year?: number
+  /** Inclusive display span (e.g. "2025–2026"). Takes precedence over `year`. */
+  period?: string
   status: ProjectStatus
   coverImage: MediaAsset
   featured: boolean
