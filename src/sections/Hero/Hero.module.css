@@ -457,27 +457,29 @@
   }
 }
 
-/* —— MP-1 Hero typography entrance (CSS-only; reduced-motion = static) —— */
+/*
+ * MP-1 Hero entrance — transform-only settle.
+ * Opacity stays 1 for every frame so t=0 matches Gate C (no empty/broken flash).
+ * Reduced-motion: no animation (static approved composition).
+ */
 @media (prefers-reduced-motion: no-preference) {
   @keyframes heroLineIn {
     from {
-      opacity: 0;
-      transform: translate3d(0, 0.65rem, 0);
+      transform: translate3d(0, 0.55rem, 0);
     }
 
     to {
-      opacity: 1;
       transform: translate3d(0, 0, 0);
     }
   }
 
   @keyframes heroPlateIn {
     from {
-      opacity: 0;
+      transform: translate3d(0, 0.4rem, 0);
     }
 
     to {
-      opacity: 1;
+      transform: translate3d(0, 0, 0);
     }
   }
 

@@ -75,5 +75,5 @@ Provisional tokens in `src/styles/tokens.css` (paper/ink, accent, type, space, m
 - **M1** — Project foundation & design system — complete
 - **M2a** — First-viewport visual prototype — complete (Gate B approved)
 - **M2b** — Full static homepage — complete (Gate C approved)
-- **M3** — Motion & interactions — in review
+- **M3** — Motion & interactions — complete (approved)
 - **M4** — Case studies — blocked until M3 approval + Gates D/E

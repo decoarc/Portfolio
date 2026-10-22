@@ -8,17 +8,35 @@ interface UseInViewOnceOptions {
   threshold?: number
 }
 
+function isNodeInViewport(node: HTMLElement): boolean {
+  const rect = node.getBoundingClientRect()
+  const vh = window.innerHeight || document.documentElement.clientHeight
+  const vw = window.innerWidth || document.documentElement.clientWidth
+  return rect.bottom > 0 && rect.right > 0 && rect.top < vh && rect.left < vw
+}
+
+function isHashTarget(node: HTMLElement): boolean {
+  const hash = window.location.hash.replace(/^#/, '')
+  if (!hash) return false
+  if (node.id === hash) return true
+  try {
+    return Boolean(node.closest(`#${CSS.escape(hash)}`))
+  } catch {
+    return false
+  }
+}
+
 /**
  * One-shot intersection reveal. Reduced-motion users start revealed.
- * Fallback ensures content never stays hidden if IO fails.
+ * Also reveals when already on-screen, targeted by hash, or after fallback timeout.
  */
 export function useInViewOnce<T extends HTMLElement = HTMLElement>(
   options: UseInViewOnceOptions = {},
 ): [RefObject<T | null>, boolean] {
   const {
-    fallbackMs = 2500,
-    rootMargin = '0px 0px -10% 0px',
-    threshold = 0.15,
+    fallbackMs = 1200,
+    rootMargin = '0px 0px -8% 0px',
+    threshold = 0.08,
   } = options
   const reduced = usePrefersReducedMotion()
   const ref = useRef<T | null>(null)
@@ -42,11 +60,26 @@ export function useInViewOnce<T extends HTMLElement = HTMLElement>(
       setInView(true)
     }
 
+    // Immediate paths: already visible, or deep-linked into this section
+    if (isHashTarget(node) || isNodeInViewport(node)) {
+      reveal()
+      return
+    }
+
     const fallback = window.setTimeout(reveal, fallbackMs)
+
+    const onHash = () => {
+      if (isHashTarget(node)) {
+        reveal()
+        window.clearTimeout(fallback)
+      }
+    }
+    window.addEventListener('hashchange', onHash)
 
     if (typeof IntersectionObserver !== 'function') {
       reveal()
       window.clearTimeout(fallback)
+      window.removeEventListener('hashchange', onHash)
       return
     }
 
@@ -66,6 +99,7 @@ export function useInViewOnce<T extends HTMLElement = HTMLElement>(
     return () => {
       observer.disconnect()
       window.clearTimeout(fallback)
+      window.removeEventListener('hashchange', onHash)
     }
   }, [reduced, fallbackMs, rootMargin, threshold])
 
