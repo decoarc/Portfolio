@@ -1,0 +1,61 @@
+import type { ReactNode } from 'react'
+import type { SiteContent } from '@/content/types'
+import { SkipLink } from '@/components/SkipLink'
+import styles from './AppShell.module.css'
+
+interface AppShellProps {
+  content: SiteContent
+  children: ReactNode
+}
+
+export function AppShell({ content, children }: AppShellProps) {
+  const professionalSocial = content.social.filter(
+    (item) => item.professionalDefault !== false,
+  )
+
+  return (
+    <div className={styles.shell}>
+      <SkipLink label={content.shell.skipToContent} />
+      <header className={styles.header}>
+        <div className={`u-container ${styles.headerInner}`}>
+          <a className={styles.brand} href="/" aria-label={content.person.name}>
+            <span className={styles.brandMark} aria-hidden="true">
+              AA
+            </span>
+            <span className={styles.brandName}>{content.person.name}</span>
+          </a>
+          <nav className={styles.nav} aria-label="Primary">
+            <ul className={styles.navList}>
+              {content.nav.map((item) => (
+                <li key={item.href}>
+                  <a href={item.href}>{item.label}</a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </div>
+      </header>
+      <main id="main" className={styles.main}>
+        {children}
+      </main>
+      <footer className={styles.footer}>
+        <div className={`u-container ${styles.footerInner}`}>
+          <p className="meta">{content.shell.footerNote}</p>
+          <ul className={styles.social}>
+            {professionalSocial.map((item) => (
+              <li key={item.id}>
+                <a
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {item.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </footer>
+    </div>
+  )
+}

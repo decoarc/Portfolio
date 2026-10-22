@@ -1,0 +1,103 @@
+/**
+ * Design tokens — Ledger × Datum × Cut hybrid
+ * Palette is provisional until Gate B (browser-rendered first viewport).
+ * Avoid: cream #F4F1EA, purple SaaS, neon cyan, terracotta defaults.
+ */
+
+:root {
+  /* Surfaces — Ledger paper / Cut charcoal */
+  --color-paper: #e8ebe6;
+  --color-paper-elevated: #f2f4f0;
+  --color-ink: #12161a;
+  --color-ink-muted: #3a424a;
+  --color-ink-subtle: #6a737c;
+  --color-rule: #c5cbc4;
+  --color-field: #1a2229;
+  --color-field-ink: #e8ebe6;
+  --color-field-muted: #9aa3ab;
+
+  /* Accent — deep oxide blue (restrained) */
+  --color-accent: #1f4d6b;
+  --color-accent-hover: #163a51;
+  --color-focus: #1f4d6b;
+
+  /* Datum annotation accent (rare) */
+  --color-mark: #b8860b;
+
+  /* Typography */
+  --font-display: 'Bricolage Grotesque Variable', 'Bricolage Grotesque',
+    'Segoe UI', sans-serif;
+  --font-body: 'Source Sans 3 Variable', 'Source Sans 3', 'Segoe UI', sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'Cascadia Code', monospace;
+
+  --text-xs: clamp(0.75rem, 0.7rem + 0.2vw, 0.8125rem);
+  --text-sm: clamp(0.875rem, 0.82rem + 0.25vw, 0.9375rem);
+  --text-base: clamp(1rem, 0.95rem + 0.3vw, 1.125rem);
+  --text-md: clamp(1.125rem, 1.05rem + 0.4vw, 1.25rem);
+  --text-lg: clamp(1.375rem, 1.2rem + 0.8vw, 1.75rem);
+  --text-xl: clamp(1.75rem, 1.4rem + 1.5vw, 2.5rem);
+  --text-display: clamp(2.75rem, 2rem + 4vw, 5.5rem);
+  --text-hero: clamp(3.25rem, 2.2rem + 5.5vw, 7rem);
+
+  --leading-tight: 1.05;
+  --leading-snug: 1.25;
+  --leading-body: 1.55;
+  --measure: 62ch;
+  --tracking-meta: 0.08em;
+
+  /* Space */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+  --space-9: 6rem;
+  --space-10: 8rem;
+
+  --page-gutter: clamp(1.25rem, 4vw, 3.5rem);
+  --page-max: 72rem;
+  --section-y: clamp(4rem, 8vw, 7rem);
+
+  /* Elevation / radius — restrained */
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --shadow-focus: 0 0 0 3px color-mix(in srgb, var(--color-focus) 45%, transparent);
+
+  /* Motion — see MOTION_SPEC.md */
+  --motion-fast: 150ms;
+  --motion-medium: 320ms;
+  --motion-slow: 600ms;
+  --ease-out-expressive: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-ink: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Z-index */
+  --z-base: 0;
+  --z-header: 40;
+  --z-skip: 100;
+
+  color-scheme: light;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-fast: 0ms;
+    --motion-medium: 0ms;
+    --motion-slow: 0ms;
+  }
+}
+
+[data-theme='field'] {
+  --color-paper: var(--color-field);
+  --color-paper-elevated: #222b33;
+  --color-ink: var(--color-field-ink);
+  --color-ink-muted: var(--color-field-muted);
+  --color-ink-subtle: #7a848e;
+  --color-rule: #3a454f;
+  --color-accent: #7eb6d6;
+  --color-accent-hover: #a3cce3;
+  --color-focus: #7eb6d6;
+  color-scheme: dark;
+}

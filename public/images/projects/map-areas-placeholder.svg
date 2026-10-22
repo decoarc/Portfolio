@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" role="img" aria-label="Map Areas placeholder">
+  <rect width="1600" height="1000" fill="#1a2229"/>
+  <rect x="80" y="80" width="1440" height="840" fill="none" stroke="#3a454f" stroke-width="2"/>
+  <text x="120" y="160" fill="#7eb6d6" font-family="ui-monospace, monospace" font-size="28" letter-spacing="4">PLATE / MAP-AREAS</text>
+  <text x="120" y="520" fill="#e8ebe6" font-family="Georgia, serif" font-size="72">Preview media</text>
+  <text x="120" y="600" fill="#9aa3ab" font-family="ui-monospace, monospace" font-size="24">Replace with optimized project still</text>
+</svg>
