@@ -80,7 +80,7 @@ Use inventory classes. Do **not** paste into `map-areas.ts` until M4b + Gate E a
 |-------|---------------------|-------|
 | `title` | Map Areas | V |
 | `tagline` | Keep/adapt current draw·save·coordinate-format summary | V |
-| `stack` | e.g. PHP, PostgreSQL/PostGIS, Leaflet | V (refine) |
+| `stack` | `PHP`, `PostgreSQL/PostGIS`, `Leaflet`, `proj4` | V (applied in content module at Gate D prep) |
 | `year` | Optional — confirm from André / git history before setting | M |
 | `hrefLive` | `https://geo-areas-php.onrender.com/` | V |
 | `hrefRepo` | `https://github.com/decoarc/geo-areas-php` | V (add when ready) |

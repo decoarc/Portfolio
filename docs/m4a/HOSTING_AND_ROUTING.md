@@ -1,8 +1,12 @@
-# Hosting and Routing Decision Proposal (Gate D)
+# Hosting and Routing — Gate D Decision (Locked)
 
-**Milestone:** M4a — proposal only  
-**Do not implement** routing, host config, or new dependencies in this milestone  
+**Milestone:** Gate D closure (post-M4a)  
+**Decision date:** 2026-10-22  
+**Status:** **D1/D2 locked** — Cloudflare Pages; Vite `base: '/'`  
+**Do not implement in this close-out:** React Router, `_redirects` file, Cloudflare account connect, or production deploy  
 **App today:** Vite + React SPA, home-only shell (`src/app/routes.tsx`), no React Router yet
+
+Related: [GATE_D_CLOSURE.md](./GATE_D_CLOSURE.md) · [M4b planning](../m4b/README.md)
 
 ---
 
@@ -12,96 +16,152 @@ Case studies need shareable URLs: `/work/:slug`.
 
 On a static host, a hard refresh (or shared link) requests that path from the CDN/origin. Without an SPA fallback, the host returns **404** because only `/index.html` exists on disk after `vite build`.
 
-Gate D (from `ARCHITECTURE.md` / `IMPLEMENTATION_PLAN.md`): choose host + SPA fallback **before** finalizing case-study routing.
+Gate D: choose host + SPA fallback **before** finalizing case-study routing.
 
 ---
 
-## 2. Constraints
+## 2. Locked decision
 
-| Constraint | Implication |
-|------------|-------------|
-| Existing Vite app | Deploy `dist/` from `pnpm build` |
-| No new paid plans / serverless without approval | Prefer free static hosting |
-| No new dependencies in M4a | Router install deferred to M4b after host choice |
-| Portfolio remote | `https://github.com/decoarc/Portfolio.git` |
-| Custom `base` | Prefer site root (`base: '/'`) to avoid asset-path pain |
+| # | Decision | Locked value |
+|---|----------|--------------|
+| **D1** | Host vendor | **Cloudflare Pages** |
+| **D2** | Site URL shape | Root custom domain **or** `*.pages.dev` with Vite **`base: '/'`** |
+| **D3** | When to add `react-router` | **M4b** (after explicit go-ahead) |
+| **D4** | Preview deployments | Enable Cloudflare Pages preview deployments when the project is connected (optional; nice for Gate E review) |
 
----
+**Alternates deferred:** Netlify remains an acceptable emergency alternate (same `_redirects` pattern). GitHub Pages / Vercel not chosen for v1.
 
-## 3. Options compared
-
-| Host | Fit for Vite SPA | SPA deep-link fallback | Notes |
-|------|------------------|------------------------|-------|
-| **Cloudflare Pages** (recommended) | Excellent | `public/_redirects`: `/* /index.html 200` or dashboard “SPA” behavior | Fast CDN; GitHub integration; free tier adequate |
-| **Netlify** | Excellent | Same `_redirects` or `netlify.toml` `/* /index.html 200` | Equally fine; pick if André prefers Netlify UX |
-| **GitHub Pages** | Good with care | Copy `index.html` → `404.html`, or Actions plugin; set `base` if project-site URL | Matches “GitHub habit”; more footguns for project pages (`/Portfolio/`) |
-| **Vercel** | Excellent | Framework preset / rewrites to `index.html` | Fine; not required |
-
-**Not recommended for v1:** SSR frameworks, PHP hosting for the portfolio itself, or coupling portfolio deploy to the Map Areas Render service.
+**Not for v1:** SSR frameworks, PHP hosting for the portfolio itself, or coupling portfolio deploy to the Map Areas Render service.
 
 ---
 
-## 4. Recommendation
+## 3. Vite production build configuration
 
-### Primary: Cloudflare Pages (or Netlify — same pattern)
+| Item | Value | Source |
+|------|-------|--------|
+| Package manager | `pnpm` (`packageManager`: `pnpm@10.33.0`) | `package.json` |
+| Node | `>=20` | `engines` |
+| Build script | `pnpm build` → `tsc -b && vite build` | `package.json` |
+| Vite config | `@vitejs/plugin-react`; alias `@` → `./src`; default `base` | `vite.config.ts` |
+| **`base`** | Keep **`/`** (Vite default; do not set project-page base) | Locked with D2 |
+| Typecheck gate | Build runs `tsc -b` before Vite | Same script |
+| Local prod smoke | `pnpm preview` serves `dist/` | `package.json` |
 
-1. Connect `decoarc/Portfolio` → build `pnpm build` → publish directory `dist`.  
-2. Ship SPA fallback from the repo (author in M4b / M6, not M4a):
-
-   ```text
-   # public/_redirects  (Cloudflare Pages & Netlify)
-   /*    /index.html   200
-   ```
-
-3. Keep Vite `base: '/'` (default) with a root custom domain or `*.pages.dev` / `*.netlify.app` site.  
-4. Verify Gate D with: open `https://<host>/work/map-areas` in a fresh tab (hard navigation), confirm the SPA boots and the router renders the case study or intentional soft-404 — not the host’s raw 404 page.
-
-### If André prefers GitHub Pages
-
-- Prefer a **user/org site** or **custom domain at root** so `base` stays `/`.  
-- Avoid `https://decoarc.github.io/Portfolio/` unless willing to set `base: '/Portfolio/'` and test all asset paths.  
-- Add `404.html` identical to `index.html` (classic GH Pages SPA trick) and document it in M6.
+No Cloudflare-specific Vite plugin is required for a static SPA.
 
 ---
 
-## 5. Application routing plan (M4b — after Gate D)
+## 4. Deployment output directory
+
+| Item | Value |
+|------|-------|
+| Publish directory | **`dist`** |
+| Typical contents | `index.html`, hashed assets under `dist/assets/`, copied `public/` files |
+| Cloudflare Pages settings (when connecting later) | Build command `pnpm build`; output directory `dist`; install command `pnpm install` (or Cloudflare’s pnpm detection) |
+
+---
+
+## 5. SPA fallback behavior
+
+Author in M4b / deploy milestone (not yet in repo):
+
+```text
+# public/_redirects  (Cloudflare Pages)
+/*    /index.html   200
+```
+
+| Behavior | Expected |
+|----------|----------|
+| Meaning of `200` rewrite | CDN serves `index.html` **without** changing the browser URL |
+| Client router | Reads `/work/:slug` and renders case study or branded unavailable state |
+| Missing static file (e.g. wrong asset hash) | Still a real CDN 404 — fallback is for **HTML navigations**, not broken assets |
+
+---
+
+## 6. Direct navigation to `/work/:slug`
+
+| Step | What happens |
+|------|----------------|
+| 1 | User opens `https://<host>/work/map-areas` (or any slug) in a fresh tab |
+| 2 | Cloudflare applies SPA rewrite → `index.html` |
+| 3 | SPA boots; router matches `/work/:slug` |
+| 4a | If `published` **and** `evidenceComplete` → case-study page |
+| 4b | Else → branded soft-404 / unavailable (never a blank crash; never rely on Cloudflare’s generic HTML 404 for app routes) |
+
+Until M4b ships the router, deep links are not meaningful in production.
+
+---
+
+## 7. Refresh behavior
+
+Hard refresh on `/work/:slug` must behave like direct navigation (same rewrite).  
+In-app client transitions (home → case study) do not need the CDN rewrite but must not assume it is absent.
+
+**Gate D deploy verification (future):** open a deep link in a fresh tab **and** refresh — both must boot the SPA.
+
+---
+
+## 8. 404 handling
+
+| Case | Handler |
+|------|---------|
+| Unknown slug / draft / preview / incomplete evidence | **In-app** branded not-found or unavailable |
+| SPA routes generally | Prefer in-app `*` route over host error page |
+| Truly missing static assets | Host/CDN **404** |
+| Optional custom host 404 | Not required if `_redirects` + in-app `*` cover HTML routes |
+
+---
+
+## 9. Future deployment requirements (checklist — do not execute yet)
+
+- [ ] Connect `decoarc/Portfolio` to Cloudflare Pages (Git integration)  
+- [ ] Set build: `pnpm build`, output: `dist`  
+- [ ] Confirm Node version ≥ 20 on the build image  
+- [ ] Add `public/_redirects` with SPA `200` rewrite (M4b)  
+- [ ] Keep Vite `base: '/'`  
+- [ ] After first deploy: verify `/`, `/#work`, hard-open `/work/map-areas`, refresh on that URL  
+- [ ] Confirm HTTPS on the Pages URL / custom domain  
+- [ ] Optional: enable preview deployments for PRs  
+- [ ] Do **not** point Cloudflare at the Map Areas PHP service  
+
+---
+
+## 10. Application routing plan (M4b — after go-ahead)
 
 | Route | Behavior |
 |-------|----------|
 | `/` | Home (current) |
 | `/work/:slug` | Case study **only** if `status === 'published'` && `evidenceComplete` |
-| `/work/:unknown` or unpublished | Branded not-found / unavailable — never blank crash |
+| `/work/:unknown` or unpublished | Branded not-found / unavailable |
 | `*` | Same branded 404 |
 
-Implementation sketch (not authorized in M4a):
+Implementation sketch (authorized only in M4b):
 
-- Add `react-router` (already planned in README as Gate D–gated).  
-- Replace home-only `routes.tsx` with a small route table; keep page components dumb.  
-- Reuse `getProjectHref` / `canLinkCaseStudy` so homepage CTAs cannot point at unpublished slugs.  
+- Add `react-router`.  
+- Replace home-only `routes.tsx` with a small route table.  
+- Reuse `getProjectHref` / `canLinkCaseStudy`.  
 - Preserve `/#work` anchors on the home page.
 
-Homepage redesign is **out of scope**; Work cards only gain a real “Case study” link when publication rules pass.
+Homepage redesign remains **out of scope**.
 
 ---
 
-## 6. Relationship to Map Areas hosting
+## 11. Relationship to Map Areas hosting
 
-| App | Host (current) | Role |
-|-----|----------------|------|
-| Portfolio | TBD (this doc) | Static marketing/case-study site |
-| Map Areas demo | Render (`geo-areas-php.onrender.com`) | External live demo linked via `hrefLive` |
+| App | Host | Role |
+|-----|------|------|
+| Portfolio | **Cloudflare Pages** (locked; not yet connected) | Static marketing / case-study site |
+| Map Areas demo | Render (`geo-areas-php.onrender.com`) | External live demo via `hrefLive` |
 
-Do not move Map Areas onto the portfolio host. Cold starts on Render are a **demo caveat**, not a portfolio deploy blocker.
+Do not move Map Areas onto the portfolio host. Cold starts on Render are a demo caveat, not a portfolio deploy blocker.
 
 ---
 
-## 7. Decision needed from André
+## 12. Options considered (archive)
 
-| # | Decision | Recommendation |
-|---|----------|----------------|
-| D1 | Host vendor | **Cloudflare Pages** (Netlify acceptable alternate) |
-| D2 | Site URL shape | Root domain or `*.pages.dev` with `base: '/'` |
-| D3 | When to add `react-router` | M4b, immediately after D1/D2 lock |
-| D4 | Preview deployments | Enable host PR previews if available (optional, nice for Gate E review) |
-
-Until D1–D2 are locked, M4b may scaffold routes locally but must not claim production deep links work.
+| Host | Fit | Why not chosen |
+|------|-----|----------------|
+| Cloudflare Pages | Excellent | **Chosen** |
+| Netlify | Excellent | Acceptable alternate only |
+| GitHub Pages | Good with care | More `base` / `404.html` footguns for project pages |
+| Vercel | Excellent | Not required |

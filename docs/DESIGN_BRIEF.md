@@ -254,8 +254,8 @@ Browser-rendered first viewport must be reviewed and approved before full homepa
 
 Full static homepage composition approved before M3 motion prototyping expands beyond minimal hooks.
 
-### Gate D — Case study publication
+### Gate D — Hosting + SPA fallback (prep closed 2026-10-22)
 
-Real project evidence required before publishing case studies (no hollow narratives). Unpublished/WIP projects must not produce broken public links.
+**Hosting locked: Cloudflare Pages** (`docs/m4a/HOSTING_AND_ROUTING.md`). SPA `_redirects` + live deep-link verify remain for M4b/deploy. Case-study *publication* evidence remains **Gate E** (no hollow narratives; unpublished/WIP must not produce broken public links).
 
 Workspace: write only in `Portfolio/`; `prototype/` remains read-only.

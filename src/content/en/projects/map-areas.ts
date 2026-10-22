@@ -15,7 +15,8 @@ export const mapAreas: ProjectCaseStudy = {
   title: 'Map Areas',
   tagline:
     'Draw and manage polygon areas on an interactive map. Save areas, clear the canvas, and add polygons by coordinates in Lat/Lng, UTM, or GMS format.',
-  stack: ['PHP', 'Maps', 'Geospatial'],
+  // Stack tags verified from geo-areas-php (PHP, PostGIS, Leaflet, proj4php / client helpers).
+  stack: ['PHP', 'PostgreSQL/PostGIS', 'Leaflet', 'proj4'],
   status: 'preview',
   featured: true,
   hrefLive: 'https://geo-areas-php.onrender.com/',

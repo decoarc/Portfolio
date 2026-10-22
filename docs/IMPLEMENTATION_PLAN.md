@@ -222,7 +222,7 @@ Related docs: `DESIGN_BRIEF.md`, `VISUAL_DIRECTIONS.md`, `ARCHITECTURE.md`, `MOT
 
 **Prerequisites**
 
-- [ ] Gate D: hosting + SPA fallback resolved (or routing kept local-only until then)  
+- [x] Gate D: hosting chosen (Cloudflare Pages); SPA fallback documented (file + live verify in M4b/deploy)  
 - [ ] Gate E: at least one project with real case-study evidence  
 
 **Deliverables**
@@ -237,7 +237,7 @@ Related docs: `DESIGN_BRIEF.md`, `VISUAL_DIRECTIONS.md`, `ARCHITECTURE.md`, `MOT
 
 - [ ] No invented metrics; `[Outcome TBD]` allowed only where labeled  
 - [ ] `published` requires `evidenceComplete`  
-- [ ] Hard-refresh deep link works on chosen host (Gate D)  
+- [ ] Hard-refresh deep link works on Cloudflare Pages (post-deploy verify)  
 - [ ] Focus management sensible on route change  
 - [ ] External demo/repo links correct and `noopener`  
 
@@ -280,7 +280,7 @@ Related docs: `DESIGN_BRIEF.md`, `VISUAL_DIRECTIONS.md`, `ARCHITECTURE.md`, `MOT
 - [ ] Documented commands all pass  
 - [ ] Production URL HTTPS; deep links work  
 - [ ] README explains content/`status` edit path  
-- [ ] Planning docs reflect locked direction and hosting choice  
+- [x] Planning docs reflect locked direction and hosting choice (Cloudflare Pages)  
 
 ---
 
@@ -292,7 +292,7 @@ Install only when justified; keep the set minimal:
 |------------|--------------|------------------------|
 | react, react-dom, vite, typescript | M1 | Core |
 | vitest, testing-library | M1 | Incremental tests (status/href, hero smoke) |
-| react-router | After Gate D planning clarity (M1 shell OK; finalize with host) | Routing |
+| react-router | After Gate D host lock + explicit M4b go-ahead (host = Cloudflare Pages) | Routing |
 | gsap | M3 (only if CSS insufficient for kept experiments) | Complex motion |
 | playwright, axe | M5–M6 | E2E / a11y |
 | lenis / three | Never by default | Needs explicit approval |
@@ -304,7 +304,7 @@ Install only when justified; keep the set minimal:
 | # | Decision | Owner | Needed by | Status |
 |---|----------|-------|-----------|--------|
 | 1 | Visual direction | André | Before M1 | **Resolved** — Ledger × Datum × Cut hybrid |
-| 2 | Hosting target + SPA fallback | André | **Before case-study routing finalized (Gate D)** | Proposal in `docs/m4a/HOSTING_AND_ROUTING.md` — **awaiting André choice** |
+| 2 | Hosting target + SPA fallback | André | **Before case-study routing finalized (Gate D)** | **Locked — Cloudflare Pages**; see `docs/m4a/HOSTING_AND_ROUTING.md` + `GATE_D_CLOSURE.md`. SPA file + live verify remain for M4b/deploy |
 | 3 | Contact method | André | Before M2b contact final copy | Unresolved |
 | 4 | v1 project list + evidence | André | Before Gate E / M4b publish | Inventory in `docs/m4a/` — Map Areas **preview**; publish blocked on Gate E |
 | 5 | Portrait + wordmark approval | André | Before M2b polish | Unresolved |

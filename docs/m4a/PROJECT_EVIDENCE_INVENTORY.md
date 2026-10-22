@@ -60,7 +60,7 @@ Case-study fields today (`ProjectCaseStudy`): `problem`, `responsibilities[]`, `
 | Render-style deploy | `Dockerfile` → `php -S 0.0.0.0:$PORT` |
 | TypeScript batch utilities | `update-perimeter.ts`, `package.json` scripts (maintenance, not UI) |
 
-**Stack note for Portfolio:** Current tags `['PHP', 'Maps', 'Geospatial']` are directionally correct but under-specify PostGIS/Leaflet. Prefer something like `PHP`, `PostgreSQL/PostGIS`, `Leaflet` when copy is rewritten — still no proficiency theater.
+**Stack note for Portfolio:** Tags updated at Gate D prep to `['PHP', 'PostgreSQL/PostGIS', 'Leaflet', 'proj4']` (verified). Still no proficiency theater.
 
 **Do not claim:** Google Maps API, MySQL as the current primary store (GitHub blurb / older `mysql2` dep in `package.json` look like leftovers from pre-migration; commit history includes `feat: migrate from MySQL to PostgreSQL/PostGIS`).
 

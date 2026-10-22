@@ -57,10 +57,12 @@
 
 ## 5. Recommended v1 publication plan
 
-1. **Now (post-M4a approval):** Map Areas remains `preview`; no case-study route link.  
-2. **M4b (after Gate D host lock):** Implement routes + template; keep Map Areas unpublished until content passes checklist.  
+1. **Now (post–Gate D prep):** Map Areas remains `preview`; no case-study route link; stack tags reflect PHP / PostGIS / Leaflet / proj4.  
+2. **M4b (host locked — Cloudflare Pages; needs explicit go-ahead):** Implement routes + template + `_redirects`; keep Map Areas unpublished until content passes checklist.  
 3. **Gate E:** Map Areas → `published` + `evidenceComplete: true` when narrative + review complete.  
 4. **Later:** Promote a second project from `draft` → `preview` only with real media and links — still no publish without evidence.
+
+See also [CASE_STUDY_READINESS.md](./CASE_STUDY_READINESS.md).
 
 ---
 

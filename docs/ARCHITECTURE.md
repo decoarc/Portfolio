@@ -1,6 +1,6 @@
 # Architecture Proposal
 
-**Status:** Accepted in principle (M0 — GO WITH ADJUSTMENTS); hosting/SPA fallback proposal in `docs/m4a/HOSTING_AND_ROUTING.md` (Gate D still open)  
+**Status:** Accepted in principle (M0 — GO WITH ADJUSTMENTS); hosting locked — **Cloudflare Pages** (`docs/m4a/HOSTING_AND_ROUTING.md`, Gate D prep closed)  
 **Scope:** Greenfield app in `Portfolio/` only  
 **Visual system:** Ledger × Datum × Cut hybrid (`VISUAL_DIRECTIONS.md`)  
 **Non-goals:** Backend, CMS, paid APIs, copying `prototype/` architecture  
@@ -25,7 +25,7 @@
 | Unit/integration | Vitest + Testing Library | Fast, Vite-native |
 | E2E | Playwright | Routing, a11y smoke, reduced-motion paths |
 | Package manager | pnpm (preferred) or npm | Lockfile + efficiency; decide at M1 scaffold |
-| Hosting | **Must be chosen before case-study routing is finalized** | Static site; SPA deep-link fallback differs by host (see §8) |
+| Hosting | **Cloudflare Pages** (locked at Gate D) | Static `dist/`; SPA fallback via `public/_redirects` (see §8) |
 
 ### Explicitly deferred
 
@@ -220,7 +220,7 @@ Anchors on home (`/#work`) remain valid for single-page navigation; router still
 
 ### Routing finalization gate
 
-**Do not finalize case-study routing configuration until hosting + SPA fallback are resolved** (see §8). Deep links to `/work/:slug` fail on static hosts without a fallback (`404.html` / `_redirects` / host “SPA mode”). Choosing the host first avoids rework of `base`, public paths, and redirect files.
+**Hosting vendor is locked (Cloudflare Pages).** Still author SPA fallback (`public/_redirects`) in M4b before claiming production deep links (see §8). Deep links to `/work/:slug` fail on static hosts without a fallback.
 
 Until that gate passes, homepage may use in-page Work anchors and withhold case-study links (`preview`/`draft` rules above).
 
@@ -252,23 +252,25 @@ Introduce automated tests **incrementally** — not a big-bang M6 dump.
 
 ## 8. Deployment approach
 
-### Hosting decision (blocking for routing)
+### Hosting decision (Gate D — locked)
 
-Static build (`vite build`) → deploy `dist/` to a free static host. **André must choose a host before case-study routing is finalized.**
+Static build (`pnpm build` → `vite build`) → deploy **`dist/`** to **Cloudflare Pages**.
 
-| Option | Pros | SPA deep-link fallback |
-|--------|------|------------------------|
-| Cloudflare Pages | Fast CDN, easy Git integrate | Enable SPA fallback / `_redirects` (`/* /index.html 200`) |
-| GitHub Pages | Matches prototype habit | `404.html` copy of `index.html` (or action plugin); set Vite `base` if project pages |
-| Netlify | Simple previews | `public/_redirects` or netlify.toml SPA rule |
+| Item | Locked / planned |
+|------|------------------|
+| Host | Cloudflare Pages |
+| SPA deep-link fallback | `public/_redirects`: `/* /index.html 200` (author in M4b) |
+| Vite `base` | `/` |
+| Detail | `docs/m4a/HOSTING_AND_ROUTING.md` |
 
-**Do not** introduce paid plans or serverless functions without approval.
+**Do not** introduce paid plans or serverless functions without approval. Netlify remains an emergency alternate with the same `_redirects` pattern.
 
-### Checklist before finalizing `/work/:slug`
+### Checklist before claiming production `/work/:slug`
 
-- [ ] Host chosen  
-- [ ] Vite `base` decided (root domain vs project pages)  
-- [ ] SPA fallback file/config authored and verified with a hard-refresh on a deep link  
+- [x] Host chosen (Cloudflare Pages)  
+- [x] Vite `base` decided (`/`)  
+- [ ] SPA fallback file authored (`public/_redirects`) — M4b  
+- [ ] Hard-refresh deep link verified on Cloudflare — after first deploy  
 - [ ] Production asset paths for fonts/images validated  
 
 ### CI (grow into M6)
@@ -376,7 +378,7 @@ When any file bytes are copied, record: source path, destination, and reason in 
 Architecture accepted in principle under GO WITH ADJUSTMENTS. Remaining blockers before/alongside early implementation:
 
 1. Explicit **M1 go-ahead** (no install/scaffold until then)  
-2. **Hosting target** (+ SPA fallback implication) before finalizing case-study routes  
+2. **Hosting target** — **done (Cloudflare Pages)**; SPA `_redirects` + live verify remain for M4b/deploy  
 3. Visual gates B/C in `DESIGN_BRIEF.md` / `IMPLEMENTATION_PLAN.md` (browser proof, not docs)  
 
 Package installation begins only after explicit M1 go-ahead.
