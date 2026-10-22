@@ -1,6 +1,6 @@
 # Architecture Proposal
 
-**Status:** Accepted in principle (M0 — GO WITH ADJUSTMENTS); hosting/SPA fallback still unresolved  
+**Status:** Accepted in principle (M0 — GO WITH ADJUSTMENTS); hosting/SPA fallback proposal in `docs/m4a/HOSTING_AND_ROUTING.md` (Gate D still open)  
 **Scope:** Greenfield app in `Portfolio/` only  
 **Visual system:** Ledger × Datum × Cut hybrid (`VISUAL_DIRECTIONS.md`)  
 **Non-goals:** Backend, CMS, paid APIs, copying `prototype/` architecture  

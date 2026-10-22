@@ -76,4 +76,6 @@ Provisional tokens in `src/styles/tokens.css` (paper/ink, accent, type, space, m
 - **M2a** — First-viewport visual prototype — complete (Gate B approved)
 - **M2b** — Full static homepage — complete (Gate C approved)
 - **M3** — Motion & interactions — complete (approved)
-- **M4** — Case studies — blocked until M3 approval + Gates D/E
+- **M4a** — Project inventory & case-study evidence — delivered (`docs/m4a/`; awaiting approval)
+- **M4b** — Case-study routes & pages — not started (needs M4a + Gate D)
+- **Gates D/E** — Hosting/SPA fallback and publishable Map Areas evidence — open (see `docs/m4a/`)

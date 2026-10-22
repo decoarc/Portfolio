@@ -304,9 +304,9 @@ Install only when justified; keep the set minimal:
 | # | Decision | Owner | Needed by | Status |
 |---|----------|-------|-----------|--------|
 | 1 | Visual direction | André | Before M1 | **Resolved** — Ledger × Datum × Cut hybrid |
-| 2 | Hosting target + SPA fallback | André | **Before case-study routing finalized (Gate D)** | Unresolved |
+| 2 | Hosting target + SPA fallback | André | **Before case-study routing finalized (Gate D)** | Proposal in `docs/m4a/HOSTING_AND_ROUTING.md` — **awaiting André choice** |
 | 3 | Contact method | André | Before M2b contact final copy | Unresolved |
-| 4 | v1 project list + evidence | André | Before Gate E / M4 | Unresolved |
+| 4 | v1 project list + evidence | André | Before Gate E / M4b publish | Inventory in `docs/m4a/` — Map Areas **preview**; publish blocked on Gate E |
 | 5 | Portrait + wordmark approval | André | Before M2b polish | Unresolved |
 | 6 | Instagram in chrome? | André | Before M2b | Unresolved |
 | 7 | PT i18n timing | André | M1 content seam (scaffold only vs later) | Unresolved |
