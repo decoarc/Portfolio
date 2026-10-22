@@ -3,6 +3,13 @@ import { projectsEn } from './en/projects'
 import type { Locale, ProjectCaseStudy, SiteContent } from './types'
 
 export type { Locale, ProjectCaseStudy, SiteContent } from './types'
+export type { CaseStudyAccess } from './caseStudyAccess'
+export {
+  filterRealBullets,
+  findProjectBySlug,
+  isPlaceholderContent,
+  resolveCaseStudyAccess,
+} from './caseStudyAccess'
 export {
   assertPublicationRules,
   canLinkCaseStudy,

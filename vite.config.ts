@@ -2,11 +2,13 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vitest/config'
+import { spaFallbackPlugin } from './vite-spa-fallback.ts'
 
 const rootDir = path.dirname(fileURLToPath(import.meta.url))
 
 export default defineConfig({
-  plugins: [react()],
+  // Preview mirrors Cloudflare `_redirects`; Vite dev already has history fallback.
+  plugins: [react(), spaFallbackPlugin()],
   resolve: {
     alias: {
       '@': path.resolve(rootDir, './src'),
@@ -17,5 +19,6 @@ export default defineConfig({
     setupFiles: ['./src/test/setup.ts'],
     globals: true,
     css: true,
+    exclude: ['**/node_modules/**', '**/e2e/**', '**/dist/**'],
   },
 })

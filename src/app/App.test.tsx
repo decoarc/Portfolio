@@ -15,11 +15,11 @@ describe('App shell', () => {
     expect(screen.getByText('Full Stack Developer')).toBeInTheDocument()
     expect(
       screen.getByRole('link', { name: 'Selected work' }),
-    ).toHaveAttribute('href', '#work')
+    ).toHaveAttribute('href', '/#work')
     const contactLinks = screen.getAllByRole('link', { name: 'Contact' })
     expect(contactLinks.length).toBeGreaterThanOrEqual(1)
     expect(
-      contactLinks.some((link) => link.getAttribute('href') === '#contact'),
+      contactLinks.some((link) => link.getAttribute('href') === '/#contact'),
     ).toBe(true)
     expect(screen.getByRole('navigation', { name: 'Primary' })).toBeInTheDocument()
     expect(screen.getByRole('main')).toBeInTheDocument()

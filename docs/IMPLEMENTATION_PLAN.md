@@ -222,24 +222,26 @@ Related docs: `DESIGN_BRIEF.md`, `VISUAL_DIRECTIONS.md`, `ARCHITECTURE.md`, `MOT
 
 **Prerequisites**
 
-- [x] Gate D: hosting chosen (Cloudflare Pages); SPA fallback documented (file + live verify in M4b/deploy)  
+- [x] Gate D: hosting chosen (Cloudflare Pages); SPA fallback authored + locally verified (Cloudflare connect still open)  
 - [ ] Gate E: at least one project with real case-study evidence  
 
-**Deliverables**
+**Deliverables (M4b completed and approved)**
 
-- Router with `/`, `/work/:slug`, 404 (unpublished → not found / coming soon)  
-- Case study template: problem, responsibilities, tech, implementation, challenges, outcomes  
-- At least one **real** published project (Map Areas candidate only after evidence rewrite)  
-- Nav + internal linking + back paths  
-- Unit/component tests for publication rules  
+- [x] Router with `/`, `/work/:slug`, 404 (preview → labeled facts-only; unpublished → not found)  
+- [x] Case study template: problem, responsibilities, tech, implementation, challenges, outcomes  
+- [ ] At least one **real** published project (Map Areas still `preview` until Gate E)  
+- [x] Nav + internal linking + back paths  
+- [x] Unit/component + Playwright tests for publication rules and SPA deep links  
 
 **Acceptance criteria**
 
-- [ ] No invented metrics; `[Outcome TBD]` allowed only where labeled  
-- [ ] `published` requires `evidenceComplete`  
+- [x] No invented metrics; `[Outcome TBD]` allowed only where labeled (preview omits TBD sections)  
+- [x] `published` requires `evidenceComplete` (helpers + route access)  
 - [ ] Hard-refresh deep link works on Cloudflare Pages (post-deploy verify)  
-- [ ] Focus management sensible on route change  
-- [ ] External demo/repo links correct and `noopener`  
+- [x] Focus management sensible on route change  
+- [x] External demo/repo links correct and `noopener`  
+- [x] Local hard-refresh deep link works via `pnpm preview` SPA fallback  
+
 
 ---
 
@@ -304,7 +306,7 @@ Install only when justified; keep the set minimal:
 | # | Decision | Owner | Needed by | Status |
 |---|----------|-------|-----------|--------|
 | 1 | Visual direction | André | Before M1 | **Resolved** — Ledger × Datum × Cut hybrid |
-| 2 | Hosting target + SPA fallback | André | **Before case-study routing finalized (Gate D)** | **Locked — Cloudflare Pages**; see `docs/m4a/HOSTING_AND_ROUTING.md` + `GATE_D_CLOSURE.md`. SPA file + live verify remain for M4b/deploy |
+| 2 | Hosting target + SPA fallback | André | **Before case-study routing finalized (Gate D)** | **Locked — Cloudflare Pages**; `_redirects` shipped in M4b; production verify after account connect |
 | 3 | Contact method | André | Before M2b contact final copy | Unresolved |
 | 4 | v1 project list + evidence | André | Before Gate E / M4b publish | Inventory in `docs/m4a/` — Map Areas **preview**; publish blocked on Gate E |
 | 5 | Portrait + wordmark approval | André | Before M2b polish | Unresolved |

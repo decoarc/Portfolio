@@ -34,13 +34,13 @@ export const siteEn: SiteContent = {
     },
   ],
   nav: [
-    { label: 'Work', href: '#work' },
-    { label: 'About', href: '#about' },
-    { label: 'Contact', href: '#contact' },
+    { label: 'Work', href: '/#work' },
+    { label: 'About', href: '/#about' },
+    { label: 'Contact', href: '/#contact' },
   ],
   hero: {
-    ctaPrimary: { label: 'Selected work', href: '#work' },
-    ctaSecondary: { label: 'Contact', href: '#contact' },
+    ctaPrimary: { label: 'Selected work', href: '/#work' },
+    ctaSecondary: { label: 'Contact', href: '/#contact' },
     plateAnnotation: 'BR · Web',
     plateFocusLabel: 'Focus',
     plateFocus: ['Interfaces', 'APIs & automation', 'Developer tools'],
@@ -55,6 +55,29 @@ export const siteEn: SiteContent = {
     previewStatusNote: 'Preview',
     moreSoonNote:
       'Additional projects will join this list as they are ready to show.',
+  },
+  caseStudy: {
+    backToWorkLabel: 'Back to selected work',
+    backToHomeLabel: 'Back to home',
+    previewBanner: 'Project preview',
+    previewNote:
+      'A technical overview based on verified implementation details. Full case study in progress.',
+    overviewLabel: 'Overview',
+    problemLabel: 'Problem and motivation',
+    responsibilitiesLabel: 'Role and contributions',
+    technologiesLabel: 'Technologies',
+    implementationLabel: 'Engineering decisions',
+    challengesLabel: 'Technical challenges',
+    outcomesLabel: 'Outcomes and current status',
+    mediaLabel: 'Project media',
+    repoLabel: 'Repository',
+    liveDemoLabel: 'Live demo',
+    yearLabel: 'Year',
+  },
+  notFound: {
+    title: 'Page not found',
+    body: 'That route is not available. The project may be unpublished, incomplete, or the address may be mistyped.',
+    homeLabel: 'Back to home',
   },
   about: {
     title: 'About',

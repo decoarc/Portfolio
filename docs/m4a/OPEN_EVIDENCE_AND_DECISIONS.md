@@ -18,7 +18,7 @@
 | **D6** | Project `year` on Map Areas | Content polish | Optional; confirm year of primary work |
 | **D7** | Second project for v1 Work list? | Scope | Recommend **no** until Map Areas case study ships |
 | **D8** | Scrub upstream credentials in `geo-areas-php` README/compose | Hygiene / credibility | See [MAP_AREAS_SECURITY_REVIEW.md](./MAP_AREAS_SECURITY_REVIEW.md); do outside Portfolio; do not copy secrets into docs |
-| **D9** | Explicit go-ahead for **M4b** | Routes + template | **Open** — hosting no longer blocks planning |
+| **D9** | Explicit go-ahead for **M4b** | Routes + template | **Done** — M4b completed and approved (`docs/m4b/`) |
 
 ---
 
@@ -58,7 +58,7 @@
 | Gate D SPA fallback **documented** | **Done** — file authoring deferred to M4b |
 | Gate D live deep-link verification | **Deferred** until first Cloudflare deploy |
 | Gate E Map Areas evidence | **Open** (inventory ready; narrative not written into app yet) |
-| Explicit M4b go-ahead (D9) | **Open** |
+| Explicit M4b go-ahead (D9) | **Done** (completed and approved) |
 | No homepage redesign | Respected |
 | No GSAP/Lenis/WebGL / no new deps in Gate D prep | Respected |
 
@@ -72,7 +72,8 @@
 - [x] Case-study content spec accepted as the template for M4b  
 - [x] Hosting decision locked: Cloudflare Pages (D1/D2)  
 - [x] Publication readiness: Map Areas stays `preview`  
-- [ ] Explicit go-ahead for **M4b** (routes + template) — separate from filling Gate E copy if desired  
+- [x] Explicit go-ahead for **M4b** (routes + template) — implemented; review pending  
+
 - [ ] Gate E content approval before `published` + `evidenceComplete`
 
 ---

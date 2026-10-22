@@ -1,21 +1,26 @@
-# M4b — Case-Study Routes & Template (planning only)
+# M4b — Case-Study Routes & Template
 
-**Status:** **Not started** — Gate D hosting decision locked; awaiting explicit implementation go-ahead  
-**Depends on:** M4a evidence pack (`docs/m4a/`), Gate D closure (`docs/m4a/GATE_D_CLOSURE.md`)  
-**Does not depend on:** Gate E (Map Areas may stay `preview` while routes ship)
+**Status:** **Completed** (approved 2026-10-22)  
+**Depends on:** M4a evidence pack, Gate D (Cloudflare Pages locked)  
+**Does not complete:** Gate E (Map Areas stays `preview` / `evidenceComplete: false`)
+
+See [M4B_COMPLETION.md](./M4B_COMPLETION.md) for the closure report.
 
 ---
 
-## 1. Authorized when André says go
+## 1. Delivered
 
-| Work item | Notes |
-|-----------|-------|
-| Add `react-router` | Already listed in dependency policy after Gate D |
-| Routes: `/`, `/work/:slug`, `*` | Soft-404 for unknown / unpublished / incomplete |
-| Case-study page template | Bind to `ProjectCaseStudy` fields; no homepage redesign |
-| `public/_redirects` | Cloudflare Pages SPA fallback: `/* /index.html 200` |
-| Homepage CTAs | Keep using `canLinkCaseStudy` / `getProjectHref` |
-| Tests | Route guards + publication rules; soft-404 behavior |
+| Work item | Status |
+|-----------|--------|
+| `react-router` routes `/`, `/work/:slug`, `*` | Done |
+| Cloudflare SPA fallback `public/_redirects` | Done |
+| Local preview SPA fallback (`vite-spa-fallback.ts`) | Done — verifies hard refresh without deploy |
+| Case-study editorial template + visual refinement | Done |
+| Labeled preview for incomplete projects | Done (Map Areas) |
+| Publication-safe homepage CTAs | Done (`getProjectHref` unchanged) |
+| Scroll + focus management | Done |
+| Unit + integration + Playwright E2E | Done |
+| Review screenshots | `docs/m4b-review/` |
 
 ---
 
@@ -27,23 +32,33 @@
 | Build | `pnpm build` |
 | Output | `dist` |
 | `base` | `/` |
+| SPA rule | `/* /index.html 200` in `public/_redirects` |
 
-Do **not** connect the Cloudflare account or deploy until a deploy milestone / André asks.
-
----
-
-## 3. Content rules during M4b
-
-- Map Areas remains `preview` + `evidenceComplete: false` unless Gate E is explicitly authorized in the same pass.  
-- Prefer filling case-study copy from [PROJECT_EVIDENCE_INVENTORY.md](../m4a/PROJECT_EVIDENCE_INVENTORY.md) and [CASE_STUDY_READINESS.md](../m4a/CASE_STUDY_READINESS.md).  
-- Never invent metrics or client stories.  
-- Never paste upstream DB credentials into content.
+Do **not** connect Cloudflare or deploy until André asks.
 
 ---
 
-## 4. Out of scope for M4b
+## 3. Publication rules (unchanged)
 
-- M5 polish / E2E expansion beyond what routing needs  
-- Homepage redesign  
-- Publishing a second project  
-- Modifying `prototype/` or `geo-areas-php/` without separate authorization
+- Homepage case-study CTA only when `published` **and** `evidenceComplete`.
+- Direct `/work/:slug` for `preview` → labeled **preview** page (verified facts only; TBD sections omitted).
+- Unknown / draft / published-without-evidence → in-app **Page not found**.
+- Map Areas remains `preview` + `evidenceComplete: false`.
+
+---
+
+## 4. Commands
+
+```bash
+pnpm validate          # typecheck, lint, unit, build, e2e
+pnpm test:e2e          # Playwright against vite preview
+pnpm preview           # after build; deep links work via SPA plugin
+```
+
+---
+
+## 5. Next (not started)
+
+- Gate E narrative fill / Map Areas `published`
+- Cloudflare Pages connect + production deep-link verify
+- M5 polish expansion

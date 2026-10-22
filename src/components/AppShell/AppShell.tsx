@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { Link, useLocation } from 'react-router'
 import type { SiteContent } from '@/content/types'
 import { SkipLink } from '@/components/SkipLink'
 import { useActiveSection } from '@/hooks'
@@ -11,28 +12,39 @@ interface AppShellProps {
 
 const SECTION_IDS = ['work', 'about', 'contact']
 
+function sectionIdFromHref(href: string): string {
+  const hash = href.includes('#') ? href.slice(href.indexOf('#') + 1) : href.replace(/^\//, '')
+  return hash
+}
+
 export function AppShell({ content, children }: AppShellProps) {
+  const location = useLocation()
+  const onHome = location.pathname === '/'
   const professionalSocial = content.social.filter(
     (item) => item.professionalDefault !== false,
   )
-  const activeSection = useActiveSection(SECTION_IDS)
+  const activeSection = useActiveSection(onHome ? SECTION_IDS : [])
 
   return (
     <div className={styles.shell}>
       <SkipLink label={content.shell.skipToContent} />
       <header className={styles.header}>
         <div className={`u-container ${styles.headerInner}`}>
-          <a className={styles.brand} href="/" aria-label={content.person.name}>
+          <Link
+            className={styles.brand}
+            to="/"
+            aria-label={content.person.name}
+          >
             <span className={styles.brandMark} aria-hidden="true">
               AA
             </span>
             <span className={styles.brandName}>{content.person.name}</span>
-          </a>
+          </Link>
           <nav className={styles.nav} aria-label="Primary">
             <ul className={styles.navList}>
               {content.nav.map((item) => {
-                const id = item.href.replace(/^#/, '')
-                const isActive = activeSection === id
+                const id = sectionIdFromHref(item.href)
+                const isActive = onHome && activeSection === id
                 return (
                   <li key={item.href}>
                     <a
@@ -49,7 +61,7 @@ export function AppShell({ content, children }: AppShellProps) {
           </nav>
         </div>
       </header>
-      <main id="main" className={styles.main}>
+      <main id="main" className={styles.main} tabIndex={-1}>
         {children}
       </main>
       <footer className={styles.footer}>

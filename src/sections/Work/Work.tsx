@@ -1,3 +1,4 @@
+import { Link } from 'react-router'
 import type { ProjectCaseStudy, SiteContent } from '@/content/types'
 import { getProjectHref } from '@/content'
 import { MotionReveal } from '@/motion'
@@ -106,9 +107,12 @@ export function Work({ site, projects }: WorkProps) {
                       </a>
                     ) : null}
                     {caseStudyHref ? (
-                      <a className={styles.actionSecondary} href={caseStudyHref}>
+                      <Link
+                        className={styles.actionSecondary}
+                        to={caseStudyHref}
+                      >
                         {work.caseStudyLabel}
-                      </a>
+                      </Link>
                     ) : (
                       <span className={styles.soon}>
                         {work.caseStudySoonLabel}

@@ -51,6 +51,28 @@ export interface SiteContent {
     previewStatusNote: string
     moreSoonNote: string
   }
+  caseStudy: {
+    backToWorkLabel: string
+    backToHomeLabel: string
+    previewBanner: string
+    previewNote: string
+    overviewLabel: string
+    problemLabel: string
+    responsibilitiesLabel: string
+    technologiesLabel: string
+    implementationLabel: string
+    challengesLabel: string
+    outcomesLabel: string
+    mediaLabel: string
+    repoLabel: string
+    liveDemoLabel: string
+    yearLabel: string
+  }
+  notFound: {
+    title: string
+    body: string
+    homeLabel: string
+  }
   about: {
     title: string
     lead: string

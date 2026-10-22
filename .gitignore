@@ -30,3 +30,9 @@ Desktop.ini
 
 .docs
 .tools
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
