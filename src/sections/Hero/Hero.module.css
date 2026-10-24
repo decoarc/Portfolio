@@ -290,6 +290,9 @@
 
   .nameFirst {
     padding-right: var(--space-3);
+    overflow-wrap: normal;
+    word-break: normal;
+    white-space: nowrap;
   }
 
   .nameRest {
@@ -298,6 +301,9 @@
     padding: 0.08em min(var(--space-5), 24px) 0.1em min(var(--space-4), 16px);
     background: transparent;
     color: var(--color-field-ink);
+    overflow-wrap: normal;
+    word-break: normal;
+    white-space: nowrap;
   }
 
   .copy {
@@ -448,18 +454,80 @@
   }
 }
 
+/*
+ * 80rem matches the approved 1280 composition: surname on one line, bio under
+ * the first name, cut field at 46vw. Sizes stay in vw past that width so 100%
+ * and zoomed-out viewports keep the same ratio instead of freezing in rem
+ * and splitting "Arcodaci".
+ */
 @media (min-width: 80rem) {
   .hero {
-    --field-width: min(46vw, 38rem);
+    --field-width: 46vw;
   }
 
   .name {
-    font-size: clamp(1.75rem, 9vw, 9.5rem);
+    font-size: max(1.75rem, 9vw);
   }
 
   .nameFirst {
     margin-right: calc(min(var(--space-10), 128px) * -1.1);
     padding-right: min(var(--space-10), 128px);
+  }
+
+  .copy {
+    max-width: none;
+    margin-left: 5vw;
+    padding-top: 3.75vw;
+  }
+
+  .role {
+    font-size: max(1rem, 1.40625vw);
+    margin-bottom: 1.25vw;
+  }
+
+  .pov {
+    font-size: max(1.125rem, 2.1875vw);
+    margin-bottom: 3.75vw;
+  }
+
+  .ctaGroup {
+    gap: 0.9375vw 2.5vw;
+  }
+
+  .ctaPrimary,
+  .ctaSecondary {
+    font-size: max(0.875rem, 1.171875vw);
+    min-height: max(44px, 3.4375vw);
+  }
+
+  .ctaPrimary {
+    padding-inline: max(24px, 1.875vw);
+  }
+
+  .plate {
+    padding: 1.875vw 3.75vw 0;
+  }
+
+  .plateHead {
+    margin-bottom: 1.875vw;
+  }
+
+  .plateFocus {
+    gap: max(0.35rem, 1.2vh);
+  }
+
+  .plateFocus li {
+    font-size: max(1.6rem, 2.1vw);
+  }
+
+  .plateSigil {
+    font-size: max(1rem, 1.40625vw);
+  }
+
+  .plateMeta,
+  .plateFocusLabel,
+  .plateLocation {
+    font-size: max(0.75rem, 1.015625vw);
   }
 }
 
