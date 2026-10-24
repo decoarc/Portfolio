@@ -14,6 +14,7 @@ Evidence-based Map Areas case-study content, applied under preview until explici
 | Document | Contents |
 |----------|----------|
 | [OWNER_DECISIONS.md](./OWNER_DECISIONS.md) | Final answers to the 11 owner questions |
+| [UPSTREAM_BACKLOG.md](./UPSTREAM_BACKLOG.md) | Future backlog for `geo-areas-php` (out of Portfolio scope) |
 | [UPSTREAM_SECURITY_PLAN.md](./UPSTREAM_SECURITY_PLAN.md) | Security remediation plan (no upstream edits) |
 | [MAP_AREAS_NARRATIVE_DRAFT.md](./MAP_AREAS_NARRATIVE_DRAFT.md) | Earlier narrative draft (superseded by apply + decisions) |
 | [EVIDENCE_REFERENCES.md](./EVIDENCE_REFERENCES.md) | Verified facts ↔ source anchors |
@@ -29,6 +30,10 @@ Evidence-based Map Areas case-study content, applied under preview until explici
 - Upstream `geo-areas-php` / `prototype/` untouched
 - No M5, no deploy, no push, no `published`
 
-## Next step
+## Upstream backlog (not Portfolio scope)
 
-Owner reviews the applied preview page → explicit approval required before `published` + `evidenceComplete: true`.
+Tracked in [UPSTREAM_BACKLOG.md](./UPSTREAM_BACKLOG.md): credential security, write-endpoint review, GitHub metadata refresh, product PT/EN i18n. **Do not** start those items from Portfolio workstreams.
+
+## Next Portfolio step
+
+Owner reviews the applied preview page → explicit approval required before `published` + `evidenceComplete: true` (Gate E closure). Upstream backlog remains a separate repo track.

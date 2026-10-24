@@ -107,6 +107,7 @@ export const siteEn: SiteContent = {
     title: 'Contact',
     lead: 'Open to roles, collaborations, and sharp technical conversations.',
     note: 'LinkedIn and GitHub are the best ways to reach me.',
+    externalHint: 'External',
   },
   shell: {
     skipToContent: 'Skip to content',

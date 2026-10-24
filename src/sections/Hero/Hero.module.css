@@ -43,7 +43,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  font-size: clamp(3.25rem, 15vw, 4.25rem);
+  font-size: clamp(0.875rem, 15vw, 4.25rem);
   font-weight: 600;
   line-height: 0.88;
   letter-spacing: -0.05em;
@@ -122,7 +122,9 @@
 .ctaPrimary {
   color: var(--color-field);
   background: var(--color-field-ink);
-  padding-inline: var(--space-5);
+  padding-inline: min(var(--space-5), 24px);
+  max-width: 100%;
+  white-space: normal;
   border-radius: var(--radius-sm);
 }
 
@@ -140,6 +142,12 @@
 
 .ctaSecondary:hover {
   color: color-mix(in srgb, var(--color-accent) 50%, var(--color-field-ink));
+}
+
+.ctaPrimary:focus-visible,
+.ctaSecondary:focus-visible {
+  outline-color: var(--color-field-ink);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-field-ink) 45%, transparent);
 }
 
 .plate {
@@ -273,9 +281,11 @@
     display: grid;
     grid-template-columns: minmax(0, 1fr) var(--field-width);
     align-items: end;
-    width: calc(100% + var(--page-gutter));
+    /* 4vw matches --page-gutter at 16px on this breakpoint, and keeps the bar
+       from running past the viewport when the rem gutter grows. */
+    width: calc(100% + min(var(--page-gutter), 4vw));
     margin-right: calc(var(--page-gutter) * -1);
-    font-size: clamp(3.75rem, 9vw, 6.5rem);
+    font-size: clamp(1rem, 9vw, 6.5rem);
   }
 
   .nameFirst {
@@ -285,7 +295,7 @@
   .nameRest {
     width: auto;
     margin: 0;
-    padding: 0.08em var(--space-5) 0.1em var(--space-4);
+    padding: 0.08em min(var(--space-5), 24px) 0.1em min(var(--space-4), 16px);
     background: transparent;
     color: var(--color-field-ink);
   }
@@ -326,6 +336,12 @@
 
   .ctaSecondary:hover {
     color: var(--color-accent);
+  }
+
+  .ctaPrimary:focus-visible,
+  .ctaSecondary:focus-visible {
+    outline-color: var(--color-focus);
+    box-shadow: var(--shadow-focus);
   }
 
   .plate {
@@ -391,19 +407,19 @@
   }
 
   .name {
-    font-size: clamp(5rem, 8.5vw, 8.75rem);
+    font-size: clamp(1.25rem, 8.5vw, 8.75rem);
   }
 
   /* Overlap: first name bleeds into the Cut field */
   .nameFirst {
-    margin-right: calc(var(--space-8) * -1);
-    padding-right: var(--space-8);
+    margin-right: calc(min(var(--space-8), 64px) * -1);
+    padding-right: min(var(--space-8), 64px);
     position: relative;
     z-index: 4;
   }
 
   .nameRest {
-    padding-left: var(--space-6);
+    padding-left: min(var(--space-6), 32px);
   }
 
   .copy {
@@ -438,18 +454,18 @@
   }
 
   .name {
-    font-size: clamp(6rem, 9vw, 9.5rem);
+    font-size: clamp(1.75rem, 9vw, 9.5rem);
   }
 
   .nameFirst {
-    margin-right: calc(var(--space-10) * -1.1);
-    padding-right: var(--space-10);
+    margin-right: calc(min(var(--space-10), 128px) * -1.1);
+    padding-right: min(var(--space-10), 128px);
   }
 }
 
 @media (max-width: 22.5rem) {
   .name {
-    font-size: clamp(2.6rem, 13vw, 3.25rem);
+    font-size: clamp(0.625rem, 13vw, 3.25rem);
   }
 
   .pov {

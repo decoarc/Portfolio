@@ -43,7 +43,7 @@ Under `docs/m4b-review/`: preview at 390 / 768 / 1280 / 1440, reduced-motion, 40
 
 ## 5. Remaining blockers (post-M4b)
 
-- Gate E: author narrative before `published` + `evidenceComplete`
+- Gate E closure: owner approval to set `published` + `evidenceComplete: true` (narrative already applied under preview)
 - Cloudflare Pages: connect account + production deep-link verify
-- Upstream Map Areas credential scrub (separate repo; not modified here)
+- Upstream `geo-areas-php` future backlog (credentials, write endpoints, GitHub update, PT/EN) — [UPSTREAM_BACKLOG.md](../gate-e/UPSTREAM_BACKLOG.md); **not** Portfolio scope; no `hrefRepo` until credentials fixed
 - M5 not started

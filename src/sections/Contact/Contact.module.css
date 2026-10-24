@@ -17,6 +17,13 @@
   flex-direction: column;
   align-items: flex-start;
   gap: 0;
+  container-type: inline-size;
+}
+
+.inner > * {
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
 }
 
 .index {
@@ -28,11 +35,12 @@
 }
 
 .title {
-  font-size: clamp(3.25rem, 10vw, 7.5rem);
+  font-size: min(21vw, clamp(3.25rem, 10vw, 7.5rem));
   letter-spacing: -0.05em;
   line-height: 0.9;
   margin: 0 0 var(--space-4);
-  max-width: 9ch;
+  max-width: min(9ch, 100%);
+  min-width: 0;
   color: var(--color-field-ink);
 }
 
@@ -47,19 +55,21 @@
 
 .lead {
   font-family: var(--font-display);
-  font-size: clamp(1.2rem, 2.2vw, 1.65rem);
+  font-size: min(14cqi, clamp(1.2rem, 2.2vw, 1.65rem));
   font-weight: 500;
   letter-spacing: -0.025em;
   line-height: var(--leading-snug);
   color: color-mix(in srgb, var(--color-field-ink) 92%, transparent);
-  max-width: 22ch;
+  max-width: min(22ch, 100%);
+  min-width: 0;
   margin: 0 0 var(--space-3);
 }
 
 .note {
   font-size: var(--text-sm);
   color: var(--color-field-muted);
-  max-width: 32ch;
+  max-width: min(32ch, 100%);
+  min-width: 0;
   margin: 0 0 var(--space-6);
 }
 
@@ -85,15 +95,18 @@
 
 .channel {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-4);
+  gap: min(var(--space-4), 16px);
+  min-width: 0;
+  max-width: 100%;
   min-height: 3.75rem;
   padding-block: var(--space-4);
   text-decoration: none;
   color: var(--color-field-ink);
   font-family: var(--font-display);
-  font-size: clamp(1.35rem, 2.5vw, 1.75rem);
+  font-size: min(15cqi, clamp(1.35rem, 2.5vw, 1.75rem));
   font-weight: 600;
   letter-spacing: -0.025em;
   transition: color var(--motion-fast) var(--ease-ink);
@@ -168,8 +181,8 @@
 @media (min-width: 64rem) {
   .inner {
     display: grid;
-    grid-template-columns: minmax(0, 1.1fr) minmax(18rem, 24rem);
-    column-gap: var(--space-9);
+    grid-template-columns: minmax(0, 1.1fr) minmax(min(18rem, 288px), min(24rem, 384px));
+    column-gap: min(var(--space-9), 96px);
     align-items: end;
   }
 

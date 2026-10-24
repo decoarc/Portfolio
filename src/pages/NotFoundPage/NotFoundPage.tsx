@@ -1,5 +1,6 @@
 import { Link } from 'react-router'
 import type { SiteContent } from '@/content/types'
+import { useDocumentTitle } from '@/app/useDocumentTitle'
 import styles from './NotFoundPage.module.css'
 
 interface NotFoundPageProps {
@@ -8,6 +9,7 @@ interface NotFoundPageProps {
 
 export function NotFoundPage({ site }: NotFoundPageProps) {
   const { notFound } = site
+  useDocumentTitle(`${notFound.title} — ${site.person.name}`)
 
   return (
     <div className={styles.page}>

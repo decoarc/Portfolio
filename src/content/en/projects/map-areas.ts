@@ -3,7 +3,8 @@ import type { ProjectCaseStudy } from '../../types'
 /**
  * Map Areas — Gate E content apply (owner decisions 2026-10-22).
  * Remains preview / evidenceComplete: false until explicit publish approval.
- * hrefRepo omitted until upstream security remediation.
+ * hrefRepo omitted until upstream credential security (see docs/gate-e/UPSTREAM_BACKLOG.md).
+ * Upstream geo-areas-php backlog (credentials, write endpoints, GitHub, PT/EN) is out of Portfolio scope.
  *
  * Cover asset provenance:
  * - Source: sibling `prototype/public/assets/components/Projects/map-areas.png`

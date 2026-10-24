@@ -19,12 +19,10 @@
       opacity var(--motion-medium) var(--ease-out-expressive),
       transform var(--motion-medium) var(--ease-out-expressive);
     transition-delay: var(--reveal-delay, 0ms);
-    will-change: opacity, transform;
   }
 
   :global(html.js) .reveal.inView {
     opacity: 1;
     transform: none;
-    will-change: auto;
   }
 }

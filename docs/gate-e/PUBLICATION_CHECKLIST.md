@@ -28,8 +28,8 @@
 |------|-----|
 | `evidenceComplete: true` | Needs explicit owner publish approval |
 | `status: 'published'` | Same — unlocks homepage Case study CTA |
-| `hrefRepo` | Wait for upstream security remediation |
-| Upstream GitHub blurb / i18n / credential scrub | Separate authorized work |
+| `hrefRepo` | Wait for upstream credential security ([UPSTREAM_BACKLOG.md](./UPSTREAM_BACKLOG.md) §1) |
+| Upstream credential scrub / write-endpoint review / GitHub blurb / PT–EN i18n | Future backlog in `geo-areas-php` — **not** Portfolio scope |
 
 ---
 
@@ -37,8 +37,8 @@
 
 | Item | Status |
 |------|--------|
-| Upstream security plan executed | Plan only (`UPSTREAM_SECURITY_PLAN.md`) |
-| GitHub description no longer MySQL/Google Maps | Separate |
+| Upstream security plan executed | Plan only — see [UPSTREAM_BACKLOG.md](./UPSTREAM_BACKLOG.md) + [UPSTREAM_SECURITY_PLAN.md](./UPSTREAM_SECURITY_PLAN.md) |
+| Write-endpoint review / GitHub blurb / product i18n | Upstream backlog only |
 | Confirm preview narrative on `/work/map-areas` | After this apply |
 | Cloudflare production deep-link verify | Deploy milestone |
 

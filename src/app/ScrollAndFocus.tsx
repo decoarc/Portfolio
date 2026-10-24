@@ -25,6 +25,10 @@ export function ScrollAndFocus() {
           behavior: reducedMotion ? 'auto' : 'smooth',
           block: 'start',
         })
+        if (!target.hasAttribute('tabindex')) {
+          target.setAttribute('tabindex', '-1')
+        }
+        target.focus({ preventScroll: true })
         return
       }
     }

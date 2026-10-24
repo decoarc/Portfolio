@@ -1,6 +1,7 @@
 # Upstream Security Remediation — Planning Only
 
-**Repo:** `geo-areas-php` (`https://github.com/decoarc/geo-areas-php`)  
+**Repo:** `geo-areas-php`  
+**Parent backlog:** [UPSTREAM_BACKLOG.md](./UPSTREAM_BACKLOG.md) (item 1 — credentials; item 2 — write endpoints)  
 **Authorization level:** Planning documentation in Portfolio only  
 **This pass:** **No** modifications to the upstream repository
 
@@ -31,5 +32,7 @@
 
 ## Portfolio coupling
 
-- Gate E apply pass **omits** `hrefRepo` until remediation is done.  
-- Case study may mention unauthenticated writes as a **demo limitation**, never connection secrets.
+- Map Areas remains `preview` / `evidenceComplete: false`.  
+- Site **omits** `hrefRepo` until credential remediation (backlog item 1) is done.  
+- Case study may mention unauthenticated writes as a **demo limitation**, never connection secrets.  
+- Full upstream future work (GitHub refresh, product PT/EN) lives in [UPSTREAM_BACKLOG.md](./UPSTREAM_BACKLOG.md) — outside Portfolio scope.

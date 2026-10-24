@@ -46,9 +46,10 @@ export function Contact({ site }: ContactProps) {
                   target="_blank"
                   rel="noopener noreferrer"
                   className={styles.channel}
+                  aria-label={`${item.label}, ${contact.externalHint}`}
                 >
                   <span className={styles.channelLabel}>{item.label}</span>
-                  <span className={styles.channelHint}>External</span>
+                  <span className={styles.channelHint}>{contact.externalHint}</span>
                 </a>
               </li>
             ))}

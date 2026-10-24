@@ -1,0 +1,602 @@
+[
+  {
+    "width": 320,
+    "rootPx": 16,
+    "font": "41.6px",
+    "headerH": 60,
+    "scrollWidth": 320,
+    "clientWidth": 320,
+    "lines": [
+      {
+        "text": "André",
+        "left": 20,
+        "right": 131
+      },
+      {
+        "text": "Arcodaci",
+        "left": 20,
+        "right": 182
+      }
+    ],
+    "links": [
+      {
+        "text": "AAAndré Arcodaci",
+        "top": 8,
+        "bottom": 52,
+        "left": 20,
+        "right": 135
+      },
+      {
+        "text": "Work",
+        "top": -18,
+        "bottom": 26,
+        "left": 159,
+        "right": 190
+      },
+      {
+        "text": "About",
+        "top": -18,
+        "bottom": 26,
+        "left": 214,
+        "right": 249
+      },
+      {
+        "text": "Contact",
+        "top": 34,
+        "bottom": 78,
+        "left": 159,
+        "right": 205
+      }
+    ]
+  },
+  {
+    "width": 320,
+    "rootPx": 32,
+    "font": "83.2px",
+    "headerH": 120,
+    "scrollWidth": 400,
+    "clientWidth": 320,
+    "lines": [
+      {
+        "text": "André",
+        "left": 40,
+        "right": 263
+      },
+      {
+        "text": "Arcodaci",
+        "left": 40,
+        "right": 365
+      }
+    ],
+    "links": [
+      {
+        "text": "AAAndré Arcodaci",
+        "top": 17,
+        "bottom": 103,
+        "left": 40,
+        "right": 215
+      },
+      {
+        "text": "Work",
+        "top": -27,
+        "bottom": 17,
+        "left": 263,
+        "right": 324
+      },
+      {
+        "text": "About",
+        "top": 39,
+        "bottom": 83,
+        "left": 263,
+        "right": 333
+      },
+      {
+        "text": "Contact",
+        "top": 105,
+        "bottom": 149,
+        "left": 263,
+        "right": 354
+      }
+    ]
+  },
+  {
+    "width": 320,
+    "rootPx": 64,
+    "font": "166.4px",
+    "headerH": 240,
+    "scrollWidth": 800,
+    "clientWidth": 320,
+    "lines": [
+      {
+        "text": "André",
+        "left": 80,
+        "right": 525
+      },
+      {
+        "text": "Arcodaci",
+        "left": 80,
+        "right": 729
+      }
+    ],
+    "links": [
+      {
+        "text": "AAAndré Arcodaci",
+        "top": 33,
+        "bottom": 207,
+        "left": 80,
+        "right": 430
+      },
+      {
+        "text": "Work",
+        "top": -52,
+        "bottom": 35,
+        "left": 526,
+        "right": 647
+      },
+      {
+        "text": "About",
+        "top": 79,
+        "bottom": 166,
+        "left": 526,
+        "right": 667
+      },
+      {
+        "text": "Contact",
+        "top": 211,
+        "bottom": 297,
+        "left": 526,
+        "right": 708
+      }
+    ]
+  },
+  {
+    "width": 390,
+    "rootPx": 16,
+    "font": "58.5px",
+    "headerH": 60,
+    "scrollWidth": 390,
+    "clientWidth": 390,
+    "lines": [
+      {
+        "text": "André",
+        "left": 20,
+        "right": 177
+      },
+      {
+        "text": "Arcodaci",
+        "left": 20,
+        "right": 248
+      }
+    ],
+    "links": [
+      {
+        "text": "AAAndré Arcodaci",
+        "top": 8,
+        "bottom": 52,
+        "left": 20,
+        "right": 152
+      },
+      {
+        "text": "Work",
+        "top": 8,
+        "bottom": 52,
+        "left": 210,
+        "right": 240
+      },
+      {
+        "text": "About",
+        "top": 8,
+        "bottom": 52,
+        "left": 264,
+        "right": 300
+      },
+      {
+        "text": "Contact",
+        "top": 8,
+        "bottom": 52,
+        "left": 324,
+        "right": 370
+      }
+    ]
+  },
+  {
+    "width": 390,
+    "rootPx": 32,
+    "font": "104px",
+    "headerH": 120,
+    "scrollWidth": 400,
+    "clientWidth": 390,
+    "lines": [
+      {
+        "text": "André",
+        "left": 40,
+        "right": 318
+      },
+      {
+        "text": "Arcodaci",
+        "left": 40,
+        "right": 446
+      }
+    ],
+    "links": [
+      {
+        "text": "AAAndré Arcodaci",
+        "top": 17,
+        "bottom": 103,
+        "left": 40,
+        "right": 215
+      },
+      {
+        "text": "Work",
+        "top": -27,
+        "bottom": 17,
+        "left": 263,
+        "right": 324
+      },
+      {
+        "text": "About",
+        "top": 39,
+        "bottom": 83,
+        "left": 263,
+        "right": 333
+      },
+      {
+        "text": "Contact",
+        "top": 105,
+        "bottom": 149,
+        "left": 263,
+        "right": 354
+      }
+    ]
+  },
+  {
+    "width": 390,
+    "rootPx": 64,
+    "font": "208px",
+    "headerH": 240,
+    "scrollWidth": 800,
+    "clientWidth": 390,
+    "lines": [
+      {
+        "text": "André",
+        "left": 80,
+        "right": 637
+      },
+      {
+        "text": "Arcodaci",
+        "left": 80,
+        "right": 891
+      }
+    ],
+    "links": [
+      {
+        "text": "AAAndré Arcodaci",
+        "top": 33,
+        "bottom": 207,
+        "left": 80,
+        "right": 430
+      },
+      {
+        "text": "Work",
+        "top": -52,
+        "bottom": 35,
+        "left": 526,
+        "right": 647
+      },
+      {
+        "text": "About",
+        "top": 79,
+        "bottom": 166,
+        "left": 526,
+        "right": 667
+      },
+      {
+        "text": "Contact",
+        "top": 211,
+        "bottom": 297,
+        "left": 526,
+        "right": 708
+      }
+    ]
+  },
+  {
+    "width": 768,
+    "rootPx": 16,
+    "font": "69.12px",
+    "headerH": 60,
+    "scrollWidth": 768,
+    "clientWidth": 768,
+    "lines": [
+      {
+        "text": "André",
+        "left": 31,
+        "right": 216
+      },
+      {
+        "text": "Arcodaci",
+        "left": 477,
+        "right": 746
+      }
+    ],
+    "links": [
+      {
+        "text": "AAAndré Arcodaci",
+        "top": 8,
+        "bottom": 52,
+        "left": 31,
+        "right": 170
+      },
+      {
+        "text": "Work",
+        "top": 8,
+        "bottom": 52,
+        "left": 570,
+        "right": 602
+      },
+      {
+        "text": "About",
+        "top": 8,
+        "bottom": 52,
+        "left": 626,
+        "right": 664
+      },
+      {
+        "text": "Contact",
+        "top": 8,
+        "bottom": 52,
+        "left": 688,
+        "right": 737
+      }
+    ]
+  },
+  {
+    "width": 768,
+    "rootPx": 32,
+    "font": "120px",
+    "headerH": 120,
+    "scrollWidth": 768,
+    "clientWidth": 768,
+    "lines": [
+      {
+        "text": "André",
+        "left": 40,
+        "right": 361
+      },
+      {
+        "text": "Arcodaci",
+        "left": 502,
+        "right": 970
+      }
+    ],
+    "links": [
+      {
+        "text": "AAAndré Arcodaci",
+        "top": 38,
+        "bottom": 82,
+        "left": 40,
+        "right": 303
+      },
+      {
+        "text": "Work",
+        "top": 39,
+        "bottom": 83,
+        "left": 408,
+        "right": 469
+      },
+      {
+        "text": "About",
+        "top": 39,
+        "bottom": 83,
+        "left": 517,
+        "right": 588
+      },
+      {
+        "text": "Contact",
+        "top": 39,
+        "bottom": 83,
+        "left": 636,
+        "right": 728
+      }
+    ]
+  },
+  {
+    "width": 768,
+    "rootPx": 64,
+    "font": "240px",
+    "headerH": 240,
+    "scrollWidth": 1232,
+    "clientWidth": 768,
+    "lines": [
+      {
+        "text": "André",
+        "left": 80,
+        "right": 722
+      },
+      {
+        "text": "Arcodaci",
+        "left": 574,
+        "right": 1510
+      }
+    ],
+    "links": [
+      {
+        "text": "AAAndré Arcodaci",
+        "top": 33,
+        "bottom": 207,
+        "left": 80,
+        "right": 430
+      },
+      {
+        "text": "Work",
+        "top": -52,
+        "bottom": 35,
+        "left": 526,
+        "right": 647
+      },
+      {
+        "text": "About",
+        "top": 79,
+        "bottom": 166,
+        "left": 526,
+        "right": 667
+      },
+      {
+        "text": "Contact",
+        "top": 211,
+        "bottom": 297,
+        "left": 526,
+        "right": 708
+      }
+    ]
+  },
+  {
+    "width": 1280,
+    "rootPx": 16,
+    "font": "115.2px",
+    "headerH": 60,
+    "scrollWidth": 1280,
+    "clientWidth": 1280,
+    "lines": [
+      {
+        "text": "André",
+        "left": 51,
+        "right": 359
+      },
+      {
+        "text": "Arcodaci",
+        "left": 774,
+        "right": 1224
+      }
+    ],
+    "links": [
+      {
+        "text": "AAAndré Arcodaci",
+        "top": 8,
+        "bottom": 52,
+        "left": 64,
+        "right": 204
+      },
+      {
+        "text": "Work",
+        "top": 8,
+        "bottom": 52,
+        "left": 1049,
+        "right": 1081
+      },
+      {
+        "text": "About",
+        "top": 8,
+        "bottom": 52,
+        "left": 1105,
+        "right": 1143
+      },
+      {
+        "text": "Contact",
+        "top": 8,
+        "bottom": 52,
+        "left": 1167,
+        "right": 1216
+      }
+    ]
+  },
+  {
+    "width": 1280,
+    "rootPx": 32,
+    "font": "192px",
+    "headerH": 120,
+    "scrollWidth": 1280,
+    "clientWidth": 1280,
+    "lines": [
+      {
+        "text": "André",
+        "left": 51,
+        "right": 565
+      },
+      {
+        "text": "Arcodaci",
+        "left": 806,
+        "right": 1555
+      }
+    ],
+    "links": [
+      {
+        "text": "AAAndré Arcodaci",
+        "top": 37,
+        "bottom": 83,
+        "left": 51,
+        "right": 325
+      },
+      {
+        "text": "Work",
+        "top": 39,
+        "bottom": 85,
+        "left": 899,
+        "right": 962
+      },
+      {
+        "text": "About",
+        "top": 39,
+        "bottom": 85,
+        "left": 1010,
+        "right": 1085
+      },
+      {
+        "text": "Contact",
+        "top": 39,
+        "bottom": 85,
+        "left": 1133,
+        "right": 1229
+      }
+    ]
+  },
+  {
+    "width": 1280,
+    "rootPx": 64,
+    "font": "384px",
+    "headerH": 240,
+    "scrollWidth": 1616,
+    "clientWidth": 1280,
+    "lines": [
+      {
+        "text": "André",
+        "left": 80,
+        "right": 1107
+      },
+      {
+        "text": "Arcodaci",
+        "left": 899,
+        "right": 2397
+      }
+    ],
+    "links": [
+      {
+        "text": "AAAndré Arcodaci",
+        "top": 33,
+        "bottom": 207,
+        "left": 80,
+        "right": 542
+      },
+      {
+        "text": "Work",
+        "top": 14,
+        "bottom": 101,
+        "left": 638,
+        "right": 759
+      },
+      {
+        "text": "About",
+        "top": 14,
+        "bottom": 101,
+        "left": 855,
+        "right": 996
+      },
+      {
+        "text": "Contact",
+        "top": 146,
+        "bottom": 233,
+        "left": 638,
+        "right": 821
+      }
+    ]
+  }
+]

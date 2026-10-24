@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import { mapAreas } from './en/projects/map-areas'
 import type { ProjectCaseStudy } from './types'
 import {
   assertPublicationRules,
@@ -73,5 +74,13 @@ describe('project status → listing and href rules', () => {
     })
     expect(getProjectHref(project)).toBe('/work/map-areas')
     expect(assertPublicationRules(project)).toBeNull()
+  })
+})
+
+describe('Map Areas publication flags', () => {
+  it('stays a preview without a repository link', () => {
+    expect(mapAreas.status).toBe('preview')
+    expect(mapAreas.evidenceComplete).toBe(false)
+    expect(mapAreas.hrefRepo).toBeUndefined()
   })
 })

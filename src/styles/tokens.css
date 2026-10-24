@@ -25,7 +25,7 @@
   --header-height: 3.75rem;
 
   /* Datum annotation accent (rare) */
-  --color-mark: #b8860b;
+  --color-mark: #7c5a08;
 
   /* Typography */
   --font-display: 'Bricolage Grotesque Variable', 'Bricolage Grotesque',
@@ -33,9 +33,9 @@
   --font-body: 'Source Sans 3 Variable', 'Source Sans 3', 'Segoe UI', sans-serif;
   --font-mono: 'IBM Plex Mono', ui-monospace, 'Cascadia Code', monospace;
 
-  --text-xs: clamp(0.75rem, 0.7rem + 0.2vw, 0.8125rem);
-  --text-sm: clamp(0.875rem, 0.82rem + 0.25vw, 0.9375rem);
-  --text-base: clamp(1rem, 0.95rem + 0.3vw, 1.125rem);
+  --text-xs: min(8vw, clamp(0.75rem, 0.7rem + 0.2vw, 0.8125rem));
+  --text-sm: min(9vw, clamp(0.875rem, 0.82rem + 0.25vw, 0.9375rem));
+  --text-base: min(13cqi, clamp(1rem, 0.95rem + 0.3vw, 1.125rem));
   --text-md: clamp(1.125rem, 1.05rem + 0.4vw, 1.25rem);
   --text-lg: clamp(1.375rem, 1.2rem + 0.8vw, 1.75rem);
   --text-xl: clamp(1.75rem, 1.4rem + 1.5vw, 2.5rem);
@@ -60,7 +60,10 @@
   --space-9: 6rem;
   --space-10: 8rem;
 
-  --page-gutter: clamp(1.25rem, 4vw, 3.5rem);
+  /* 20px and 56px are 1.25rem and 3.5rem at a 16px root. Locking the
+     ends in px keeps that gutter when the root font grows, so enlarged
+     text reflows in the same content width instead of losing it to margins. */
+  --page-gutter: clamp(20px, 4vw, 56px);
   --page-max: 72rem;
   --section-y: clamp(4rem, 8vw, 7rem);
 

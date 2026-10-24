@@ -8,7 +8,8 @@
   position: sticky;
   top: 0;
   z-index: var(--z-header);
-  height: var(--header-height);
+  height: auto;
+  min-height: var(--header-height);
   border-bottom: 1px solid var(--color-rule);
   background: color-mix(in srgb, var(--color-paper) 92%, transparent);
   backdrop-filter: blur(6px);
@@ -18,16 +19,20 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
   gap: var(--space-5);
-  height: 100%;
-  min-height: var(--header-height);
+  height: auto;
+  min-height: calc(var(--header-height) - 1px);
   padding-block: 0;
 }
 
 .brand {
   display: inline-flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: var(--space-3);
+  max-width: 100%;
+  min-width: 0;
   text-decoration: none;
   min-height: 44px;
   transition: opacity var(--motion-fast) var(--ease-ink);
@@ -51,12 +56,17 @@
   letter-spacing: -0.01em;
 }
 
+.nav {
+  max-width: 100%;
+}
+
 .navList {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-2) var(--space-5);
   list-style: none;
   padding: 0;
+  max-width: 100%;
 }
 
 .nav a {
@@ -141,6 +151,11 @@
   color: var(--color-field-ink);
 }
 
-.footer .meta {
+.footer :focus-visible {
+  outline-color: var(--color-field-ink);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-field-ink) 45%, transparent);
+}
+
+.footer :global(.meta) {
   color: var(--color-field-muted);
 }

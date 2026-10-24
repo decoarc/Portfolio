@@ -1,5 +1,6 @@
 import type { ProjectCaseStudy, SiteContent } from '@/content/types'
 import { filterPublicProjects } from '@/content'
+import { useDocumentTitle } from '@/app/useDocumentTitle'
 import { Hero } from '@/sections/Hero'
 import { Work } from '@/sections/Work'
 import { About } from '@/sections/About'
@@ -16,6 +17,7 @@ interface HomePageProps {
  * Hero composition is Gate-B locked — do not redesign here.
  */
 export function HomePage({ site, projects }: HomePageProps) {
+  useDocumentTitle(`${site.person.name} — Portfolio`)
   const listed = filterPublicProjects(projects)
 
   return (

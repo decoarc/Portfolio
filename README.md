@@ -43,6 +43,7 @@ pnpm validate     # typecheck + lint + test + build
 | `@fontsource-variable/bricolage-grotesque` | Ledger display face (self-hosted via package) | M1 |
 | `@fontsource-variable/source-sans-3` | Body face | M1 |
 | `@fontsource/ibm-plex-mono` | Datum metadata only | M1 |
+| `@axe-core/playwright` | WCAG smoke on primary routes | M5 |
 
 ### Explicitly not installed (yet / ever by default)
 

@@ -23,18 +23,18 @@ html {
   scroll-padding-top: calc(var(--header-height) + 0.75rem);
 }
 
+/* At 320px the header wraps to two rows (about 113px at 16px). 8rem clears
+   that row and still grows with the root font. Wider viewports keep the
+   single-row offset above. */
+@media (max-width: 22.5rem) {
+  html {
+    scroll-padding-top: 8rem;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
-  }
-
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
   }
 }
 
@@ -95,6 +95,15 @@ h4 {
   line-height: var(--leading-tight);
   letter-spacing: -0.02em;
   text-wrap: balance;
+}
+
+p,
+li,
+h1,
+h2,
+h3,
+a {
+  overflow-wrap: break-word;
 }
 
 p {

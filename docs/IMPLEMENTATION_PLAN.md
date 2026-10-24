@@ -308,7 +308,7 @@ Install only when justified; keep the set minimal:
 | 1 | Visual direction | André | Before M1 | **Resolved** — Ledger × Datum × Cut hybrid |
 | 2 | Hosting target + SPA fallback | André | **Before case-study routing finalized (Gate D)** | **Locked — Cloudflare Pages**; `_redirects` shipped in M4b; production verify after account connect |
 | 3 | Contact method | André | Before M2b contact final copy | Unresolved |
-| 4 | v1 project list + evidence | André | Before Gate E / M4b publish | Inventory in `docs/m4a/` — Map Areas **preview**; publish blocked on Gate E |
+| 4 | v1 project list + evidence | André | Before Gate E publish | Narrative applied under **preview**; explicit publish approval still open. Upstream `geo-areas-php` backlog: `docs/gate-e/UPSTREAM_BACKLOG.md` (out of Portfolio scope) |
 | 5 | Portrait + wordmark approval | André | Before M2b polish | Unresolved |
 | 6 | Instagram in chrome? | André | Before M2b | Unresolved |
 | 7 | PT i18n timing | André | M1 content seam (scaffold only vs later) | Unresolved |

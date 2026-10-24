@@ -13,6 +13,12 @@
   margin-inline: auto;
 }
 
+.inner > * {
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+}
+
 .header {
   display: flex;
   flex-wrap: wrap;
@@ -30,7 +36,9 @@
 }
 
 .title {
-  font-size: clamp(2.25rem, 4.5vw, 3.75rem);
+  font-size: min(12vw, clamp(2.25rem, 4.5vw, 3.75rem));
+  min-width: 0;
+  max-width: 100%;
   letter-spacing: -0.035em;
   line-height: 1;
   margin: 0;
@@ -41,19 +49,28 @@
   gap: clamp(2rem, 5vw, 3.5rem);
 }
 
+.layout > * {
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+}
+
 .prose {
-  max-width: 38rem;
+  max-width: min(38rem, 100%);
+  min-width: 0;
+  container-type: inline-size;
 }
 
 .lead {
   font-family: var(--font-display);
-  font-size: clamp(1.3rem, 2.2vw, 1.75rem);
+  font-size: min(18cqi, clamp(1.3rem, 2.2vw, 1.75rem));
   font-weight: 500;
   letter-spacing: -0.025em;
   line-height: 1.2;
   color: var(--color-ink);
   margin: 0 0 var(--space-4);
-  max-width: 26ch;
+  max-width: min(26ch, 100%);
+  min-width: 0;
 }
 
 .body {
@@ -61,7 +78,8 @@
   line-height: var(--leading-body);
   color: var(--color-ink-muted);
   margin: 0;
-  max-width: 48ch;
+  max-width: min(48ch, 100%);
+  min-width: 0;
 }
 
 .lists {
@@ -69,6 +87,7 @@
   gap: var(--space-6);
   padding-top: var(--space-5);
   border-top: 1px solid var(--color-rule);
+  container-type: inline-size;
 }
 
 .listBlock {
@@ -96,7 +115,7 @@
 
 .list li {
   font-family: var(--font-display);
-  font-size: clamp(1.05rem, 1.5vw, 1.25rem);
+  font-size: min(15cqi, clamp(1.05rem, 1.5vw, 1.25rem));
   font-weight: 500;
   letter-spacing: -0.015em;
   line-height: 1.25;
@@ -111,8 +130,8 @@
 
 @media (min-width: 48rem) {
   .layout {
-    grid-template-columns: minmax(0, 1.25fr) minmax(15rem, 0.75fr);
-    gap: var(--space-7);
+    grid-template-columns: minmax(0, 1.25fr) minmax(min(15rem, 240px), 0.75fr);
+    gap: min(var(--space-7), 48px);
     align-items: start;
   }
 
@@ -120,14 +139,13 @@
     border-top: 0;
     border-left: 1px solid var(--color-rule);
     padding-top: 0;
-    padding-left: var(--space-6);
-    gap: var(--space-7);
+    padding-left: min(var(--space-6), 32px);
   }
 }
 
 @media (min-width: 64rem) {
   .prose {
-    padding-right: var(--space-6);
+    padding-right: min(var(--space-6), 32px);
   }
 
   .lead {

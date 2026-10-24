@@ -87,6 +87,8 @@ export interface SiteContent {
     lead: string
     /** Optional supporting line — omit development/placeholder phrasing. */
     note?: string
+    /** Visible hint on outbound channels; also appended to the accessible name. */
+    externalHint: string
   }
   shell: {
     skipToContent: string

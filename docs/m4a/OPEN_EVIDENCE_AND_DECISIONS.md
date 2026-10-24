@@ -1,8 +1,9 @@
 # Remaining Evidence and Decisions
 
 **Milestone:** Gate D close-out (post-M4a)  
-**Blocks:** Gate E (publish Map Areas); M4b start still needs explicit go-ahead  
-**Resolved this close-out:** Hosting D1/D2 → Cloudflare Pages (see [GATE_D_CLOSURE.md](./GATE_D_CLOSURE.md))
+**Blocks:** Gate E closure (explicit publish approval for Map Areas)  
+**Resolved this close-out:** Hosting D1/D2 → Cloudflare Pages (see [GATE_D_CLOSURE.md](./GATE_D_CLOSURE.md))  
+**Upstream future work:** [UPSTREAM_BACKLOG.md](../gate-e/UPSTREAM_BACKLOG.md) — `geo-areas-php` only; **not** Portfolio scope
 
 ---
 
@@ -14,10 +15,10 @@
 | **D2** | Production URL shape | Vite `base`, asset paths | **Locked intent —** root / `*.pages.dev` with `base: '/'` |
 | **D3** | Confirm Map Areas problem/motivation wording | Gate E | Approve or rewrite the interpretation in the inventory |
 | **D4** | Confirm solo ownership / role bullets | Gate E | Any collaborators to credit? |
-| **D5** | Show `hrefRepo` on Work + case study? | Content | Recommend **yes** → `https://github.com/decoarc/geo-areas-php` |
+| **D5** | Show `hrefRepo` on Work + case study? | Content | **No until upstream credential security** ([UPSTREAM_BACKLOG.md](../gate-e/UPSTREAM_BACKLOG.md) §1); then separate Portfolio pass |
 | **D6** | Project `year` on Map Areas | Content polish | Optional; confirm year of primary work |
 | **D7** | Second project for v1 Work list? | Scope | Recommend **no** until Map Areas case study ships |
-| **D8** | Scrub upstream credentials in `geo-areas-php` README/compose | Hygiene / credibility | See [MAP_AREAS_SECURITY_REVIEW.md](./MAP_AREAS_SECURITY_REVIEW.md); do outside Portfolio; do not copy secrets into docs |
+| **D8** | Scrub upstream credentials in `geo-areas-php` README/compose | Hygiene / credibility | Future upstream backlog ([UPSTREAM_BACKLOG.md](../gate-e/UPSTREAM_BACKLOG.md)); see also [MAP_AREAS_SECURITY_REVIEW.md](./MAP_AREAS_SECURITY_REVIEW.md); do not copy secrets into docs |
 | **D9** | Explicit go-ahead for **M4b** | Routes + template | **Done** — M4b completed and approved (`docs/m4b/`) |
 
 ---
@@ -33,9 +34,10 @@
 | Case-study body from inventory | `implementation` / `challenges` still TBD stubs | Draft from [CASE_STUDY_READINESS.md](./CASE_STUDY_READINESS.md) in Gate E / authorized content pass |
 | 2–4 extra screenshots | Stronger case study / CLS-safe gallery | Capture draw, list, coords modal, UTM; optimize to WebP under `public/images/projects/` |
 | Optional short demo clip or GIF | Demonstration without cold-start friction | Host as file or external link — only if André wants |
-| Confirm live demo is OK to stay writable | Honesty about public POST endpoints | Keep as limitation bullet or add read-only demo later (out of Portfolio scope) |
-| Update GitHub repo description | Avoid contradicting PostGIS/Leaflet story | Change upstream blurb away from MySQL/Google Maps |
-| Upstream credential scrub + rotation | Public README/Compose exposure | Authorized work in `geo-areas-php` only |
+| Confirm live demo is OK to stay writable | Honesty about public POST endpoints | Stated as limitation; write-endpoint review in upstream backlog |
+| Update GitHub repo description | Avoid contradicting PostGIS/Leaflet story | Upstream backlog item 3 — not Portfolio |
+| Upstream credential scrub + rotation | Public README/Compose exposure | Upstream backlog item 1 — not Portfolio |
+| Product PT/EN i18n | Bilingual app | Upstream backlog item 4 — not Portfolio |
 
 ### Other projects (only if promoting beyond draft)
 
@@ -57,7 +59,7 @@
 | Gate D host choice (D1/D2) | **Locked** — Cloudflare Pages |
 | Gate D SPA fallback **documented** | **Done** — file authoring deferred to M4b |
 | Gate D live deep-link verification | **Deferred** until first Cloudflare deploy |
-| Gate E Map Areas evidence | **Open** (inventory ready; narrative not written into app yet) |
+| Gate E Map Areas evidence | **Applied under preview** — publish flags still need explicit owner approval |
 | Explicit M4b go-ahead (D9) | **Done** (completed and approved) |
 | No homepage redesign | Respected |
 | No GSAP/Lenis/WebGL / no new deps in Gate D prep | Respected |

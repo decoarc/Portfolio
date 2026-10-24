@@ -229,7 +229,7 @@ Authorization mapped experiments to homepage motion (case-study route transition
 |----|---------------------|----------|-------|
 | MP-1 | Hero typography | **Keep** (adjusted) | Transform-only settle (no opacity fade) so t=0 matches Gate C; stagger on name/copy/plate; `--motion-slow` / `--motion-stagger` (70ms); reduced = static |
 | MP-2 | Project interactions | **Keep** | CSS `scale(1.02)` on media + meta accent border; `:hover` and `:focus-within` parity; no cursor-follow |
-| MP-3 | Section transitions (Work / About / Contact) | **Keep** | `MotionReveal` + `IntersectionObserver` once; opacity + 1.25rem Y; Contact Cut rule `scaleX` draw; 2.5s fallback reveal |
+| MP-3 | Section transitions (Work / About / Contact) | **Keep** | `MotionReveal` + `IntersectionObserver` once; opacity + 1.25rem Y; Contact Cut rule `scaleX` draw; 1200ms fallback reveal |
 | MP-4 | Navigation continuity | **Keep** | `scroll-padding-top` for sticky header; nav underline + `aria-current` via scroll spy; native smooth scroll (off when reduced) |
 | Spec MP-3 (home→case study) | — | **Defer** | No case-study routes yet; do not implement route theatre before Gate D |
 | Spec MP-4 (light/dark band) | — | **Keep (static+reveal)** | Contact Cut band already approved; motion is reveal + hairline draw only |

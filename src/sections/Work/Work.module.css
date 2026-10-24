@@ -15,11 +15,18 @@
   margin-inline: auto;
 }
 
+.inner > * {
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+}
+
 .header {
   display: grid;
   gap: var(--space-3);
   margin-bottom: clamp(2rem, 5vw, 3.5rem);
-  max-width: 48rem;
+  max-width: min(48rem, 100%);
+  min-width: 0;
 }
 
 .index {
@@ -31,17 +38,19 @@
 }
 
 .title {
-  font-size: clamp(2.25rem, 4.5vw, 3.75rem);
+  font-size: min(12vw, clamp(2.25rem, 4.5vw, 3.75rem));
   letter-spacing: -0.035em;
   margin: 0 0 var(--space-3);
-  max-width: 12ch;
+  max-width: min(12ch, 100%);
+  min-width: 0;
   line-height: 1;
 }
 
 .intro {
   font-size: var(--text-md);
   color: var(--color-ink-muted);
-  max-width: 42ch;
+  max-width: min(42ch, 100%);
+  min-width: 0;
   margin: 0;
 }
 
@@ -132,7 +141,9 @@
 }
 
 .projectTitle {
-  font-size: clamp(1.85rem, 3.5vw, 2.75rem);
+  font-size: min(10vw, clamp(1.85rem, 3.5vw, 2.75rem));
+  min-width: 0;
+  max-width: 100%;
   letter-spacing: -0.03em;
   line-height: 1.05;
   margin: 0 0 var(--space-3);
@@ -142,7 +153,8 @@
   font-size: var(--text-base);
   line-height: var(--leading-body);
   color: var(--color-ink-muted);
-  max-width: 52ch;
+  max-width: min(52ch, 100%);
+  min-width: 0;
   margin: 0 0 var(--space-4);
 }
 
@@ -184,7 +196,9 @@
 .actionPrimary {
   color: var(--color-paper-elevated);
   background: var(--color-ink);
-  padding-inline: var(--space-5);
+  padding-inline: min(var(--space-5), 24px);
+  max-width: 100%;
+  white-space: normal;
   border-radius: var(--radius-sm);
 }
 
@@ -244,8 +258,8 @@
 /* Side-by-side only when there is real horizontal room */
 @media (min-width: 64rem) {
   .project {
-    grid-template-columns: minmax(0, 1.4fr) minmax(20rem, 0.85fr);
-    gap: var(--space-8);
+    grid-template-columns: minmax(0, 1.4fr) minmax(min(20rem, 320px), 0.85fr);
+    gap: min(var(--space-8), 64px);
     align-items: start;
   }
 
@@ -273,7 +287,7 @@
   }
 
   .projectTitle {
-    font-size: clamp(2.25rem, 2.8vw, 3rem);
+    font-size: min(10vw, clamp(2.25rem, 2.8vw, 3rem));
   }
 }
 

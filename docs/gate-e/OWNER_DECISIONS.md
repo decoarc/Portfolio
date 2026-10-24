@@ -42,10 +42,20 @@
 
 ---
 
-## Planned follow-ups (out of this apply pass)
+## Planned follow-ups
 
-1. Upstream security scrub/rotation (`geo-areas-php`) — then consider `hrefRepo`.  
-2. Upstream GitHub description refresh (MySQL/Google Maps → PostGIS/Leaflet).  
-3. Upstream PT/EN internationalization.  
-4. Owner approval to set `published` + `evidenceComplete: true`.  
-5. Cloudflare deploy / production deep-link verify (separate).
+### A. Upstream backlog — `geo-areas-php` (future; **not** Portfolio scope)
+
+Canonical list: [UPSTREAM_BACKLOG.md](./UPSTREAM_BACKLOG.md). Do **not** implement from Portfolio.
+
+1. Credential security (scrub/rotation; no committed plaintext secrets).  
+2. Write-endpoint review (unauthenticated public save paths).  
+3. GitHub repository update (description / stale MySQL–Google Maps refs).  
+4. Product internationalization PT/EN.  
+
+After item 1 only: consider adding `hrefRepo` in a **separate** Portfolio content pass. Until then, keep the repo link off the public site.
+
+### B. Portfolio-only follow-ups
+
+1. Owner approval to set `published` + `evidenceComplete: true` (Gate E closure).  
+2. Cloudflare deploy / production deep-link verify (deploy milestone).

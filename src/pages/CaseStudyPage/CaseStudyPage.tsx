@@ -7,6 +7,7 @@ import {
   isPlaceholderContent,
 } from '@/content'
 import type { ProjectCaseStudy, SiteContent } from '@/content/types'
+import { useDocumentTitle } from '@/app/useDocumentTitle'
 import styles from './CaseStudyPage.module.css'
 
 interface CaseStudyPageProps {
@@ -40,6 +41,7 @@ function Section({
  * still require published + evidenceComplete.
  */
 export function CaseStudyPage({ site, project, access }: CaseStudyPageProps) {
+  useDocumentTitle(`${project.title} — ${site.person.name}`)
   const copy = site.caseStudy
   const isPreview = access === 'preview'
   const periodLabel = getProjectPeriodLabel(project)
@@ -141,10 +143,11 @@ export function CaseStudyPage({ site, project, access }: CaseStudyPageProps) {
               <img
                 className={styles.coverImage}
                 src={project.coverImage.src}
-                alt={project.coverImage.alt}
+                alt=""
                 width={project.coverImage.width}
                 height={project.coverImage.height}
                 decoding="async"
+                fetchPriority="high"
               />
             </picture>
             <figcaption className={styles.coverCaption}>

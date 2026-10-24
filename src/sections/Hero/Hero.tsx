@@ -45,9 +45,11 @@ export function Hero({ site }: HeroProps) {
           </div>
         </div>
 
-        <aside className={styles.plate} aria-hidden="true">
+        <aside className={styles.plate}>
           <div className={styles.plateHead}>
-            <span className={styles.plateSigil}>AA</span>
+            <span className={styles.plateSigil} aria-hidden="true">
+              AA
+            </span>
             <span className={styles.plateMeta}>{plateAnnotation}</span>
           </div>
 
@@ -62,7 +64,7 @@ export function Hero({ site }: HeroProps) {
 
           <p className={styles.plateLocation}>{site.person.locationLabel}</p>
 
-          <span className={styles.plateIndex} />
+          <span className={styles.plateIndex} aria-hidden="true" />
         </aside>
       </div>
     </section>
