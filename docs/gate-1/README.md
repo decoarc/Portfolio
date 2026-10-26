@@ -47,6 +47,9 @@ As 18 imagens desta pasta são geradas por `pnpm comps:capture` e regravadas a
 cada execução. Não edite à mão. `pnpm comps` roda só as verificações e não
 escreve nada aqui.
 
+> Nota: os comps e esses scripts (`pnpm comps`, `pnpm comps:capture`) foram
+> removidos na Fase 2; as capturas ficam só como registro.
+
 ## Decisão
 
 Registrar em `docs/DESIGN_DECISIONS.md` assim que o dono escolher.

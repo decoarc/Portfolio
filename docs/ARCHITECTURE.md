@@ -34,8 +34,9 @@ docs/                   spec, decisões, backlog, dossiês dos gates
 
 - Uma seção recebe `copy` e dados por props, nunca importa conteúdo sozinha.
   Quem lê o conteúdo é a rota (`HomeRoute`), via `getContent(locale)`.
-- Toda seção é uma `Sheet` (`tone="cover"` ou `"sheet"`), com `id` e
-  `aria-labelledby`. O respiro vem de `--sheet-pad-*`, nunca de `padding`
+- Toda seção é uma `Sheet` (`tone="cover"` ou `"sheet"`). As seções de conteúdo
+  levam `id` e `aria-labelledby`; o Hero só tem `aria-labelledby` (sem `id`) e
+  o Release (o índice) é um `nav` rotulado, sem nenhum dos dois. O respiro vem de `--sheet-pad-*`, nunca de `padding`
   sobreposto.
 - O número da seção é a posição em `homeSections(site)` mais um: o mesmo no
   índice (Release) e no `SectionHead`. Seção sem itens (Interests vazio) não
@@ -88,7 +89,8 @@ o build. A spec (R7, em
 
 O script roda com `node scripts/assert-no-mock.ts`, que exige a remoção nativa
 de tipos do Node (sem flag desde o Node 22.18 / 23.6); por isso
-`engines.node` é `>=22.18`.
+`engines.node` é `>=22.18`. O `.node-version` (`24`) fixa o Node do
+Cloudflare Pages, cuja imagem padrão pode ser mais antiga que esse piso.
 
 ## Scripts
 

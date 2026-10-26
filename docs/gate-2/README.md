@@ -27,7 +27,7 @@ Use `build:preview`: `pnpm build` falha de propósito enquanto houver mock.
 | Conteúdo: sem mock em produção                                       | `scripts/assert-no-mock.test.ts`; trava dentro de `pnpm build`                                                                   |
 | Acessibilidade (axe)                                                 | `e2e/a11y.spec.ts`                                                                                                               |
 | Responsividade: sem rolagem horizontal, nada passa da borda em 390px | `e2e/responsive.spec.ts`                                                                                                         |
-| Responsividade: CTAs na primeira dobra, 3 viewports × 2 idiomas      | `e2e/first-viewport.spec.ts`                                                                                                     |
+| Responsividade: CTAs na primeira dobra, 390×844 e 768×1024 × 2 idiomas | `e2e/first-viewport.spec.ts`                                                                                                     |
 | Motion desligado: nenhuma animação ativa nem duração computada       | `e2e/motion.spec.ts` (`getAnimations()` e `transition`/`animation` computados, com `reduce` e `no-preference`)                   |
 | Motion desligado: nenhum `animation`/`transition` em CSS             | `scripts/no-motion.test.ts` (varre `src/**/*.css`)                                                                               |
 | Fraunces completa carregada (`opsz`, `SOFT`, `WONK`)                 | `e2e/motion.spec.ts`                                                                                                             |
