@@ -7,8 +7,8 @@ const VIEWPORTS = [
 ] as const
 
 const LOCALES = [
-  { name: 'en', path: '/' },
-  { name: 'pt', path: '/pt' },
+  { name: 'en', path: '/', prefix: '' },
+  { name: 'pt', path: '/pt', prefix: '/pt' },
 ] as const
 
 for (const viewport of VIEWPORTS) {
@@ -30,6 +30,26 @@ for (const viewport of VIEWPORTS) {
       const outDir = `${testInfo.project.testDir}/../docs/gate-2`
       await page.screenshot({
         path: `${outDir}/home-${viewport.name}-${locale.name}.png`,
+        fullPage: false,
+      })
+      await page.screenshot({
+        path: `${outDir}/home-full-${viewport.name}-${locale.name}.png`,
+        fullPage: true,
+      })
+    })
+
+    test(`gate 2 · case · ${viewport.name} · ${locale.name}`, async ({
+      page,
+    }, testInfo) => {
+      await page.setViewportSize({
+        width: viewport.width,
+        height: viewport.height,
+      })
+      await page.goto(`${locale.prefix}/work/token-killer`)
+      await page.evaluate(() => document.fonts.ready.then(() => true))
+      const outDir = `${testInfo.project.testDir}/../docs/gate-2`
+      await page.screenshot({
+        path: `${outDir}/case-${viewport.name}-${locale.name}.png`,
         fullPage: false,
       })
     })
