@@ -47,6 +47,11 @@ tinta sobre superfície 15.44:1, tinta suave sobre fundo 5.57:1, tinta suave
 sobre superfície 6.32:1, acento sobre fundo 5.54:1, acento sobre superfície
 6.29:1.
 
+**A base manila substituiu um creme `#F2EEE6`** durante a Fase 0: o
+`src/styles/tokens.css` anterior já registrava `Avoid: cream #F4F1EA`, e o
+creme proposto estava a um fio disso. Croma 40 contra 12 torna a escolha
+deliberada em vez de um off-white padrão.
+
 ### Fraunces completa (`full.css`)
 
 A Fraunces vai como `@fontsource-variable/fraunces/full.css`, com os eixos
@@ -54,11 +59,6 @@ A Fraunces vai como `@fontsource-variable/fraunces/full.css`, com os eixos
 então `opsz` e `WONK` não apareciam nas capturas do Gate 1. O dono escolheu o
 arquivo completo em 2026-10-26 e aprovou o resultado no checkpoint da Task 4,
 comparando `docs/gate-2/home-*-pt.png` com `docs/gate-1/02-editorial-rolodex-*-pt.png`.
-
-**A base manila substituiu um creme `#F2EEE6`** durante a Fase 0: o
-`src/styles/tokens.css` anterior já registrava `Avoid: cream #F4F1EA`, e o
-creme proposto estava a um fio disso. Croma 40 contra 12 torna a escolha
-deliberada em vez de um off-white padrão.
 
 ### Rejeitadas
 

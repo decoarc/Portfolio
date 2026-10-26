@@ -6,7 +6,7 @@ Os documentos de planejamento ficam em `docs/`.
 
 ## Pré-requisitos
 
-- Node.js >= 20
+- Node.js >= 22.18 (o `build` roda `scripts/assert-no-mock.ts` com a remoção nativa de tipos do Node, sem flag a partir dessa versão)
 - pnpm 10 (`corepack enable`)
 
 ## Comandos

@@ -78,9 +78,17 @@ idioma preservando caminho e hash. `vite-spa-fallback.ts` espelha o
 árvore com `findMockPaths` e sai com 1, listando os caminhos, enquanto existir
 `mock: true`. `--allow-mock` (ou `ALLOW_MOCK=1`) lista, avisa e sai com 0.
 
-A trava está **dentro do script `build`**, e não em `prebuild`, porque o pnpm 10
-não roda hooks `pre`/`post` por padrão (`enable-pre-post-scripts` é `false`); um
-`prebuild` seria ignorado em silêncio e a trava nunca dispararia.
+A trava está **dentro dos scripts `build` e `build:preview`**, e não em um
+`prebuild`: os dois precisam de argumentos diferentes (`build:preview` passa
+`--allow-mock`), o que um único `prebuild` compartilhado não consegue dar. Com
+a chamada explícita, a trava também não depende de como o host de deploy invoca
+o build. A spec (R7, em
+`docs/superpowers/specs/2026-10-26-portfolio-visual-redesign-design.md`) dizia
+`prebuild`; este é o desvio, registrado aqui.
+
+O script roda com `node scripts/assert-no-mock.ts`, que exige a remoção nativa
+de tipos do Node (sem flag desde o Node 22.18 / 23.6); por isso
+`engines.node` é `>=22.18`.
 
 ## Scripts
 
