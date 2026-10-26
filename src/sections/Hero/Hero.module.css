@@ -1,0 +1,157 @@
+/* Hero do comp 02, portado com tokens. Flex no mobile, grid a partir de 768px. */
+
+/* Sobrepõe o padding da Sheet (mesma especificidade): Hero.tsx importa a Sheet
+   antes deste módulo, então este CSS vem depois no bundle. */
+.hero {
+  /* A barra superior ocupa o topo da primeira dobra: o hero completa o resto. */
+  min-height: calc(100svh - var(--masthead-h));
+  padding: var(--gutter) var(--gutter) var(--gutter)
+    calc(var(--gutter) + var(--margin-rail));
+  display: flex;
+  flex-direction: column;
+  gap: clamp(24px, 4vh, 48px);
+  border-bottom: 2px solid var(--ink);
+}
+
+.meta {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-meta);
+  letter-spacing: var(--track-meta);
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+.metaRight {
+  align-self: flex-end;
+}
+
+.name {
+  margin: auto 0;
+  font-family: var(--font-display);
+  font-variation-settings: var(--fraunces-display);
+  font-weight: 600;
+  font-size: var(--text-display);
+  line-height: 0.92;
+  letter-spacing: -0.025em;
+  /* Medida curta deliberada: o nome quebra em duas linhas e isso é o desenho. */
+  max-width: 9ch;
+}
+
+.role,
+.statement,
+.location {
+  margin: 0;
+}
+
+.role {
+  font-family: var(--font-mono);
+  font-size: var(--text-meta);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.statement {
+  max-width: 38ch;
+  font-size: var(--text-lead);
+  color: var(--ink-muted);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: baseline;
+}
+
+.location {
+  font-family: var(--font-mono);
+  font-size: var(--text-meta);
+  letter-spacing: var(--track-meta);
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+@media (min-width: 768px) {
+  .hero {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: auto 1fr auto auto;
+    column-gap: 20px;
+    row-gap: 12px;
+  }
+
+  .metaLeft {
+    grid-column: 1 / span 6;
+  }
+  .metaRight {
+    grid-column: 7 / -1;
+  }
+  .name {
+    grid-column: 1 / span 7;
+  }
+
+  /* Faixa de tablet (768–1199): função e statement dividem uma linha, CTAs e
+     localização dividem a seguinte — a régua de 1440 deixava o statement em
+     seis linhas sob um vazio grande. */
+  .role {
+    grid-column: 1 / span 4;
+    align-self: end;
+  }
+  .statement {
+    grid-column: 5 / -1;
+    align-self: end;
+  }
+  .actions {
+    grid-row: 4;
+    grid-column: 1 / span 8;
+    align-self: center;
+  }
+  .location {
+    grid-row: 4;
+    grid-column: 9 / -1;
+    justify-self: end;
+    align-self: center;
+  }
+}
+
+@media (min-width: 1200px) {
+  .role {
+    grid-column: 1 / span 3;
+  }
+  .statement {
+    grid-column: 4 / span 4;
+  }
+  /* A régua de CTAs precisa da largura real do rótulo em PT
+     ("Trabalhos selecionados"): ganha 5 colunas e a localização desce para a
+     própria linha. */
+  .actions {
+    grid-row: 3;
+    grid-column: 8 / span 5;
+    align-self: end;
+  }
+  .location {
+    grid-row: 4;
+    grid-column: 1 / -1;
+    justify-self: end;
+  }
+}
+
+.action {
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  text-decoration: none;
+  padding-bottom: 2px;
+  white-space: nowrap;
+}
+
+.primary {
+  color: var(--ink);
+  border-bottom: 2px solid var(--accent);
+}
+
+.ghost {
+  color: var(--ink-muted);
+  border-bottom: 1px solid var(--rule);
+}

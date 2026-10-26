@@ -1,0 +1,55 @@
+/* Índice da home: primeira coisa na folha `--surface`, logo abaixo do filete
+   de 2px do hero. O número sai para o trilho de margem, como o `.slot__index`
+   do comp 02. */
+
+.release {
+  padding-block: clamp(32px, 6vh, 64px);
+}
+
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-bottom: 1px solid var(--rule);
+}
+
+.entry {
+  border-top: 1px solid var(--rule);
+}
+
+.link {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  padding: clamp(12px, 2vh, 18px) 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-body);
+  letter-spacing: var(--track-meta);
+  text-transform: uppercase;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.link:hover .label {
+  color: var(--accent);
+}
+
+.index {
+  flex: none;
+  font-size: var(--text-meta);
+  color: var(--accent);
+}
+
+/* O número sai para o trilho de margem, mas continua no fluxo do flex para
+   alinhar pela linha de base com o rótulo (o comp usava top absoluto, que
+   deixava o número alguns pixels acima). Abaixo de 768px volta para o fluxo. */
+@media (min-width: 768px) {
+  .link {
+    gap: 0;
+  }
+
+  .index {
+    width: var(--margin-rail);
+    margin-left: calc(var(--margin-rail) * -1);
+  }
+}
