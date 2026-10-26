@@ -13,9 +13,11 @@ describe('Approach', () => {
       name: siteEn.approach.label,
     })
     expect(heading).toBeVisible()
-    // As fichas também são numeradas (01–03): o número da seção é o que
-    // acompanha o h2.
-    expect(heading.previousElementSibling).toHaveTextContent('02')
+    expect(
+      within(section)
+        .getAllByText(/^\d{2}$/)
+        .map((node) => node.textContent),
+    ).toEqual(['02'])
     expect(screen.getByText(siteEn.approach.intro)).toBeVisible()
   })
 

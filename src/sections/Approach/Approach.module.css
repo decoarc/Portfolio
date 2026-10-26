@@ -1,7 +1,7 @@
 /* Fichas da abordagem no vocabulário das lâminas (`.slot` do comp 02): filete
-   de 1px por ficha, título em Fraunces, corpo em tinta suave. O número da
-   ficha usa a mesma técnica do SectionHead — no fluxo do flex, alinhado pela
-   linha de base, empurrado para o trilho a partir de 768px. */
+   de 1px por ficha, título em Fraunces, corpo em tinta suave. As fichas não
+   têm número: no trilho, numeral é só de seção, para não competir com o
+   índice (o filete já separa uma ficha da outra). */
 
 /* Filete de 2px que separa as seções da folha (Work → Approach). */
 .approach {
@@ -20,20 +20,6 @@
   gap: 8px;
   padding: clamp(24px, 3.5vh, 40px) 0;
   border-top: 1px solid var(--rule);
-}
-
-.line {
-  display: flex;
-  align-items: baseline;
-  gap: 12px;
-}
-
-.index {
-  flex: none;
-  font-family: var(--font-mono);
-  font-size: var(--text-meta);
-  letter-spacing: var(--track-meta);
-  color: var(--accent);
 }
 
 .title {
@@ -59,14 +45,5 @@
     grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
     column-gap: 32px;
     align-items: start;
-  }
-
-  .line {
-    gap: 0;
-  }
-
-  .index {
-    width: var(--margin-rail);
-    margin-left: calc(var(--margin-rail) * -1);
   }
 }

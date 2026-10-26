@@ -11,7 +11,10 @@ interface ApproachProps {
 
 const HEADING_ID = 'approach-heading'
 
-/** Abordagem: fichas no padrão das lâminas de Work, numeradas no trilho. */
+/**
+ * Abordagem: fichas no padrão das lâminas de Work, sem número — no trilho,
+ * numeral é só de seção (o mesmo do índice).
+ */
 export function Approach({ index, copy }: ApproachProps) {
   return (
     <Sheet
@@ -27,14 +30,9 @@ export function Approach({ index, copy }: ApproachProps) {
         intro={copy.intro}
       />
       <ol className={styles.list}>
-        {copy.items.map((item, position) => (
+        {copy.items.map((item) => (
           <li key={item.title} className={styles.item}>
-            <div className={styles.line}>
-              <span className={styles.index}>
-                {String(position + 1).padStart(2, '0')}
-              </span>
-              <h3 className={styles.title}>{item.title}</h3>
-            </div>
+            <h3 className={styles.title}>{item.title}</h3>
             <p className={styles.body}>{item.body}</p>
           </li>
         ))}
