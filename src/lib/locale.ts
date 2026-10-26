@@ -18,10 +18,10 @@ export function parseLocalePath(pathname: string): {
   locale: Locale
   path: string
 } {
-  if (pathname === '/pt' || pathname === '/pt/')
-    return { locale: 'pt', path: '/' }
-  if (pathname.startsWith('/pt/'))
-    return { locale: 'pt', path: pathname.slice(3) }
+  // O React Router casa o prefixo sem diferenciar caixa; aqui também.
+  const lower = pathname.toLowerCase()
+  if (lower === '/pt' || lower === '/pt/') return { locale: 'pt', path: '/' }
+  if (lower.startsWith('/pt/')) return { locale: 'pt', path: pathname.slice(3) }
   return { locale: 'en', path: pathname }
 }
 

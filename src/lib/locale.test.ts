@@ -22,6 +22,8 @@ describe('parseLocalePath', () => {
     ['/pt', { locale: 'pt', path: '/' }],
     ['/pt/', { locale: 'pt', path: '/' }],
     ['/pt/work/x', { locale: 'pt', path: '/work/x' }],
+    ['/PT', { locale: 'pt', path: '/' }],
+    ['/Pt/work/x', { locale: 'pt', path: '/work/x' }],
     ['/ptx', { locale: 'en', path: '/ptx' }],
     ['/work/x', { locale: 'en', path: '/work/x' }],
   ] as const)('parseLocalePath(%s)', (pathname, esperado) => {
@@ -33,6 +35,7 @@ describe('switchLocalePath', () => {
   it.each([
     ['/work/x', '', 'pt', '/pt/work/x'],
     ['/pt/work/x', '', 'en', '/work/x'],
+    ['/PT/work/x', '', 'en', '/work/x'],
     ['/pt', '#work', 'en', '/#work'],
     ['/nao-existe', '', 'pt', '/pt/nao-existe'],
   ] as const)(
