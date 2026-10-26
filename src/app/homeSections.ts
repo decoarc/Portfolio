@@ -6,7 +6,9 @@ import type { HomeSectionId, SiteContent } from '../content/types.ts'
  * cabeçalho da seção.
  */
 export function homeSections(site: SiteContent): HomeSectionId[] {
-  const sections: HomeSectionId[] = ['work', 'approach', 'about']
+  const sections: HomeSectionId[] = ['work']
+  if (site.approach.items.length > 0) sections.push('approach')
+  sections.push('about')
   if (site.interests.items.length > 0) sections.push('interests')
   sections.push('contact')
   return sections

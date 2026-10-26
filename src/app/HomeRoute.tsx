@@ -28,7 +28,9 @@ export function HomeRoute() {
         locale={locale}
         labels={{ projectType: site.projectType, links: site.links }}
       />
-      <Approach index={numberOf('approach')} copy={site.approach} />
+      {sections.includes('approach') && (
+        <Approach index={numberOf('approach')} copy={site.approach} />
+      )}
       <About index={numberOf('about')} copy={site.about} />
       {sections.includes('interests') && (
         <Interests index={numberOf('interests')} copy={site.interests} />

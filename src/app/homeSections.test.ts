@@ -17,4 +17,14 @@ describe('homeSections', () => {
     const site = { ...siteEn, interests: { ...siteEn.interests, items: [] } }
     expect(homeSections(site)).toEqual(['work', 'approach', 'about', 'contact'])
   })
+
+  it('omite approach quando não há itens', () => {
+    const site = { ...siteEn, approach: { ...siteEn.approach, items: [] } }
+    expect(homeSections(site)).toEqual([
+      'work',
+      'about',
+      'interests',
+      'contact',
+    ])
+  })
 })
