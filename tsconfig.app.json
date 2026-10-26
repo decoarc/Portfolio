@@ -28,5 +28,9 @@
       "@/*": ["src/*"]
     }
   },
-  "include": ["src"]
+  "include": ["src", "design/comps"],
+  /* `static.test.ts` lê o disco (`node:fs`, `process.cwd()`). Ele vive no
+     projeto `node`, que tem os tipos de Node; o projeto `app` é código de
+     browser e não deve enxergar globais de Node. */
+  "exclude": ["design/comps/static.test.ts"]
 }

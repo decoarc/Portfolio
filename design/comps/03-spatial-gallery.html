@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en" data-comp="03-spatial-gallery">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Comp 03 — Spatial Gallery</title>
+    <link rel="stylesheet" href="./03-spatial-gallery.css" />
+    <script type="module">
+      import '@fontsource-variable/syne'
+      import '@fontsource-variable/space-grotesk'
+      import '@fontsource-variable/geist-mono'
+    </script>
+    <script type="module" src="./harness.ts"></script>
+  </head>
+  <body>
+    <main class="comp">
+      <section class="hero" data-region="hero">
+        <p class="hero__meta hero__meta--left" data-copy="hero.metaLeft"></p>
+        <p class="hero__meta hero__meta--right" data-copy="hero.metaRight"></p>
+        <h1 class="hero__name" data-copy="person.name"></h1>
+        <p class="hero__role" data-copy="person.role"></p>
+        <p class="hero__statement" data-copy="hero.statement"></p>
+        <nav class="hero__actions">
+          <a class="action action--primary" href="#work" data-copy="hero.ctaPrimary"></a>
+          <a class="action action--ghost" href="#work" data-copy="hero.ctaSecondary"></a>
+        </nav>
+        <p class="hero__location" data-copy="person.location"></p>
+      </section>
+
+      <section class="work" id="work" data-region="work">
+        <header class="work__head">
+          <h2 class="work__label" data-copy="work.label"></h2>
+          <p class="work__intro" data-copy="work.intro"></p>
+        </header>
+        <ol class="work__list" data-work-list></ol>
+        <template data-work-item>
+          <li class="slot">
+            <span class="slot__index" data-index></span>
+            <span class="slot__type" data-copy="type"></span>
+            <h3 class="slot__title" data-copy="title"></h3>
+            <p class="slot__summary" data-copy="summary"></p>
+            <p class="slot__stack" data-copy="stack"></p>
+            <span class="slot__year" data-copy="year"></span>
+          </li>
+        </template>
+      </section>
+    </main>
+  </body>
+</html>

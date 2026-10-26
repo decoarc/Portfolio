@@ -1,0 +1,412 @@
+/* Comp 01 — Inspection Slot. Autocontido: não importa token de src/. */
+
+:root {
+  --bg: #16181a;
+  --surface: #1f2225;
+  --ink: #e8e6e1;
+  --ink-muted: #a8a49c;
+  --rule: #4a4f55;
+  --accent: #ff6a1f;
+
+  --font-display: 'Archivo Variable', 'Archivo', system-ui, sans-serif;
+  --font-body: 'Instrument Sans Variable', 'Instrument Sans', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono Variable', ui-monospace, monospace;
+
+  /* `--plate` é a faixa de chapa que fica *fora* da abertura; `--aperture-pad`
+     é a distância entre a moldura e o conteúdo dentro dela. A soma dos dois é
+     o quanto o nome tem para sangrar até a borda da página. */
+  --plate: clamp(20px, 4vw, 64px);
+  --aperture-pad: clamp(16px, 2.4vw, 40px);
+  --frame: 1px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--bg);
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: clamp(1rem, 0.96rem + 0.2vw, 1.0625rem);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+.comp {
+  display: block;
+}
+
+/* ---- Hero: uma abertura emoldurada na chapa ---- */
+
+/* A abertura é feita com a própria caixa do hero, não com pseudo-elemento: a
+   borda de `--plate` é pintada na cor da chapa, `background-clip: padding-box`
+   limita `--surface` ao interior e o `box-shadow` interno desenha a moldura.
+   Feito assim a superfície é fundo real do elemento — o que o axe mede é o par
+   que o olho vê.
+
+   Mobile é flex column: empilhar é o comportamento correto e não há risco de
+   coluna implícita. O grid de 12 colunas só entra a partir de 768px. */
+.hero {
+  position: relative;
+  min-height: 100svh;
+  border: var(--plate) solid var(--bg);
+  padding: var(--aperture-pad);
+  background: var(--surface);
+  background-clip: padding-box;
+  box-shadow: inset 0 0 0 var(--frame) var(--rule);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(24px, 4vh, 48px);
+  /* Sem `overflow: hidden`: `overflow` recorta no limite do *padding box*, que
+     aqui é exatamente a moldura — ele decepava a sangria do nome. A trava de
+     overflow por região continua valendo e é o que protege o lado direito. */
+}
+
+/* Marca de registro no canto da abertura: o acento entra como ferramenta de
+   medição, não como enfeite. */
+.hero::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: clamp(48px, 7vw, 120px);
+  height: 3px;
+  background: var(--accent);
+}
+
+.hero__meta {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+.hero__meta--right {
+  align-self: flex-end;
+}
+
+.hero__name {
+  /* `auto` no eixo de bloco absorve o espaço livre e centra verticalmente,
+     tanto no flex do mobile quanto na faixa 1fr do grid desktop. */
+  margin: auto 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2.75rem, 0.8rem + 11vw, 11rem);
+  line-height: 0.86;
+  letter-spacing: -0.03em;
+  /* A sangria é a assinatura e agora é real: a caixa do nome atravessa a
+     moldura, passa por cima da chapa e chega à borda da página. O padding
+     devolve só alguns pixels — o bastante para a primeira letra não encostar
+     na borda, pouco o suficiente para o cruzamento da moldura se ver. */
+  margin-inline-start: calc((var(--plate) + var(--aperture-pad)) * -1);
+  padding-inline-start: clamp(6px, 1vw, 16px);
+}
+
+.hero__role,
+.hero__statement,
+.hero__location {
+  margin: 0;
+}
+
+.hero__role {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.hero__statement {
+  max-width: 46ch;
+  color: var(--ink-muted);
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.hero__location {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+@media (min-width: 768px) {
+  .hero {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: auto 1fr auto auto;
+    column-gap: 16px;
+    row-gap: 12px;
+  }
+
+  .hero__meta--left {
+    grid-column: 1 / span 6;
+  }
+
+  .hero__meta--right {
+    grid-column: 7 / -1;
+  }
+
+  .hero__name {
+    grid-column: 1 / -1;
+  }
+
+  /* Faixa de tablet (768–1199): a régua de 1440 dava 4 de 12 colunas (~210px)
+     ao statement, que quebrava em seis linhas sob um vazio grande. Aqui função
+     e statement dividem uma linha, CTAs e localização dividem a seguinte. */
+  .hero__role {
+    grid-column: 1 / span 4;
+    align-self: end;
+  }
+
+  .hero__statement {
+    grid-column: 5 / -1;
+    align-self: end;
+  }
+
+  .hero__actions {
+    grid-row: 4;
+    grid-column: 1 / span 8;
+    align-self: center;
+  }
+
+  .hero__location {
+    grid-row: 4;
+    grid-column: 9 / -1;
+    justify-self: end;
+    align-self: center;
+  }
+}
+
+/* Desktop: o bloco inferior vira uma régua de quatro colunas. */
+@media (min-width: 1200px) {
+  .hero__role {
+    grid-column: 1 / span 3;
+  }
+
+  .hero__statement {
+    grid-column: 4 / span 4;
+  }
+
+  /* A régua de CTAs precisa da largura real do rótulo em PT
+     ("Trabalhos selecionados"), não de duas colunas estreitas — por isso
+     ganha 5 colunas e a localização desce para a própria linha. */
+  .hero__actions {
+    grid-row: 3;
+    grid-column: 8 / span 5;
+    align-self: end;
+  }
+
+  .hero__location {
+    grid-row: 4;
+    grid-column: 1 / -1;
+    justify-self: end;
+  }
+}
+
+.action {
+  display: inline-block;
+  padding: 10px 18px;
+  border: var(--frame) solid var(--rule);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.action--primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #16181a;
+}
+
+.action--ghost {
+  color: var(--ink);
+}
+
+/* ---- Work: a bancada de inspeção — uma abertura por peça ---- */
+
+.work {
+  padding: var(--plate);
+}
+
+.work__head {
+  display: grid;
+  gap: 12px;
+  padding-bottom: clamp(28px, 4vh, 48px);
+}
+
+.work__label {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.5rem, 1.1rem + 1.6vw, 2.5rem);
+  letter-spacing: -0.02em;
+}
+
+.work__intro {
+  margin: 0;
+  max-width: 52ch;
+  color: var(--ink-muted);
+}
+
+.work__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: clamp(32px, 3.5vw, 56px);
+}
+
+/* Cada peça é apresentada dentro de uma abertura: moldura visível, interior em
+   `--surface` e o recorte escuro em cima, esperando a mídia do projeto. */
+.slot {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    'window  window'
+    'type    year'
+    'title   title'
+    'summary summary'
+    'stack   stack';
+  column-gap: 16px;
+  row-gap: 6px;
+  padding: var(--aperture-pad);
+  background: var(--surface);
+  border: var(--frame) solid var(--rule);
+}
+
+/* O recorte: um vazio na chapa, mais escuro que a superfície em volta, com
+   marca de registro no centro. É o lugar da peça. */
+.slot::before {
+  content: '';
+  grid-area: window;
+  aspect-ratio: 16 / 10;
+  margin-block-end: clamp(14px, 1.8vw, 24px);
+  border: var(--frame) solid var(--rule);
+  background:
+    linear-gradient(var(--rule), var(--rule)) 50% 50% / var(--frame) 22px
+      no-repeat,
+    linear-gradient(var(--rule), var(--rule)) 50% 50% / 22px var(--frame)
+      no-repeat,
+    var(--bg);
+}
+
+/* O número é uma etiqueta cravada na moldura, não um item da pilha. */
+.slot__index {
+  position: absolute;
+  top: calc(var(--frame) * -1);
+  left: var(--aperture-pad);
+  transform: translateY(-50%);
+  padding: 0 10px;
+  background: var(--bg);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+}
+
+.slot__type {
+  grid-area: type;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.slot__title {
+  grid-area: title;
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.375rem, 1.1rem + 1.2vw, 2rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+.slot__summary {
+  grid-area: summary;
+  margin: 0;
+  max-width: 54ch;
+  color: var(--ink-muted);
+}
+
+.slot__stack,
+.slot__year {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--ink-muted);
+}
+
+.slot__stack {
+  grid-area: stack;
+  margin: 0;
+}
+
+.slot__year {
+  grid-area: year;
+  justify-self: end;
+}
+
+/* Tablet: a abertura deita e fica ao lado do texto — a largura disponível vira
+   enquadramento, não um vazio de 16/10 atravessando a tela. */
+@media (min-width: 768px) {
+  .slot {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr) auto;
+    grid-template-areas:
+      'window type    year'
+      'window title   title'
+      'window summary summary'
+      'window stack   stack';
+    column-gap: clamp(20px, 2.4vw, 36px);
+    align-content: start;
+  }
+
+  .slot::before {
+    aspect-ratio: auto;
+    margin-block-end: 0;
+  }
+}
+
+/* Desktop: duas aberturas por linha. A bancada se lê como folha de contato, não
+   como pilha — é aqui que o comp se separa dos outros dois. */
+@media (min-width: 1200px) {
+  .work__list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .slot {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      'window  window'
+      'type    year'
+      'title   title'
+      'summary summary'
+      'stack   stack';
+    align-content: stretch;
+  }
+
+  .slot::before {
+    aspect-ratio: 16 / 10;
+    margin-block-end: clamp(14px, 1.8vw, 24px);
+  }
+}
