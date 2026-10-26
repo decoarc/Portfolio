@@ -2,7 +2,7 @@ import AxeBuilder from '@axe-core/playwright'
 import { expect, test } from '@playwright/test'
 
 /** Cada comp novo entra aqui e herda a matriz inteira de verificação. */
-const COMPS = ['01-inspection-slot'] as const
+const COMPS = ['01-inspection-slot', '02-editorial-rolodex'] as const
 
 const VIEWPORTS = [
   { name: 'desktop', width: 1440, height: 900 },
