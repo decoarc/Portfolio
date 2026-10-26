@@ -5,7 +5,9 @@
 export function findMockPaths(value: unknown, path = ''): string[] {
   if (value === null || typeof value !== 'object') return []
   if (Array.isArray(value)) {
-    return value.flatMap((item, index) => findMockPaths(item, `${path}[${index}]`))
+    return value.flatMap((item, index) =>
+      findMockPaths(item, `${path}[${index}]`),
+    )
   }
   const record = value as Record<string, unknown>
   if (record.mock === true) return [path]

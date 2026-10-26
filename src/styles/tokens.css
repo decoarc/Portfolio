@@ -8,7 +8,8 @@
   --accent: #a32114;
 
   --font-display: 'Fraunces Variable', 'Fraunces', Georgia, serif;
-  --font-body: 'Instrument Sans Variable', 'Instrument Sans', system-ui, sans-serif;
+  --font-body:
+    'Instrument Sans Variable', 'Instrument Sans', system-ui, sans-serif;
   --font-mono: 'Geist Mono Variable', ui-monospace, monospace;
 
   --gutter: clamp(20px, 5vw, 80px);

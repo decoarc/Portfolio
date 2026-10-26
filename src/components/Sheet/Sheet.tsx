@@ -10,8 +10,18 @@ interface SheetProps {
 }
 
 /** Folha de uma seção: padding de gutter mais o trilho de margem. */
-export function Sheet({ tone, id, labelledBy, children, className }: SheetProps) {
-  const classes = [styles.sheet, tone === 'cover' ? styles.cover : styles.paper, className]
+export function Sheet({
+  tone,
+  id,
+  labelledBy,
+  children,
+  className,
+}: SheetProps) {
+  const classes = [
+    styles.sheet,
+    tone === 'cover' ? styles.cover : styles.paper,
+    className,
+  ]
     .filter(Boolean)
     .join(' ')
   return (

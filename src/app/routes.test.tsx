@@ -24,7 +24,9 @@ describe('rotas por locale', () => {
 
   it('404 em inglês para rota desconhecida', async () => {
     renderAt('/rota/qualquer')
-    expect(await screen.findByRole('heading', { name: 'Page not found' })).toBeInTheDocument()
+    expect(
+      await screen.findByRole('heading', { name: 'Page not found' }),
+    ).toBeInTheDocument()
   })
 
   it('404 em português sob /pt', async () => {
@@ -37,7 +39,9 @@ describe('rotas por locale', () => {
 
   it('case study inexistente cai na 404', async () => {
     renderAt('/work/nao-existe')
-    expect(await screen.findByRole('heading', { name: 'Page not found' })).toBeInTheDocument()
+    expect(
+      await screen.findByRole('heading', { name: 'Page not found' }),
+    ).toBeInTheDocument()
   })
 
   it('o link de idioma preserva o caminho', async () => {

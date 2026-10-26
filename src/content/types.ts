@@ -2,7 +2,8 @@ export type Locale = 'en' | 'pt'
 export type ProjectType = 'verified' | 'concept'
 export type ProjectStatus = 'draft' | 'preview' | 'published'
 export type ProjectLinkKind = 'live' | 'repo'
-export type HomeSectionId = 'work' | 'approach' | 'about' | 'interests' | 'contact'
+export type HomeSectionId =
+  'work' | 'approach' | 'about' | 'interests' | 'contact'
 
 export interface ProjectLink {
   kind: ProjectLinkKind
@@ -71,7 +72,13 @@ export interface SiteContent {
   links: { labels: Record<ProjectLinkKind, string>; externalHint: string }
   work: { label: string; intro: string; previewNote: string }
   approach: { label: string; intro: string; items: ApproachItem[] }
-  about: { label: string; lead: string; body: string; stackLabel: string; stack: string[] }
+  about: {
+    label: string
+    lead: string
+    body: string
+    stackLabel: string
+    stack: string[]
+  }
   interests: { label: string; items: string[] }
   contact: { label: string; lead: string; channels: ContactChannel[] }
   caseStudy: {

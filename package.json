@@ -16,8 +16,6 @@
     "test:watch": "vitest",
     "test:e2e": "playwright test --project=chromium",
     "capture": "playwright test --project=capture",
-    "comps": "playwright test --config playwright.comps.config.ts comps.spec.ts",
-    "comps:capture": "playwright test --config playwright.comps.config.ts capture.spec.ts",
     "validate": "pnpm typecheck && pnpm lint && pnpm test && pnpm build && pnpm test:e2e"
   },
   "dependencies": {
@@ -31,10 +29,6 @@
   "devDependencies": {
     "@axe-core/playwright": "4.14.0",
     "@eslint/js": "^9.39.1",
-    "@fontsource-variable/archivo": "^5.3.0",
-    "@fontsource-variable/jetbrains-mono": "^5.3.0",
-    "@fontsource-variable/space-grotesk": "^5.3.0",
-    "@fontsource-variable/syne": "^5.3.0",
     "@playwright/test": "^1.64.1",
     "@testing-library/dom": "^10.4.2",
     "@testing-library/jest-dom": "^6.9.1",

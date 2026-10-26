@@ -2,7 +2,7 @@ import type { SiteContent } from '../types.ts'
 
 /**
  * Copy do site em português. Copy real é tradução fiel de `en/site.ts`, sem
- * afirmação nova; hero e `work` vêm da Fase 0 (`design/comps/content.ts`).
+ * afirmação nova; hero e `work` vêm da Fase 0.
  */
 export const sitePt: SiteContent = {
   meta: {

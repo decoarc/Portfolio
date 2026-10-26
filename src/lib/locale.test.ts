@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest'
-import { htmlLang, localePath, parseLocalePath, switchLocalePath } from './locale.ts'
+import {
+  htmlLang,
+  localePath,
+  parseLocalePath,
+  switchLocalePath,
+} from './locale.ts'
 
 describe('localePath', () => {
   it.each([
@@ -30,9 +35,12 @@ describe('switchLocalePath', () => {
     ['/pt/work/x', '', 'en', '/work/x'],
     ['/pt', '#work', 'en', '/#work'],
     ['/nao-existe', '', 'pt', '/pt/nao-existe'],
-  ] as const)('switchLocalePath(%s, %s, %s) = %s', (pathname, hash, target, esperado) => {
-    expect(switchLocalePath(pathname, hash, target)).toBe(esperado)
-  })
+  ] as const)(
+    'switchLocalePath(%s, %s, %s) = %s',
+    (pathname, hash, target, esperado) => {
+      expect(switchLocalePath(pathname, hash, target)).toBe(esperado)
+    },
+  )
 })
 
 describe('htmlLang', () => {

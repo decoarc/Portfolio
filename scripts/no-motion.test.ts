@@ -4,7 +4,8 @@ import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
 
 // Motion é a Fase 3: nenhum CSS de src/ pode declarar animation ou transition.
-const MOTION = /(^|[\s;{])(-(webkit|moz|o|ms)-)?(animation|transition)(-[a-z-]+)?\s*:/m
+const MOTION =
+  /(^|[\s;{])(-(webkit|moz|o|ms)-)?(animation|transition)(-[a-z-]+)?\s*:/m
 
 function cssFiles(dir: string): string[] {
   return readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
@@ -21,7 +22,8 @@ describe('sem motion nesta fase', () => {
       readFileSync(file, 'utf8')
         .split('\n')
         .forEach((line, index) => {
-          if (MOTION.test(line)) hits.push(`${file}:${index + 1}  ${line.trim()}`)
+          if (MOTION.test(line))
+            hits.push(`${file}:${index + 1}  ${line.trim()}`)
         })
     }
     expect(hits).toEqual([])

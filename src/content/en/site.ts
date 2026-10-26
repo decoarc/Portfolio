@@ -2,7 +2,7 @@ import type { SiteContent } from '../types.ts'
 
 /**
  * Copy do site em inglês.
- * Hero, `work` e `projectType` vêm da Fase 0 (`design/comps/content.ts`);
+ * Hero, `work` e `projectType` vêm da Fase 0;
  * `about`, contato, 404 e rótulos do case study vêm do site anterior (main).
  * Sem e-mail (não há e-mail verificado), sem empregador, métrica ou prêmio.
  */

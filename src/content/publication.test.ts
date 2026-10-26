@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest'
-import { caseStudyAccess, caseStudyHref, findProject, isValidSlug, listProjects } from './publication.ts'
+import {
+  caseStudyAccess,
+  caseStudyHref,
+  findProject,
+  isValidSlug,
+  listProjects,
+} from './publication.ts'
 import type { Project } from './types.ts'
 
 function project(overrides: Partial<Project> = {}): Project {

@@ -15,7 +15,11 @@ function children(): RouteObject[] {
 /** Dois subtrees: PT sob `/pt`, EN na raiz. */
 export function createRoutes(): RouteObject[] {
   return [
-    { path: '/pt', element: <LocaleLayout locale="pt" />, children: children() },
+    {
+      path: '/pt',
+      element: <LocaleLayout locale="pt" />,
+      children: children(),
+    },
     { path: '/', element: <LocaleLayout locale="en" />, children: children() },
   ]
 }

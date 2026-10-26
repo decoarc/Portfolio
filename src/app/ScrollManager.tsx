@@ -16,7 +16,8 @@ export function ScrollManager() {
       }
       const target = document.getElementById(id)
       if (!target) return
-      if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1')
+      if (!target.hasAttribute('tabindex'))
+        target.setAttribute('tabindex', '-1')
       target.scrollIntoView({ block: 'start' })
       target.focus({ preventScroll: true })
       return

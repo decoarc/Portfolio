@@ -14,13 +14,22 @@ export function localePath(locale: Locale, path: string): string {
   return path.startsWith('/#') ? `/pt${path.slice(1)}` : `/pt${path}`
 }
 
-export function parseLocalePath(pathname: string): { locale: Locale; path: string } {
-  if (pathname === '/pt' || pathname === '/pt/') return { locale: 'pt', path: '/' }
-  if (pathname.startsWith('/pt/')) return { locale: 'pt', path: pathname.slice(3) }
+export function parseLocalePath(pathname: string): {
+  locale: Locale
+  path: string
+} {
+  if (pathname === '/pt' || pathname === '/pt/')
+    return { locale: 'pt', path: '/' }
+  if (pathname.startsWith('/pt/'))
+    return { locale: 'pt', path: pathname.slice(3) }
   return { locale: 'en', path: pathname }
 }
 
-export function switchLocalePath(pathname: string, hash: string, target: Locale): string {
+export function switchLocalePath(
+  pathname: string,
+  hash: string,
+  target: Locale,
+): string {
   const { path } = parseLocalePath(pathname)
   return localePath(target, `${path}${hash}`)
 }
