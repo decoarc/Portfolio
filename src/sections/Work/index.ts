@@ -1,1 +1,1 @@
-export { Work } from './Work'
+export { Work } from './Work.tsx'

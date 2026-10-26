@@ -1,0 +1,21 @@
+.link {
+  color: var(--ink);
+  text-decoration-line: underline;
+  text-decoration-color: var(--rule);
+  text-underline-offset: 3px;
+}
+
+.link:hover {
+  color: var(--accent);
+  text-decoration-color: var(--accent);
+}
+
+/* Seta de nova aba só para quem vê; o texto alternativo vazio a tira do nome
+   acessível (a dica falada é o `hint`). Inline-block para não herdar o
+   sublinhado. */
+.link::after {
+  content: '\2197';
+  content: '\2197' / '';
+  display: inline-block;
+  margin-left: 0.3em;
+}

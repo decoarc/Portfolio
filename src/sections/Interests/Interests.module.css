@@ -1,0 +1,30 @@
+/* Interesses: seção de uma linha — respiro menor, como o índice (Release). */
+
+.interests {
+  --sheet-pad-block-start: clamp(32px, 6vh, 64px);
+  --sheet-pad-block-end: clamp(32px, 6vh, 64px);
+  border-top: 2px solid var(--ink);
+}
+
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 1ch;
+  row-gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--font-mono);
+  font-size: var(--text-body);
+  letter-spacing: var(--track-meta);
+  text-transform: uppercase;
+}
+
+/* O ponto médio é só visual: o texto alternativo vazio o tira da leitura,
+   e cada item continua um item de lista. */
+.item + .item::before {
+  content: '\00B7';
+  content: '\00B7' / '';
+  padding: 0 1.25ch;
+  color: var(--accent);
+}

@@ -1,136 +1,99 @@
 export type Locale = 'en' | 'pt'
-
-/** Controls public visibility and link generation during intermediate milestones. */
+export type ProjectType = 'verified' | 'concept'
 export type ProjectStatus = 'draft' | 'preview' | 'published'
+export type ProjectLinkKind = 'live' | 'repo'
+export type HomeSectionId =
+  'work' | 'approach' | 'about' | 'interests' | 'contact'
 
-export interface SitePerson {
-  name: string
-  role: string
-  locationLabel: string
-  shortBio: string
-  email?: string
-}
-
-export interface SocialLink {
-  id: 'github' | 'linkedin' | 'instagram' | (string & {})
-  label: string
-  href: string
-  /** When false, omit from primary professional chrome by default. */
-  professionalDefault?: boolean
-}
-
-export interface NavItem {
-  label: string
+export interface ProjectLink {
+  kind: ProjectLinkKind
   href: string
 }
-
-export interface SiteCta {
-  label: string
-  href: string
-}
-
-export interface SiteContent {
-  person: SitePerson
-  social: SocialLink[]
-  nav: NavItem[]
-  hero: {
-    ctaPrimary: SiteCta
-    ctaSecondary: SiteCta
-    /** Quiet Datum annotation on the Cut plate — not a badge cluster. */
-    plateAnnotation: string
-    /** Title-block focus lines (interests from brief — not proficiency claims). */
-    plateFocusLabel: string
-    plateFocus: string[]
-  }
-  work: {
-    title: string
-    intro: string
-    liveDemoLabel: string
-    caseStudySoonLabel: string
-    caseStudyLabel: string
-    previewStatusNote: string
-    moreSoonNote: string
-  }
-  caseStudy: {
-    backToWorkLabel: string
-    backToHomeLabel: string
-    previewBanner: string
-    previewNote: string
-    overviewLabel: string
-    problemLabel: string
-    responsibilitiesLabel: string
-    technologiesLabel: string
-    implementationLabel: string
-    challengesLabel: string
-    outcomesLabel: string
-    mediaLabel: string
-    repoLabel: string
-    liveDemoLabel: string
-    yearLabel: string
-  }
-  notFound: {
-    title: string
-    body: string
-    homeLabel: string
-  }
-  about: {
-    title: string
-    lead: string
-    body: string
-    stackLabel: string
-    stack: string[]
-    exploringLabel: string
-    exploring: string[]
-  }
-  contact: {
-    title: string
-    lead: string
-    /** Optional supporting line — omit development/placeholder phrasing. */
-    note?: string
-    /** Visible hint on outbound channels; also appended to the accessible name. */
-    externalHint: string
-  }
-  shell: {
-    skipToContent: string
-    homeLandmark: string
-    footerNote: string
-  }
-}
-
-export interface MediaAsset {
+export interface ProjectCover {
   src: string
   alt: string
   width: number
   height: number
 }
-
-export interface ProjectSummary {
-  slug: string
-  title: string
-  tagline: string
-  stack: string[]
-  /**
-   * Single calendar year when work fits one year.
-   * Prefer `period` for inclusive spans such as 2025–2026.
-   */
-  year?: number
-  /** Inclusive display span (e.g. "2025–2026"). Takes precedence over `year`. */
-  period?: string
-  status: ProjectStatus
-  coverImage: MediaAsset
-  featured: boolean
-  hrefLive?: string
-  hrefRepo?: string
+/** Ao menos um de `paragraphs`/`items` é não vazio. */
+export interface CaseSection {
+  heading: string
+  paragraphs?: string[]
+  items?: string[]
 }
 
-export interface ProjectCaseStudy extends ProjectSummary {
-  problem: string
-  responsibilities: string[]
-  implementation: string[]
-  challenges: string[]
-  /** Use "[Outcome TBD]" when unknown — never invent metrics. */
-  outcomes: string[]
-  gallery?: MediaAsset[]
-  /** Case study ships only when evidence is real enough. */
-  evidenceComplete: boolean
+export interface Project {
+  slug: string
+  title: string
+  type: ProjectType
+  status: ProjectStatus
+  /** Dado inventado para exercitar layout. Bloqueia `pnpm build`. */
+  mock?: true
+  summary: string
+  role: string
+  /** Texto livre: '2025' ou '2025–2026'. */
+  year: string
+  stack: string[]
+  cover?: ProjectCover
+  sections: CaseSection[]
+  links: ProjectLink[]
+}
+
+export interface ApproachItem {
+  title: string
+  body: string
+  mock?: true
+}
+export interface ContactChannel {
+  id: 'github' | 'linkedin'
+  label: string
+  href: string
+}
+
+export interface SiteContent {
+  meta: { homeTitle: string; titleSuffix: string }
+  shell: {
+    skipToContent: string
+    homeMark: string
+    /** Nome do *outro* idioma, escrito nele: 'Português' no site EN, 'English' no PT. */
+    localeSwitch: string
+    footerNote: string
+  }
+  person: { name: string; role: string; location: string }
+  hero: {
+    statement: string
+    ctaPrimary: string
+    ctaSecondary: string
+    metaLeft: string
+    metaRight: string
+  }
+  release: { label: string; entries: Record<HomeSectionId, string> }
+  projectType: Record<ProjectType, string>
+  links: { labels: Record<ProjectLinkKind, string>; externalHint: string }
+  work: { label: string; intro: string; previewNote: string }
+  approach: { label: string; intro: string; items: ApproachItem[] }
+  about: {
+    label: string
+    lead: string
+    body: string
+    stackLabel: string
+    stack: string[]
+  }
+  interests: { label: string; items: string[] }
+  contact: { label: string; lead: string; channels: ContactChannel[] }
+  caseStudy: {
+    backToWork: string
+    roleLabel: string
+    yearLabel: string
+    stackLabel: string
+    linksLabel: string
+    previewNotice: string
+    conceptNotice: string
+  }
+  notFound: { title: string; body: string; homeLabel: string }
+}
+
+export interface LocaleContent {
+  site: SiteContent
+  projects: Project[]
 }

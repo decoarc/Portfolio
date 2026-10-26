@@ -13,20 +13,32 @@ export function spaFallbackPlugin(options?: {
 }): Plugin {
   const includeDev = options?.includeDev ?? false
 
-  const attach = (middlewares: Connect.Server, root: string, outDir: string) => {
+  const attach = (
+    middlewares: Connect.Server,
+    root: string,
+    outDir: string,
+  ) => {
     middlewares.use((req, res, next) => {
       const url = req.url ?? '/'
       if (req.method !== 'GET' && req.method !== 'HEAD') {
         next()
         return
       }
-      if (url.startsWith('/@') || url.startsWith('/node_modules') || url.includes('.')) {
+      if (
+        url.startsWith('/@') ||
+        url.startsWith('/node_modules') ||
+        url.includes('.')
+      ) {
         next()
         return
       }
 
       const candidate = path.join(outDir, url === '/' ? 'index.html' : url)
-      if (url !== '/' && fs.existsSync(candidate) && fs.statSync(candidate).isFile()) {
+      if (
+        url !== '/' &&
+        fs.existsSync(candidate) &&
+        fs.statSync(candidate).isFile()
+      ) {
         next()
         return
       }
@@ -48,7 +60,10 @@ export function spaFallbackPlugin(options?: {
   return {
     name: 'portfolio-spa-fallback',
     configurePreviewServer(server) {
-      const outDir = path.resolve(server.config.root, server.config.build.outDir)
+      const outDir = path.resolve(
+        server.config.root,
+        server.config.build.outDir,
+      )
       attach(server.middlewares, server.config.root, outDir)
     },
     configureServer(server) {

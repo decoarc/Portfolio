@@ -1,66 +1,34 @@
-import type { SiteContent } from '@/content/types'
-import { MotionReveal } from '@/motion'
+import type { SiteContent } from '../../content/types.ts'
+import { SectionHead } from '../../components/SectionHead/SectionHead.tsx'
+import { Sheet } from '../../components/Sheet/Sheet.tsx'
 import styles from './About.module.css'
 
 interface AboutProps {
-  site: SiteContent
+  /** Posição da seção na home: o mesmo número do índice. */
+  index: number
+  copy: SiteContent['about']
 }
 
-/**
- * About — editorial narrative + Datum capability lists.
- * MP-3: coordinated section reveal.
- */
-export function About({ site }: AboutProps) {
-  const { about } = site
+const HEADING_ID = 'about-heading'
 
+/** Sobre: medida curta, lead e corpo, e a stack numa linha mono. */
+export function About({ index, copy }: AboutProps) {
   return (
-    <section
+    <Sheet
+      tone="sheet"
       id="about"
+      labelledBy={HEADING_ID}
       className={styles.about}
-      aria-labelledby="about-heading"
     >
-      <div className={styles.inner}>
-        <MotionReveal>
-          <header className={styles.header}>
-            <p className={styles.index} aria-hidden="true">
-              03
-            </p>
-            <h2 id="about-heading" className={styles.title}>
-              {about.title}
-            </h2>
-          </header>
-        </MotionReveal>
-
-        <div className={styles.layout}>
-          <MotionReveal delayMs={60}>
-            <div className={styles.prose}>
-              <p className={styles.lead}>{about.lead}</p>
-              <p className={styles.body}>{about.body}</p>
-            </div>
-          </MotionReveal>
-
-          <MotionReveal delayMs={120}>
-            <div className={styles.lists}>
-              <div className={styles.listBlock}>
-                <h3 className={styles.listLabel}>{about.stackLabel}</h3>
-                <ul className={styles.list}>
-                  {about.stack.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-              </div>
-              <div className={styles.listBlock}>
-                <h3 className={styles.listLabel}>{about.exploringLabel}</h3>
-                <ul className={styles.list}>
-                  {about.exploring.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </MotionReveal>
-        </div>
+      <SectionHead index={index} headingId={HEADING_ID} title={copy.label} />
+      <div className={styles.text}>
+        <p className={styles.lead}>{copy.lead}</p>
+        <p className={styles.body}>{copy.body}</p>
+        <p className={styles.stack}>
+          <span className={styles.stackLabel}>{copy.stackLabel}</span>
+          <span>{copy.stack.join(' · ')}</span>
+        </p>
       </div>
-    </section>
+    </Sheet>
   )
 }

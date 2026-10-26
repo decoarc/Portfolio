@@ -1,230 +1,27 @@
-/**
- * Closing Cut band — full charcoal field, typographic CTA cluster.
- * MP-3: cutRule draws once on reveal (transform scaleX).
- */
+/* Contracapa: volta ao `--bg` da capa, aberta pelo mesmo filete de 2px que
+   fecha o hero. */
 
 .contact {
-  background: var(--color-field);
-  color: var(--color-field-ink);
-  padding-block: clamp(3.25rem, 8vw, 6.5rem);
-  border-top: 1px solid color-mix(in srgb, var(--color-field-ink) 12%, transparent);
-}
-
-.inner {
-  width: min(100% - (var(--page-gutter) * 2), var(--page-max));
-  margin-inline: auto;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0;
-  container-type: inline-size;
-}
-
-.inner > * {
-  min-width: 0;
-  width: 100%;
-  max-width: 100%;
-}
-
-.index {
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
-  letter-spacing: var(--tracking-meta);
-  color: var(--color-field-muted);
-  margin: 0 0 var(--space-3);
-}
-
-.title {
-  font-size: min(21vw, clamp(3.25rem, 10vw, 7.5rem));
-  letter-spacing: -0.05em;
-  line-height: 0.9;
-  margin: 0 0 var(--space-4);
-  max-width: min(9ch, 100%);
-  min-width: 0;
-  color: var(--color-field-ink);
-}
-
-.cutRule {
-  display: block;
-  width: min(8rem, 40vw);
-  height: 1px;
-  margin: 0 0 var(--space-5);
-  background: color-mix(in srgb, var(--color-field-ink) 35%, transparent);
-  transform-origin: left center;
+  border-top: 2px solid var(--ink);
 }
 
 .lead {
+  margin: 0;
+  max-width: 22ch;
   font-family: var(--font-display);
-  font-size: min(14cqi, clamp(1.2rem, 2.2vw, 1.65rem));
-  font-weight: 500;
-  letter-spacing: -0.025em;
-  line-height: var(--leading-snug);
-  color: color-mix(in srgb, var(--color-field-ink) 92%, transparent);
-  max-width: min(22ch, 100%);
-  min-width: 0;
-  margin: 0 0 var(--space-3);
-}
-
-.note {
-  font-size: var(--text-sm);
-  color: var(--color-field-muted);
-  max-width: min(32ch, 100%);
-  min-width: 0;
-  margin: 0 0 var(--space-6);
-}
-
-.channelsReveal {
-  width: min(100%, 28rem);
-  margin: 0 0 clamp(2rem, 5vw, 3.5rem);
+  font-variation-settings: var(--fraunces-title);
+  font-weight: 600;
+  font-size: var(--text-title);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
 }
 
 .channels {
-  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 32px;
+  margin: clamp(24px, 4vh, 48px) 0 0;
   padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  border-top: 1px solid color-mix(in srgb, var(--color-field-ink) 22%, transparent);
-}
-
-.channels li {
-  border-bottom: 1px solid
-    color-mix(in srgb, var(--color-field-ink) 22%, transparent);
-}
-
-.channel {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: min(var(--space-4), 16px);
-  min-width: 0;
-  max-width: 100%;
-  min-height: 3.75rem;
-  padding-block: var(--space-4);
-  text-decoration: none;
-  color: var(--color-field-ink);
-  font-family: var(--font-display);
-  font-size: min(15cqi, clamp(1.35rem, 2.5vw, 1.75rem));
-  font-weight: 600;
-  letter-spacing: -0.025em;
-  transition: color var(--motion-fast) var(--ease-ink);
-}
-
-.channel:hover,
-.channel:focus-visible {
-  color: color-mix(in srgb, var(--color-accent) 45%, var(--color-field-ink));
-}
-
-.channelHint {
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
-  font-weight: 500;
-  letter-spacing: var(--tracking-meta);
-  text-transform: uppercase;
-  color: var(--color-field-muted);
-}
-
-.channel:hover .channelHint,
-.channel:focus-visible .channelHint {
-  color: inherit;
-}
-
-.signoff {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2) var(--space-5);
-  align-items: baseline;
-  margin: 0;
-  max-width: none;
-  padding-top: var(--space-5);
-  border-top: 1px solid color-mix(in srgb, var(--color-field-ink) 14%, transparent);
-  width: min(100%, 28rem);
-}
-
-.signoffName {
-  font-family: var(--font-display);
-  font-size: var(--text-sm);
-  font-weight: 600;
-  letter-spacing: -0.01em;
-}
-
-.signoffMeta {
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
-  letter-spacing: var(--tracking-meta);
-  text-transform: uppercase;
-  color: var(--color-field-muted);
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  :global([data-motion-inview='false']) .cutRule {
-    transform: scaleX(0);
-  }
-
-  :global([data-motion-inview='true']) .cutRule {
-    animation: cutRuleDraw var(--motion-medium) var(--ease-out-expressive) both;
-  }
-}
-
-@keyframes cutRuleDraw {
-  from {
-    transform: scaleX(0);
-  }
-
-  to {
-    transform: scaleX(1);
-  }
-}
-
-@media (min-width: 64rem) {
-  .inner {
-    display: grid;
-    grid-template-columns: minmax(0, 1.1fr) minmax(min(18rem, 288px), min(24rem, 384px));
-    column-gap: min(var(--space-9), 96px);
-    align-items: end;
-  }
-
-  .inner > :first-child {
-    grid-column: 1;
-    grid-row: 1;
-  }
-
-  .inner > :nth-child(2) {
-    grid-column: 1;
-    grid-row: 2;
-    align-self: start;
-    margin-top: var(--space-2);
-  }
-
-  .channelsReveal {
-    grid-column: 2;
-    grid-row: 1 / span 2;
-    width: 100%;
-    margin: 0;
-    align-self: end;
-  }
-
-  .inner > :last-child {
-    grid-column: 1 / -1;
-    grid-row: 3;
-    margin-top: var(--space-8);
-  }
-
-  .channel {
-    min-height: 4.25rem;
-  }
-
-  .lead {
-    max-width: 18ch;
-  }
-
-  .note {
-    margin-bottom: 0;
-  }
-
-  .signoff {
-    width: 100%;
-  }
+  list-style: none;
+  font-size: var(--text-lead);
 }

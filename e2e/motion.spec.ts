@@ -1,18 +1,58 @@
-import { expect, test } from '@playwright/test'
+import { expect, test, type Page } from '@playwright/test'
 
-test.describe('reduced motion', () => {
-  test.use({ reducedMotion: 'reduce' })
+const PAGES = ['/', '/work/token-killer'] as const
 
-  test('homepage stays visible without entrance motion', async ({ page }) => {
-    await page.goto('/')
-    const hero = page.locator('h1 span').first()
-    await expect(hero).toBeVisible()
-    await expect(hero).toHaveCSS('opacity', '1')
-    await expect(hero).toHaveCSS('animation-name', 'none')
-    await expect(page.getByRole('heading', { name: 'Selected work' })).toBeVisible()
-    await expect(page.locator('#work')).toHaveCSS('opacity', '1')
-    await expect
-      .poll(() => page.evaluate(() => getComputedStyle(document.documentElement).scrollBehavior))
-      .toBe('auto')
+async function exercise(page: Page, path: string) {
+  await page.goto(path)
+  await page.evaluate(() => document.fonts.ready.then(() => true))
+  const title = page.locator('main h3 a, main h1').first()
+  await title.hover()
+  await page.getByRole('link').nth(1).focus()
+  await page.keyboard.press('Tab')
+}
+
+for (const reducedMotion of ['reduce', 'no-preference'] as const) {
+  test.describe(`prefers-reduced-motion: ${reducedMotion}`, () => {
+    test.use({ reducedMotion })
+
+    for (const path of PAGES) {
+      test(`nenhuma animação ativa · ${path}`, async ({ page }) => {
+        await exercise(page, path)
+        const count = await page.evaluate(() => document.getAnimations().length)
+        expect(count).toBe(0)
+        /**
+         * `getAnimations()` só vê transições em curso; uma `transition`
+         * declarada e ainda não disparada passaria. A duração calculada pega
+         * a declaração em si.
+         */
+        const timed = await page.evaluate(() => {
+          const durations = (value: string) =>
+            value.split(',').some((part) => parseFloat(part) > 0)
+          for (const el of document.querySelectorAll('*')) {
+            const style = getComputedStyle(el)
+            if (
+              durations(style.transitionDuration) ||
+              durations(style.animationDuration)
+            ) {
+              return el.tagName.toLowerCase() + '.' + String(el.className)
+            }
+          }
+          return null
+        })
+        expect(timed).toBeNull()
+      })
+    }
   })
+}
+
+test('a Fraunces completa foi carregada', async ({ page }) => {
+  await page.goto('/')
+  await page.evaluate(() => document.fonts.ready.then(() => true))
+  const names = await page.evaluate(() =>
+    performance.getEntriesByType('resource').map((entry) => entry.name),
+  )
+  expect(
+    names.some((name) => name.includes('fraunces-latin-full-normal')),
+    names.join('\n'),
+  ).toBe(true)
 })

@@ -1,0 +1,205 @@
+/* A ficha aberta. Medida curta para o texto; a ficha técnica (`<dl>` em mono)
+   vai para o trilho de margem a partir de 768px, pela mesma técnica do
+   SectionHead e do índice: no fluxo, empurrada para o trilho com margem
+   negativa. O trilho da home (8vw, até 120px) é estreito demais para
+   "PostgreSQL/PostGIS" em mono; a folha do case study alarga o próprio
+   `--margin-rail`, que o padding do Sheet e o trilho da `<dl>` leem juntos. */
+
+.page {
+  --sheet-pad-block-start: clamp(32px, 6vh, 64px);
+  --measure: 62ch;
+}
+
+.back {
+  display: inline-block;
+  margin-bottom: clamp(32px, 6vh, 64px);
+  font-family: var(--font-mono);
+  font-size: var(--text-meta);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.back::before {
+  content: '\2190';
+  content: '\2190' / '';
+  margin-right: 0.6em;
+}
+
+.back:hover {
+  text-decoration-line: underline;
+  text-underline-offset: 3px;
+}
+
+.head {
+  display: grid;
+  gap: 12px;
+  padding-bottom: clamp(24px, 4vh, 40px);
+  border-bottom: 1px solid var(--rule);
+}
+
+.type {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-micro);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-variation-settings: var(--fraunces-title);
+  font-weight: 600;
+  font-size: min(var(--text-display), 6rem);
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  overflow-wrap: break-word;
+}
+
+/* Aviso de preview e de estudo conceitual: frase inteira, sem caixa alta,
+   marcada pelo filete do acento. */
+.notice {
+  margin: 0;
+  max-width: 60ch;
+  padding-left: 12px;
+  border-left: 2px solid var(--accent);
+  font-family: var(--font-mono);
+  font-size: var(--text-meta);
+  line-height: 1.6;
+  color: var(--ink);
+}
+
+.body {
+  padding-top: clamp(24px, 4vh, 40px);
+}
+
+/* Ficha técnica. Abaixo de 768px: em linha, antes do resumo. */
+.facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 32px;
+  margin: 0 0 24px;
+  font-family: var(--font-mono);
+  font-size: var(--text-meta);
+  line-height: 1.5;
+}
+
+.fact dt {
+  font-size: var(--text-micro);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+.fact dd {
+  margin: 0;
+}
+
+/* Em linha, os itens da stack dividem a linha com um ponto médio só visual. */
+.stackItem {
+  display: inline;
+}
+
+.stackItem + .stackItem::before {
+  content: ' \00B7  ';
+  content: ' \00B7  ' / '';
+  white-space: pre;
+  color: var(--ink-muted);
+}
+
+.text {
+  display: grid;
+  gap: 0;
+  max-width: var(--measure);
+}
+
+.summary {
+  margin: 0;
+  font-size: var(--text-lead);
+  line-height: 1.5;
+}
+
+.cover {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  margin-top: clamp(24px, 4vh, 40px);
+  border: 1px solid var(--rule);
+}
+
+.section {
+  margin-top: clamp(32px, 6vh, 56px);
+}
+
+.section p {
+  margin: 0 0 1em;
+}
+
+.section > :last-child {
+  margin-bottom: 0;
+}
+
+.sectionTitle {
+  margin: 0 0 12px;
+  font-family: var(--font-display);
+  font-variation-settings: var(--fraunces-heading);
+  font-weight: 600;
+  font-size: var(--text-title);
+  line-height: 1.1;
+}
+
+.items {
+  margin: 0;
+  padding-left: 1.2em;
+}
+
+.items li + li {
+  margin-top: 0.5em;
+}
+
+.items li::marker {
+  color: var(--rule);
+}
+
+@media (min-width: 768px) {
+  .page {
+    --margin-rail: clamp(160px, 18vw, 240px);
+  }
+
+  .body {
+    display: flex;
+    align-items: flex-start;
+  }
+
+  .facts {
+    flex: none;
+    flex-direction: column;
+    gap: 20px;
+    width: var(--margin-rail);
+    margin: 0 0 0 calc(var(--margin-rail) * -1);
+    padding-right: 20px;
+    overflow-wrap: break-word;
+  }
+
+  .stackItem {
+    display: block;
+  }
+
+  .stackItem + .stackItem::before {
+    content: none;
+  }
+
+  .text {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+}
+
+/* O aviso de preview precede o rótulo de tipo: um respiro a mais o separa. */
+.head > .notice:first-child {
+  margin-bottom: 8px;
+}

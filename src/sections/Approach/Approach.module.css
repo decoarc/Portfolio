@@ -1,0 +1,49 @@
+/* Fichas da abordagem no vocabulário das lâminas (`.slot` do comp 02): filete
+   de 1px por ficha, título em Fraunces, corpo em tinta suave. As fichas não
+   têm número: no trilho, numeral é só de seção, para não competir com o
+   índice (o filete já separa uma ficha da outra). */
+
+/* Filete de 2px que separa as seções da folha (Work → Approach). */
+.approach {
+  border-top: 2px solid var(--ink);
+}
+
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-bottom: 1px solid var(--rule);
+}
+
+.item {
+  display: grid;
+  gap: 8px;
+  padding: clamp(24px, 3.5vh, 40px) 0;
+  border-top: 1px solid var(--rule);
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-variation-settings: var(--fraunces-title);
+  font-weight: 600;
+  font-size: var(--text-title);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+.body {
+  margin: 0;
+  max-width: 50ch;
+  color: var(--ink-muted);
+}
+
+/* A partir de 768px, título à esquerda e corpo à direita, como uma ficha de
+   duas colunas; o corpo alinha pelo topo do título. */
+@media (min-width: 768px) {
+  .item {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    column-gap: 32px;
+    align-items: start;
+  }
+}

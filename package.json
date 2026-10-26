@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "node scripts/assert-no-mock.ts && tsc -b && vite build",
+    "build:preview": "node scripts/assert-no-mock.ts --allow-mock && tsc -b && vite build",
     "preview": "vite preview",
     "typecheck": "tsc -b --pretty false",
     "lint": "eslint .",
@@ -13,15 +14,14 @@
     "format:check": "prettier --check .",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:e2e": "playwright test",
-    "comps": "playwright test --config playwright.comps.config.ts comps.spec.ts",
-    "comps:capture": "playwright test --config playwright.comps.config.ts capture.spec.ts",
+    "test:e2e": "playwright test --project=chromium",
+    "capture": "playwright test --project=capture",
     "validate": "pnpm typecheck && pnpm lint && pnpm test && pnpm build && pnpm test:e2e"
   },
   "dependencies": {
-    "@fontsource-variable/bricolage-grotesque": "^5.3.0",
-    "@fontsource-variable/source-sans-3": "^5.3.1",
-    "@fontsource/ibm-plex-mono": "^5.3.0",
+    "@fontsource-variable/fraunces": "^5.3.0",
+    "@fontsource-variable/geist-mono": "^5.3.0",
+    "@fontsource-variable/instrument-sans": "^5.3.0",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "react-router": "^8.5.0"
@@ -29,13 +29,6 @@
   "devDependencies": {
     "@axe-core/playwright": "4.14.0",
     "@eslint/js": "^9.39.1",
-    "@fontsource-variable/archivo": "^5.3.0",
-    "@fontsource-variable/fraunces": "^5.3.0",
-    "@fontsource-variable/geist-mono": "^5.3.0",
-    "@fontsource-variable/instrument-sans": "^5.3.0",
-    "@fontsource-variable/jetbrains-mono": "^5.3.0",
-    "@fontsource-variable/space-grotesk": "^5.3.0",
-    "@fontsource-variable/syne": "^5.3.0",
     "@playwright/test": "^1.64.1",
     "@testing-library/dom": "^10.4.2",
     "@testing-library/jest-dom": "^6.9.1",
@@ -59,7 +52,7 @@
     "vitest": "^5.0.5"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=22.18"
   },
   "packageManager": "pnpm@10.33.0"
 }

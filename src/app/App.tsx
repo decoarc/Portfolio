@@ -1,13 +1,9 @@
+import { useState } from 'react'
 import { createBrowserRouter, RouterProvider } from 'react-router'
-import { Providers } from './providers'
-import { createAppRoutes } from './router'
+import { createRoutes } from './routes.tsx'
 
-const router = createBrowserRouter(createAppRoutes())
-
-export default function App() {
-  return (
-    <Providers>
-      <RouterProvider router={router} />
-    </Providers>
-  )
+export function App() {
+  // Criado uma vez; o router mantém o próprio estado de navegação.
+  const [router] = useState(() => createBrowserRouter(createRoutes()))
+  return <RouterProvider router={router} />
 }

@@ -1,5 +1,13 @@
-import type { ProjectCaseStudy } from '../../types'
-import { mapAreas } from './map-areas'
+import type { Project } from '../../types.ts'
+import { atlasLedger } from './atlas-ledger.ts'
+import { fieldNotes } from './field-notes.ts'
+import { mapAreas } from './map-areas.ts'
+import { tokenKiller } from './token-killer.ts'
 
-/** English project registry. Add modules here; never invent credentials. */
-export const projectsEn: ProjectCaseStudy[] = [mapAreas]
+/** Ordem de exibição na home. */
+export const projectsEn: Project[] = [
+  mapAreas,
+  tokenKiller,
+  atlasLedger,
+  fieldNotes,
+]

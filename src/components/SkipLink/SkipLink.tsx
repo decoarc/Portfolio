@@ -1,13 +1,8 @@
 import styles from './SkipLink.module.css'
 
-interface SkipLinkProps {
-  label: string
-  href?: string
-}
-
-export function SkipLink({ label, href = '#main' }: SkipLinkProps) {
+export function SkipLink({ label }: { label: string }) {
   return (
-    <a className={styles.skip} href={href}>
+    <a href="#main" className={styles.link}>
       {label}
     </a>
   )

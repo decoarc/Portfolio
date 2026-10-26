@@ -1,68 +1,39 @@
-import type { SiteContent } from '@/content/types'
-import { MotionReveal } from '@/motion'
+import type { SiteContent } from '../../content/types.ts'
+import { ExternalLink } from '../../components/ExternalLink/ExternalLink.tsx'
+import { SectionHead } from '../../components/SectionHead/SectionHead.tsx'
+import { Sheet } from '../../components/Sheet/Sheet.tsx'
 import styles from './Contact.module.css'
 
 interface ContactProps {
-  site: SiteContent
+  /** Posição da seção na home: o mesmo número do índice. */
+  index: number
+  copy: SiteContent['contact']
+  /** Dica de nova aba dos canais (`links.externalHint`). */
+  externalHint: string
 }
 
-/**
- * Contact / closing — Cut field.
- * MP-3: reveal + optional rule emphasis (no case-study route theatre).
- */
-export function Contact({ site }: ContactProps) {
-  const { contact, social, person } = site
-  const channels = social.filter((item) => item.professionalDefault !== false)
+const HEADING_ID = 'contact-heading'
 
+/** Contato: a contracapa, de volta ao papel da capa. */
+export function Contact({ index, copy, externalHint }: ContactProps) {
   return (
-    <section
+    <Sheet
+      tone="cover"
       id="contact"
+      labelledBy={HEADING_ID}
       className={styles.contact}
-      aria-labelledby="contact-heading"
-      data-theme="field"
     >
-      <div className={styles.inner}>
-        <MotionReveal>
-          <p className={styles.index} aria-hidden="true">
-            04
-          </p>
-          <h2 id="contact-heading" className={styles.title}>
-            {contact.title}
-          </h2>
-          <span className={styles.cutRule} aria-hidden="true" />
-        </MotionReveal>
-
-        <MotionReveal delayMs={70}>
-          <p className={styles.lead}>{contact.lead}</p>
-          {contact.note ? <p className={styles.note}>{contact.note}</p> : null}
-        </MotionReveal>
-
-        <MotionReveal delayMs={120} className={styles.channelsReveal}>
-          <ul className={styles.channels}>
-            {channels.map((item) => (
-              <li key={item.id}>
-                <a
-                  href={item.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={styles.channel}
-                  aria-label={`${item.label}, ${contact.externalHint}`}
-                >
-                  <span className={styles.channelLabel}>{item.label}</span>
-                  <span className={styles.channelHint}>{contact.externalHint}</span>
-                </a>
-              </li>
-            ))}
-          </ul>
-        </MotionReveal>
-
-        <MotionReveal delayMs={160}>
-          <p className={styles.signoff}>
-            <span className={styles.signoffName}>{person.name}</span>
-            <span className={styles.signoffMeta}>{person.locationLabel}</span>
-          </p>
-        </MotionReveal>
-      </div>
-    </section>
+      <SectionHead index={index} headingId={HEADING_ID} title={copy.label} />
+      <p className={styles.lead}>{copy.lead}</p>
+      <ul className={styles.channels}>
+        {copy.channels.map((channel) => (
+          <li key={channel.id}>
+            <ExternalLink href={channel.href} hint={externalHint}>
+              {channel.label}
+            </ExternalLink>
+          </li>
+        ))}
+      </ul>
+    </Sheet>
   )
 }

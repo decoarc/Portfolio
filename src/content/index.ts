@@ -1,40 +1,18 @@
-import { siteEn } from './en/site'
-import { projectsEn } from './en/projects'
-import type { Locale, ProjectCaseStudy, SiteContent } from './types'
+import { projectsEn } from './en/projects/index.ts'
+import { siteEn } from './en/site.ts'
+import { projectsPt } from './pt/projects/index.ts'
+import { sitePt } from './pt/site.ts'
+import type { Locale, LocaleContent } from './types.ts'
 
-export type { Locale, ProjectCaseStudy, SiteContent } from './types'
-export type { CaseStudyAccess } from './caseStudyAccess'
-export {
-  filterRealBullets,
-  findProjectBySlug,
-  isPlaceholderContent,
-  resolveCaseStudyAccess,
-} from './caseStudyAccess'
-export {
-  assertPublicationRules,
-  canLinkCaseStudy,
-  filterPublicProjects,
-  getProjectHref,
-  isListedProject,
-  isValidSlug,
-} from './projectLinks'
-export { getProjectPeriodLabel } from './projectPeriod'
-
-const siteByLocale: Record<Locale, SiteContent> = {
-  en: siteEn,
-  // Portuguese seam reserved — do not invent PT copy until provided.
-  pt: siteEn,
+/**
+ * Árvore completa de conteúdo. Também é lida por `scripts/assert-no-mock.ts`
+ * no Node: imports relativos com `.ts`, sem alias e sem CSS/DOM.
+ */
+export const contentByLocale: Record<Locale, LocaleContent> = {
+  en: { site: siteEn, projects: projectsEn },
+  pt: { site: sitePt, projects: projectsPt },
 }
 
-const projectsByLocale: Record<Locale, ProjectCaseStudy[]> = {
-  en: projectsEn,
-  pt: projectsEn,
-}
-
-export function getSiteContent(locale: Locale = 'en'): SiteContent {
-  return siteByLocale[locale] ?? siteByLocale.en
-}
-
-export function getProjects(locale: Locale = 'en'): ProjectCaseStudy[] {
-  return projectsByLocale[locale] ?? projectsByLocale.en
+export function getContent(locale: Locale): LocaleContent {
+  return contentByLocale[locale]
 }

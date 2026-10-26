@@ -1,82 +1,54 @@
 # Portfolio — André Arcodaci
 
-Greenfield craft portfolio (Vite + React + TypeScript). Visual direction: **Ledger × Datum × Cut** hybrid. Planning docs live in `docs/`.
+Portfólio bilíngue (EN na raiz, PT em `/pt`) em React 19, Vite 8 e TypeScript.
+Direção visual: **Editorial Rolodex** (papel manila, Fraunces, fichas de índice).
+Os documentos de planejamento ficam em `docs/`.
 
-## Workspace boundaries
+## Pré-requisitos
 
-| Path | Access |
-|------|--------|
-| `Portfolio/` (this repo) | Writable |
-| sibling `prototype/` | **Read-only** — do not modify or commit there |
+- Node.js >= 22.18 (o `build` roda `scripts/assert-no-mock.ts` com a remoção nativa de tipos do Node, sem flag a partir dessa versão)
+- pnpm 10 (`corepack enable`)
 
-## Prerequisites
-
-- Node.js ≥ 20
-- pnpm 10 (`corepack enable` recommended)
-
-## Commands
+## Comandos
 
 ```bash
 pnpm install
-pnpm dev          # local dev server
-pnpm typecheck    # TypeScript project references
-pnpm lint         # ESLint
-pnpm format       # Prettier write
+pnpm dev            # servidor local
+pnpm typecheck      # tsc -b
+pnpm lint           # ESLint
+pnpm test           # Vitest, uma execução
+pnpm format         # Prettier --write
 pnpm format:check
-pnpm test         # Vitest (run once)
-pnpm test:watch
-pnpm build        # production build to dist/
-pnpm preview      # preview production build
-pnpm validate     # typecheck + lint + test + build
+pnpm test:e2e       # Playwright (projeto chromium); sobe build:preview + preview
+pnpm capture        # regrava as capturas do Gate 2 em docs/gate-2/
+pnpm build          # trava de mock + tsc -b + vite build; falha enquanto houver mock
+pnpm build:preview  # igual, mas permite mock
+pnpm preview        # serve dist/
+pnpm validate       # typecheck + lint + test + build + test:e2e
 ```
 
-## Stack (M1)
+`pnpm build` e `pnpm validate` falham enquanto existir conteúdo `mock: true`:
+é a trava de integridade funcionando. Use `pnpm build:preview` para avaliar.
 
-| Package | Why | Milestone |
-|---------|-----|-----------|
-| `react`, `react-dom` | UI | M1 |
-| `vite`, `@vitejs/plugin-react` | Dev/build | M1 |
-| `typescript` (strict) | Typed content + app | M1 |
-| `eslint` + plugins | Lint / a11y hints | M1 |
-| `prettier` | Formatting | M1 |
-| `vitest`, Testing Library, `jsdom` | Unit/component tests | M1 |
-| `@fontsource-variable/bricolage-grotesque` | Ledger display face (self-hosted via package) | M1 |
-| `@fontsource-variable/source-sans-3` | Body face | M1 |
-| `@fontsource/ibm-plex-mono` | Datum metadata only | M1 |
-| `@axe-core/playwright` | WCAG smoke on primary routes | M5 |
+Verificações (typecheck, lint, test, build, e2e) rodam como scripts do projeto,
+sem `rtk` na frente, lendo o código de saída.
 
-### Explicitly not installed (yet / ever by default)
+## Regras de conteúdo
 
-| Package | Status |
-|---------|--------|
-| `react-router` | Deferred until hosting + SPA fallback (Gate D); home shell only |
-| `gsap` | M3 if CSS cannot meet kept motion experiments |
-| `lenis`, `three` | Not by default — needs explicit approval |
-| Tailwind | Rejected — CSS Modules + tokens |
+- A copy vive em `src/content/<locale>/`; componentes não têm string própria.
+- Os dois locales têm o mesmo shape (teste de paridade).
+- Projeto `concept` sempre exibe o rótulo de estudo conceitual; repositório
+  privado não é linkado; nada de métrica, empregador ou prêmio inventado.
+- Todo item inventado leva `mock: true`.
 
-## Content rules
+## Mais
 
-- English copy lives under `src/content/en/` — components must not hardcode user-facing strings.
-- Projects require `status`: `draft` \| `preview` \| `published`.
-- Public UI must use `getProjectHref` / `canLinkCaseStudy` so unpublished work never links to `/work/:slug`.
-- Do not invent employers, metrics, or awards. Use labeled `[… TBD]` placeholders.
+- Arquitetura: `docs/ARCHITECTURE.md`
+- Decisões de design: `docs/DESIGN_DECISIONS.md`
+- Adiado: `docs/BACKLOG.md`
+- Dossiê do Gate 2: `docs/gate-2/README.md`
 
-## Design tokens
+## Fase atual
 
-Provisional tokens in `src/styles/tokens.css` (paper/ink, accent, type, space, motion). Palette/type finalize at Gate B (browser-rendered first viewport).
-
-## Asset provenance
-
-| Asset | Source | Notes |
-|-------|--------|-------|
-| `public/images/projects/map-areas.webp` (+ `-800.webp`) | Read-only copy from `prototype/public/assets/components/Projects/map-areas.png` | Optimized with `cwebp` (q80); prototype/ not modified |
-
-## Milestone status
-
-- **M1** — Project foundation & design system — complete
-- **M2a** — First-viewport visual prototype — complete (Gate B approved)
-- **M2b** — Full static homepage — complete (Gate C approved)
-- **M3** — Motion & interactions — complete (approved)
-- **M4a** — Project inventory & case-study evidence — delivered (`docs/m4a/`; awaiting approval)
-- **M4b** — Case-study routes & pages — not started (needs M4a + Gate D)
-- **Gates D/E** — Hosting/SPA fallback and publishable Map Areas evidence — open (see `docs/m4a/`)
+Fase 2 (fundação) concluída: reescrita de `src/` na direção Editorial Rolodex,
+sem motion. Motion é a Fase 3; conteúdo real no lugar dos mocks, a Fase 4.
