@@ -121,12 +121,28 @@ body {
   .hero__meta--left { grid-column: 1 / span 6; }
   .hero__meta--right { grid-column: 7 / -1; }
   .hero__name { grid-column: 1 / span 7; }
-  .hero__role { grid-column: 1 / span 3; align-self: end; }
-  .hero__statement { grid-column: 4 / span 4; align-self: end; }
+
+  /* Faixa de tablet (768–1199): a régua de 1440 dava 4 de 12 colunas (~210px)
+     ao statement, que quebrava em seis linhas sob um vazio grande. Aqui função
+     e statement dividem uma linha, CTAs e localização dividem a seguinte. */
+  .hero__role { grid-column: 1 / span 4; align-self: end; }
+  .hero__statement { grid-column: 5 / -1; align-self: end; }
+  .hero__actions { grid-row: 4; grid-column: 1 / span 8; align-self: center; }
+  .hero__location {
+    grid-row: 4;
+    grid-column: 9 / -1;
+    justify-self: end;
+    align-self: center;
+  }
+}
+
+@media (min-width: 1200px) {
+  .hero__role { grid-column: 1 / span 3; }
+  .hero__statement { grid-column: 4 / span 4; }
   /* A régua de CTAs precisa da largura real do rótulo em PT
      ("Trabalhos selecionados"), não de duas colunas estreitas — por isso
      ganha 5 colunas e a localização desce para a própria linha. */
-  .hero__actions { grid-column: 8 / span 5; align-self: end; }
+  .hero__actions { grid-row: 3; grid-column: 8 / span 5; align-self: end; }
   .hero__location { grid-row: 4; grid-column: 1 / -1; justify-self: end; }
 }
 
@@ -150,7 +166,12 @@ body {
 
 /* ---- Work: lâminas de índice ---- */
 
+/* A folha de índice é um papel mais claro que a capa: a passagem do hero para
+   os trabalhos é virar a página, não rolar a mesma. É o único uso de
+   `--surface` no comp — e é o que faz o valor publicado no README existir na
+   captura. */
 .work {
+  background: var(--surface);
   padding: var(--gutter) var(--gutter) var(--gutter)
     calc(var(--gutter) + var(--margin-rail));
 }

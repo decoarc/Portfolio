@@ -83,7 +83,10 @@ body {
   text-align: center;
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: clamp(2.5rem, 0.8rem + 10vw, 9.5rem);
+  /* A inclinação curta do fluido é deliberada: com `0.8rem + 10vw` a palavra
+     mais longa media 359px em 390px de viewport contra 350px disponíveis e
+     estourava o hero — invisível, porque `overflow: hidden` recorta. */
+  font-size: clamp(2.5rem, 0.1rem + 11vw, 9.5rem);
   line-height: 0.95;
   letter-spacing: -0.04em;
   text-wrap: balance;
@@ -134,12 +137,28 @@ body {
   .hero__meta--left { grid-column: 1 / span 6; }
   .hero__meta--right { grid-column: 7 / -1; }
   .hero__name { grid-column: 1 / -1; justify-self: center; }
-  .hero__role { grid-column: 1 / span 3; align-self: end; }
-  .hero__statement { grid-column: 4 / span 4; align-self: end; }
+
+  /* Faixa de tablet (768–1199): a régua de 1440 dava 4 de 12 colunas (~210px)
+     ao statement, que quebrava em seis linhas sob um vazio grande. Aqui função
+     e statement dividem uma linha; CTAs e localização dividem a seguinte. */
+  .hero__role { grid-column: 1 / span 4; align-self: end; }
+  .hero__statement { grid-column: 5 / -1; align-self: end; }
+  .hero__actions { grid-row: 4; grid-column: 1 / span 8; align-self: center; }
+  .hero__location {
+    grid-row: 4;
+    grid-column: 9 / -1;
+    justify-self: end;
+    align-self: center;
+  }
+}
+
+@media (min-width: 1200px) {
+  .hero__role { grid-column: 1 / span 3; }
+  .hero__statement { grid-column: 4 / span 4; }
   /* A régua de CTAs precisa da largura real do rótulo em PT
      ("Trabalhos selecionados"), não de duas colunas estreitas — por isso
      ganha 5 colunas e a localização desce para a própria linha. */
-  .hero__actions { grid-column: 8 / span 5; align-self: end; }
+  .hero__actions { grid-row: 3; grid-column: 8 / span 5; align-self: end; }
   .hero__location { grid-row: 4; grid-column: 1 / -1; justify-self: end; }
 }
 
@@ -276,3 +295,14 @@ body {
   .slot__summary { grid-area: summary; }
   .slot__stack { grid-area: stack; justify-self: end; text-align: right; }
 }
+
+/* ---- Modo plano: só para a trava de contraste ---- */
+
+/* O axe não sabe compor um gradiente com o que está atrás e devolve o nó como
+   `incomplete` em vez de medi-lo — o comp passaria no portão sem nenhum par
+   medido. Sob `?flat=1` (o harness marca `data-flat`) as camadas de luz saem e
+   fica a cor sólida de base. As capturas do dossiê e a visualização normal
+   continuam com os gradientes; os valores do pior caso iluminado estão
+   medidos à mão no README. */
+:root[data-flat] .hero::before { background: none; }
+:root[data-flat] .slot { background: var(--surface); box-shadow: none; }
