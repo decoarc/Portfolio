@@ -8,7 +8,7 @@ test('home → case study → de volta a #work, com foco na seção', async ({
   page,
 }) => {
   await page.goto('/')
-  await page.getByRole('link', { name: 'Token Killer', exact: true }).click()
+  await page.getByRole('link', { name: /Token Killer/ }).click()
   await expect(page).toHaveURL(/\/work\/token-killer$/)
   await expect(
     page.getByRole('heading', { level: 1, name: 'Token Killer' }),

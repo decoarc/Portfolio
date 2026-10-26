@@ -82,10 +82,9 @@ describe('Work', () => {
     const projects = makeProjects(2)
     renderWork(projects, 'pt', sitePt)
     for (const item of projects) {
-      expect(screen.getByRole('link', { name: item.title })).toHaveAttribute(
-        'href',
-        `/pt/work/${item.slug}`,
-      )
+      expect(
+        screen.getByRole('link', { name: new RegExp(item.title) }),
+      ).toHaveAttribute('href', `/pt/work/${item.slug}`)
     }
   })
 

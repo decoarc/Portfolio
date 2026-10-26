@@ -47,10 +47,9 @@ describe('ProjectSlip', () => {
         labels={labels}
       />,
     )
-    expect(screen.getByRole('link', { name: item.title })).toHaveAttribute(
-      'href',
-      '/work/exemplo',
-    )
+    expect(
+      screen.getByRole('link', { name: new RegExp(item.title) }),
+    ).toHaveAttribute('href', '/work/exemplo')
   })
 
   it('preview sem href: título sem link e nota de prévia', () => {
@@ -60,7 +59,7 @@ describe('ProjectSlip', () => {
     )
     expect(screen.queryByRole('link', { name: item.title })).toBeNull()
     expect(
-      screen.getByRole('heading', { level: 3, name: item.title }),
+      screen.getByRole('heading', { level: 3, name: new RegExp(item.title) }),
     ).toBeVisible()
     expect(screen.getByText(labels.preview)).toBeVisible()
   })
@@ -77,6 +76,15 @@ describe('ProjectSlip', () => {
       />,
     )
     expect(screen.getByText(siteEn.projectType.concept)).toBeVisible()
+    // quem navega por título ou por link também ouve o tipo
+    const typePattern = new RegExp(siteEn.projectType.concept)
+    expect(
+      screen.getByRole('heading', { level: 3, name: typePattern }),
+    ).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: typePattern })).toHaveAttribute(
+      'href',
+      '/work/exemplo',
+    )
   })
 
   it('link externo abre em nova aba e anuncia isso no nome', () => {

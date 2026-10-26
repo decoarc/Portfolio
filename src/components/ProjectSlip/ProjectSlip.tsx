@@ -25,19 +25,29 @@ export function ProjectSlip({
   href,
   labels,
 }: ProjectSlipProps) {
+  // Quem navega por título ou por link precisa ouvir o tipo (FR-04): um
+  // conceito nunca passa por trabalho entregue.
+  const typeName = <span className="visually-hidden">{labels.type}: </span>
   return (
     <li className={styles.slip}>
       <p className={styles.meta}>
         <span className={styles.index}>{String(index).padStart(2, '0')}</span>
-        <span className={styles.type}>{labels.type}</span>
+        {/* O tipo já entra no nome do título; aqui fica só o rótulo visual. */}
+        <span className={styles.type} aria-hidden="true">
+          {labels.type}
+        </span>
       </p>
       <h3 className={styles.title}>
         {href ? (
           <Link to={href} className={styles.titleLink}>
+            {typeName}
             {project.title}
           </Link>
         ) : (
-          project.title
+          <>
+            {typeName}
+            {project.title}
+          </>
         )}
       </h3>
       <div className={styles.body}>
@@ -48,7 +58,7 @@ export function ProjectSlip({
         <span>{project.stack.join(' · ')}</span>
         {project.links.map((link) => (
           <ExternalLink
-            key={link.kind}
+            key={link.href}
             href={link.href}
             hint={labels.links.externalHint}
           >
