@@ -25,6 +25,8 @@
     "eslint.config.js",
     /* Teste de Node (lê os CSS dos comps do disco). Sai junto com a pasta
        `design/comps` ao fim da Fase 2. */
-    "design/comps/static.test.ts"
+    "design/comps/static.test.ts",
+    /* Trava de mock (Node) e seus testes; importam src/lib/mock.ts, sem DOM. */
+    "scripts/**/*.ts"
   ]
 }
