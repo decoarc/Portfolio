@@ -14,7 +14,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
-    "comps": "playwright test --config playwright.comps.config.ts",
+    "comps": "playwright test --config playwright.comps.config.ts comps.spec.ts",
+    "comps:capture": "playwright test --config playwright.comps.config.ts capture.spec.ts",
     "validate": "pnpm typecheck && pnpm lint && pnpm test && pnpm build && pnpm test:e2e"
   },
   "dependencies": {

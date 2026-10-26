@@ -50,6 +50,21 @@ export function isChromeEnabled(search: string): boolean {
 }
 
 /**
+ * Modo plano: `?flat=1` marca o documento com `data-flat` e cada comp troca as
+ * suas camadas de gradiente pela cor sólida de base correspondente.
+ *
+ * Existe só para a trava de contraste. O axe não sabe compor um
+ * `radial-gradient`/`linear-gradient` com o que está atrás e devolve o nó como
+ * `incomplete` em vez de medi-lo — ou seja, o comp passaria no portão de
+ * contraste sem um único par ter sido medido. Com o fundo computável, o spec
+ * exige `violations` e `incomplete` vazios. As capturas do dossiê e a
+ * visualização normal continuam com os gradientes.
+ */
+export function isFlatMode(search: string): boolean {
+  return new URLSearchParams(search).get('flat') === '1'
+}
+
+/**
  * Barra fixa de desenvolvimento: troca de idioma, leitura do viewport e o
  * rótulo MOCK, para que nenhuma captura seja confundida com trabalho real.
  * Fica fora do fluxo do documento e some com `?chrome=0`, que é como as
@@ -106,5 +121,8 @@ if (typeof document !== 'undefined' && document.querySelector('[data-region="her
   const locale = readLocale(window.location.search)
   document.documentElement.lang = locale === 'pt' ? 'pt-BR' : 'en'
   applyLocale(document, locale)
+  if (isFlatMode(window.location.search)) {
+    document.documentElement.setAttribute('data-flat', '')
+  }
   if (isChromeEnabled(window.location.search)) mountChrome(document, locale)
 }

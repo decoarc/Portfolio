@@ -4,6 +4,7 @@ import {
   applyCopy,
   applyLocale,
   isChromeEnabled,
+  isFlatMode,
   readLocale,
   renderWorkList,
   resolvePath,
@@ -94,5 +95,11 @@ describe('harness dos comps', () => {
   it('desliga o chrome com ?chrome=0', () => {
     expect(isChromeEnabled('?chrome=0')).toBe(false)
     expect(isChromeEnabled('')).toBe(true)
+  })
+
+  it('liga o modo plano só com ?flat=1', () => {
+    expect(isFlatMode('?flat=1')).toBe(true)
+    expect(isFlatMode('?flat=0')).toBe(false)
+    expect(isFlatMode('')).toBe(false)
   })
 })
