@@ -42,13 +42,64 @@ Observado também, por um dos agentes:
 - scripts de `package.json` cujo nome não bate com nenhum filtro
   (`typecheck`, `build`, `format:check`) passam crus.
 
-**Impacto:** qualquer verificação feita através do `rtk` pode estar mentindo.
-Enquanto não for investigado, rode `pnpm typecheck` e `pnpm build` **sem** o
-prefixo antes de confiar num resultado verde.
+**Investigado em 2026-10-26 (rtk 0.37.2)** com sondas de erro proposital
+(tipo, teste, lint) e controle pelo PowerShell, que não passa pelo hook — o
+hook `rtk hook claude` só casa com o tool `Bash`.
 
-**Por que está no backlog e não resolvido:** é ferramenta do ambiente, não
-código deste repositório, e a correção da Fase 0 que importava — o build — já
-está feita (commit `4efd9d2`).
+| Comando | O que o rtk faz de fato | Mensagem | Exit |
+| --- | --- | --- | --- |
+| `rtk pnpm typecheck` | subcomando embutido: roda `npx tsc` **sem argumentos**, ignorando o script do `package.json` | `No errors found` — **falso** | 0 — **falso** |
+| `rtk tsc --noEmit` / `npx tsc --noEmit` (reescrito) | idem: sem `-b`, o `tsconfig.json` raiz tem `"files": []` e nada é checado | `No errors found` — **falso** | 0 — **falso** |
+| `rtk prettier --check` / `npx`/`pnpm exec prettier` (reescrito) | o filtro só lê stdout; o prettier escreve os `[warn]` no stderr | `All files formatted correctly` — **falso** | 1 — correto |
+| `rtk vitest` / `pnpm exec vitest run` (reescrito) | parser falha (`All parsing tiers failed`), sobra só a linha do relatório JSON | sem conteúdo | correto |
+| `rtk tsc -b`, `rtk lint`, `rtk pnpm lint`, `rtk pnpm build` | repassa ou filtra corretamente | correta | correto |
+| `pnpm typecheck`, `pnpm build`, `pnpm test`, `pnpm validate` sem prefixo | o hook **não** reescreve | — | correto |
+
+**Causa raiz da Fase 0:** os agentes seguiram a instrução global "sempre
+prefixe com `rtk`" e rodaram `rtk pnpm typecheck` (confirmado nos
+transcripts). Esse subcomando não é passthrough — troca `tsc -b --pretty
+false` por `tsc`, que num tsconfig de referências checa zero arquivos. O exit
+0 é do próprio `tsc`; o rtk só converte silêncio em afirmação. Onde aparecia
+`| tail`, o pipe sem `pipefail` mascarava o exit code de qualquer jeito.
+
+**Critérios de validação confiáveis:**
+
+1. Verificação que decide verde/vermelho roda como **script do projeto sem
+   prefixo** (`pnpm typecheck`, `pnpm lint`, `pnpm test`, `pnpm build`,
+   `pnpm validate`). O hook não os toca.
+2. Nunca `rtk pnpm <script>` para script com nome de subcomando do rtk
+   (`typecheck`, `list`, `install`, `outdated`): o rtk executa a versão dele,
+   não a do projeto.
+3. O exit code é a fonte de verdade, nunca a frase-resumo. Ler com
+   `cmd; echo "exit=$?"` — nunca atrás de `| tail`/`| head` sem
+   `set -o pipefail`.
+4. Toda verificação nova precisa ter sido vista falhando uma vez (sonda com
+   erro proposital) antes de ter o verde aceito.
+5. Quando a saída do rtk estiver vazia ou estranha, `rtk proxy <cmd>` dá a
+   saída crua; o log completo de falhas fica em `~/AppData/Local/rtk/tee/`.
+
+**Correção no ambiente (feita em 2026-10-26):**
+
+- `%APPDATA%\rtk\config.toml`, `[hooks] exclude_commands`: a exclusão casa
+  por **prefixo**, então cada forma de invocação tem entrada própria — `tsc`,
+  `npx tsc`, `pnpm exec tsc`, `pnpm tsc`, `npm exec tsc`, e o mesmo para
+  `prettier` e `vitest`. Conferido com `rtk rewrite`: os 15 prefixos passam
+  crus; `eslint`, `git` e `pnpm list` continuam filtrados. Backup do config
+  anterior ao lado, em `config.toml.bak-2026-10-26`.
+- `~/CLAUDE.md` e `~/.claude/RTK.md` ganharam a exceção "comandos de
+  verificação nunca passam pelo `rtk`", com os critérios acima. O exclude não
+  cobre o `rtk pnpm typecheck` digitado explicitamente; quem cobre é essa
+  regra. Atenção: o bloco do `~/CLAUDE.md` é gerado por `rtk init`, e rodar
+  de novo pode sobrescrever a exceção.
+
+**Upstream (`rtk-ai/rtk`), ainda abertos na v1.1.0:** #2809 (`rtk pnpm
+typecheck` ignora o script) e #2878 (prettier só lê stdout, com a correção em
+aberto no #3571). O caso do sucesso falso em tsconfig de referências não
+estava relatado; o comentário para o #2809 está redigido e aguarda o
+`gh auth login`.
+
+**Quando revisitar:** ao atualizar o rtk, se #2809 e #2878 estiverem
+fechados, testar de novo com sonda de erro antes de remover as exclusões.
 
 ### `pnpm format:check` falha em ~80 arquivos
 
