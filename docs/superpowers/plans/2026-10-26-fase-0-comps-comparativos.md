@@ -1278,7 +1278,7 @@ Create `design/comps/02-editorial-rolodex.html` — idêntico ao Comp 01, com qu
 
 **Conceito — Arquivo editorial / Rolodex.** Papel, não tela. A página é uma folha quente com margem larga e uma coluna de medida curta, como um frontispício de revista. O hero é tipográfico puro: o nome em serifa de alto contraste com eixo óptico, sem imagem nenhuma. Os projetos são **lâminas** empilhadas com borda superior marcada e um número de ficha recuado na margem — a leitura é de índice, não de grade. A assinatura é o vermelho de arquivo usado só em etiqueta e numeração.
 
-**Paleta (medida, passa AA):** fundo `#F2EEE6`, superfície `#FBF9F5`, tinta `#16130F` (16.00:1), tinta suave `#5A534A` (6.55:1), filete `#B9AD98`, acento `#A32114` (6.52:1).
+**Paleta (medida, passa AA):** fundo `#E8DCC0`, superfície `#F2EAD6`, tinta `#16130F` (13.60:1 sobre o fundo, 15.44:1 sobre a superfície), tinta suave `#5A534A` (5.57:1 / 6.32:1), filete `#A89771`, acento `#A32114` (5.54:1 / 6.29:1). *(Atualizado na onda de correção: o plano documentava a paleta creme original; o código entrega manila, e é a manila que está nos dois READMEs e nas capturas.)*
 
 **Tipografia:** Fraunces Variable no display (serifa com `opsz`, ganha personalidade em tamanho grande sem perder legibilidade), Instrument Sans no corpo, Geist Mono nos metadados.
 
@@ -2092,8 +2092,8 @@ a moldura esquerda; os projetos são gavetas numeradas.
 Arquivo editorial. Papel quente, margem larga, medida curta; hero puramente
 tipográfico; projetos como lâminas de índice com o número recuado na margem.
 
-- **Paleta:** `#F2EEE6` fundo · `#FBF9F5` superfície · `#16130F` tinta ·
-  `#5A534A` tinta suave · `#B9AD98` filete · `#A32114` acento
+- **Paleta:** `#E8DCC0` fundo · `#F2EAD6` superfície · `#16130F` tinta ·
+  `#5A534A` tinta suave · `#A89771` filete · `#A32114` acento
 - **Tipografia:** Fraunces Variable · Instrument Sans Variable · Geist Mono Variable
 - **Na Fase 3 se moveria:** as lâminas se separariam verticalmente na entrada em
   viewport, como fichas folheadas; o eixo óptico da Fraunces mudaria com o

@@ -11,6 +11,14 @@ const COMPS_DIR = join(process.cwd(), 'design', 'comps')
 const FORBIDDEN = /(^|[\s;{])(-[a-z]+-)?(animation|transition)(-[a-z-]+)?\s*:/
 
 describe('comps são estáticos', () => {
+  /**
+   * Limites conhecidos desta varredura, para quem ler depois não achar que a
+   * cobertura é total: ela olha só `design/comps/*.css`. Fica de fora o
+   * `<style>` inline de `index.html`, qualquer CSS em subdiretório, e
+   * `el.style.animation` atribuído por JS. A trava complementar está em
+   * `checks/comps.spec.ts`, que roda `document.getAnimations()` na página
+   * montada e pega o que escapar daqui.
+   */
   const files = readdirSync(COMPS_DIR).filter((name) => name.endsWith('.css'))
 
   it('encontra ao menos um CSS de comp', () => {

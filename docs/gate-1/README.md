@@ -34,16 +34,18 @@ As capturas abaixo são o registro da decisão, em `<comp>-<viewport>-<locale>.p
 | | 01 Inspection Slot | 02 Editorial Rolodex | 03 Spatial Gallery |
 |---|---|---|---|
 | Base | Escura, metálica | Clara, papel | Escura, luz |
+| Composição dos trabalhos | Folha de contato: aberturas emolduradas, duas por linha | Pilha de lâminas de índice, filete entre elas | Placas suspensas, deslocadas alternadamente |
 | Display | Archivo | Fraunces | Syne |
 | Acento | Âmbar industrial `#FF6A1F` | Vermelho de arquivo `#A32114` | Luz fria `#AFC7FF` |
-| Depende de mídia | Média — as molduras pedem imagem | Baixa — é tipográfico | Alta — as placas pedem mídia |
+| Depende de mídia | Média — cada abertura tem um recorte vazio esperando imagem | Baixa — é tipográfico | Alta — as placas pedem mídia |
 | Escala com muitos projetos | Boa | Muito boa | Média |
 | Risco | Virar "industrial genérico" | Parecer sóbrio demais, perto do atual | Luz e profundidade custam caro em motion |
 
 ## Capturas
 
-As 18 imagens desta pasta são geradas por `pnpm comps` e regravadas a cada
-execução. Não edite à mão.
+As 18 imagens desta pasta são geradas por `pnpm comps:capture` e regravadas a
+cada execução. Não edite à mão. `pnpm comps` roda só as verificações e não
+escreve nada aqui.
 
 ## Decisão
 
