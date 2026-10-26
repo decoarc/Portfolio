@@ -14,7 +14,7 @@ export default defineConfig({
     trace: 'on-first-retry',
   },
   webServer: {
-    command: `pnpm build && pnpm preview --host 127.0.0.1 --port ${port}`,
+    command: `pnpm build:preview && pnpm preview --host 127.0.0.1 --port ${port}`,
     url: baseURL,
     reuseExistingServer: !process.env.CI,
     timeout: 180_000,
@@ -22,6 +22,12 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium',
+      testMatch: /.*\.spec\.ts/,
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
+      name: 'capture',
+      testMatch: /.*\.capture\.ts/,
       use: { ...devices['Desktop Chrome'] },
     },
   ],

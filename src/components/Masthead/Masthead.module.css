@@ -1,0 +1,29 @@
+.masthead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  height: var(--masthead-h);
+  padding: 0 var(--gutter);
+  background: var(--bg);
+  border-bottom: 1px solid var(--rule);
+  font-family: var(--font-mono);
+  font-size: var(--text-meta);
+  letter-spacing: var(--track-meta);
+  text-transform: uppercase;
+}
+
+.mark,
+.switch {
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.switch {
+  color: var(--ink-muted);
+}
+
+.mark:hover,
+.switch:hover {
+  color: var(--accent);
+}

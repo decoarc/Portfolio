@@ -1,0 +1,12 @@
+.sheet {
+  padding: clamp(48px, 10vh, 112px) var(--gutter) clamp(48px, 10vh, 112px)
+    calc(var(--gutter) + var(--margin-rail));
+}
+
+.cover {
+  background: var(--bg);
+}
+
+.paper {
+  background: var(--surface);
+}
