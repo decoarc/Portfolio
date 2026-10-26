@@ -1,0 +1,273 @@
+/* Comp 03 — Galeria espacial abstrata. Autocontido. */
+
+:root {
+  --bg: #08090b;
+  --surface: #121519;
+  --ink: #f0f2f5;
+  --ink-muted: #949ca6;
+  --rule: #333a43;
+  --accent: #afc7ff;
+
+  --font-display: 'Syne Variable', 'Syne', system-ui, sans-serif;
+  --font-body: 'Space Grotesk Variable', 'Space Grotesk', system-ui, sans-serif;
+  --font-mono: 'Geist Mono Variable', ui-monospace, monospace;
+
+  --gutter: clamp(20px, 4vw, 72px);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--bg);
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: clamp(1rem, 0.96rem + 0.2vw, 1.0625rem);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---- Hero: um vazio com uma fonte de luz ---- */
+
+/* Mesma regra dos Comps 01 e 02: flex no mobile, grid a partir de 768px. */
+.hero {
+  position: relative;
+  min-height: 100svh;
+  padding: var(--gutter);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(24px, 4vh, 48px);
+  isolation: isolate;
+  overflow: hidden;
+}
+
+/* A luz: estática, larga, atrás de tudo. */
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(
+      60% 45% at 50% 38%,
+      rgb(175 199 255 / 14%) 0%,
+      rgb(175 199 255 / 4%) 45%,
+      transparent 72%
+    );
+}
+
+.hero__meta {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+.hero__meta--right { align-self: flex-end; }
+
+.hero__name {
+  margin: auto 0;
+  /* No flex column `align-self` é o eixo horizontal; no grid desktop o
+     mesmo papel cabe a `justify-self`, declarado na media query. */
+  align-self: center;
+  text-align: center;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(2.5rem, 0.8rem + 10vw, 9.5rem);
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+
+.hero__role,
+.hero__statement,
+.hero__location {
+  margin: 0;
+}
+
+.hero__role {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.hero__statement {
+  max-width: 42ch;
+  color: var(--ink-muted);
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.hero__location {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+@media (min-width: 768px) {
+  .hero {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: auto 1fr auto;
+    column-gap: 16px;
+  }
+
+  .hero__meta--left { grid-column: 1 / span 6; }
+  .hero__meta--right { grid-column: 7 / -1; }
+  .hero__name { grid-column: 1 / -1; justify-self: center; }
+  .hero__role { grid-column: 1 / span 3; align-self: end; }
+  .hero__statement { grid-column: 4 / span 5; align-self: end; }
+  .hero__actions { grid-column: 9 / span 2; align-self: end; }
+  .hero__location { grid-column: 11 / -1; align-self: end; justify-self: end; }
+}
+
+.action {
+  display: inline-block;
+  padding: 11px 20px;
+  border-radius: 999px;
+  font-size: 0.875rem;
+  text-decoration: none;
+}
+
+.action--primary {
+  background: var(--accent);
+  color: #08090b;
+}
+
+.action--ghost {
+  border: 1px solid var(--rule);
+  color: var(--ink);
+}
+
+/* ---- Work: placas suspensas ---- */
+
+.work {
+  padding: var(--gutter);
+}
+
+.work__head {
+  display: grid;
+  gap: 10px;
+  padding-bottom: clamp(28px, 4vh, 56px);
+}
+
+.work__label {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.5rem, 1.1rem + 1.6vw, 2.5rem);
+  letter-spacing: -0.03em;
+}
+
+.work__intro {
+  margin: 0;
+  max-width: 50ch;
+  color: var(--ink-muted);
+}
+
+.work__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: clamp(16px, 2.5vh, 28px);
+}
+
+.slot {
+  display: grid;
+  gap: 8px;
+  padding: clamp(24px, 3.5vh, 40px);
+  border-radius: 14px;
+  background:
+    linear-gradient(160deg, rgb(175 199 255 / 6%) 0%, transparent 42%),
+    var(--surface);
+  border: 1px solid var(--rule);
+  /* Luz de borda de um lado só: a placa parece iluminada, não desenhada. */
+  box-shadow: inset 1px 1px 0 rgb(240 242 245 / 7%);
+}
+
+/* O deslocamento alternado é o que cria profundidade sem movimento. */
+@media (min-width: 768px) {
+  .slot {
+    width: min(100%, 52rem);
+  }
+
+  .slot:nth-child(even) {
+    justify-self: end;
+  }
+}
+
+.slot__index {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--accent);
+}
+
+.slot__type {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+.slot__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.5rem, 1.1rem + 1.8vw, 2.5rem);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+
+.slot__summary {
+  margin: 0;
+  max-width: 52ch;
+  color: var(--ink-muted);
+}
+
+.slot__stack,
+.slot__year {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--ink-muted);
+}
+
+.slot__stack { margin: 0; }
+
+@media (min-width: 768px) {
+  .slot {
+    grid-template-columns: minmax(0, 3fr) minmax(0, 1fr);
+    grid-template-areas:
+      'index   year'
+      'type    type'
+      'title   title'
+      'summary stack';
+    column-gap: 32px;
+  }
+
+  .slot__index { grid-area: index; }
+  .slot__year { grid-area: year; justify-self: end; }
+  .slot__type { grid-area: type; }
+  .slot__title { grid-area: title; }
+  .slot__summary { grid-area: summary; }
+  .slot__stack { grid-area: stack; justify-self: end; text-align: right; }
+}
