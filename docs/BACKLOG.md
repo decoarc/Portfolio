@@ -101,33 +101,17 @@ estava relatado; o comentário para o #2809 está redigido e aguarda o
 **Quando revisitar:** ao atualizar o rtk, se #2809 e #2878 estiverem
 fechados, testar de novo com sonda de erro antes de remover as exclusões.
 
-### `pnpm format:check` falha em ~80 arquivos
+## Conteúdo e publicação — Fase 4
 
-Falha em todo o `src/` e inclusive no próprio `.prettierrc.json`. É
-pré-existente, anterior a esta direção, e está **fora** do `pnpm validate`, por
-isso não bloqueia nada hoje.
+### Metadados por idioma
 
-**Momento certo:** rodar `pnpm format` de uma vez na Fase 2, quando o `src/`
-for reescrito — formatar agora criaria ruído num diff que vai ser descartado.
+Hoje só `<title>` e `lang` mudam com o locale (Fase 2). Faltam `hreflang`,
+`description` e Open Graph por idioma.
 
-## Dívidas pequenas da Fase 0
+### `pnpm validate` falha por desenho enquanto houver mock
 
-Nenhuma bloqueia a Fase 2; todas somem quando `design/comps/` for apagado,
-exceto a primeira.
-
-- `CompProject.stack` é uma string já concatenada com `·`. A camada de conteúdo
-  da Fase 2 deve usar `string[]` e deixar o separador para a apresentação.
-- A varredura de `design/comps/static.test.ts` cobre só `design/comps/*.css` —
-  não `<style>` inline, não subdiretórios, não `el.style.animation` atribuído
-  por JS. A limitação está anotada no próprio teste.
-- `docs/m4b-review/home-1280.png` é reescrito por `pnpm test:e2e` a cada
-  execução, sujando a árvore. Vale fixar a captura ou tirá-la do controle de
-  versão.
-
-## Desmonte da Fase 0
-
-Quando a Fase 2 terminar, remover — a lista completa está em
-`design/comps/README.md`: a pasta `design/comps/`, as `devDependencies` de
-fontes não escolhidas, `playwright.comps.config.ts`, os scripts `comps` e
-`comps:capture`, o exclude de `vite.config.ts` e as entradas nos dois
-`tsconfig`. As capturas em `docs/gate-1/` ficam como registro da decisão.
+`validate` encadeia `build`, e `build` roda a trava de mock
+(`scripts/assert-no-mock.ts`) antes de `tsc -b`. Enquanto algum item tiver
+`mock: true`, `validate` sai com 1 — é o critério 8 da spec funcionando. O
+critério 9 (`validate` verde) fecha na Fase 4, com conteúdo real no lugar dos
+mocks.
