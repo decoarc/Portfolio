@@ -1,0 +1,49 @@
+/* `.work__head` do comp 02, com o número da seção no trilho de margem pela
+   mesma técnica do índice (Release): no fluxo do flex, alinhado pela linha de
+   base, e empurrado para o trilho a partir de 768px. */
+
+.head {
+  display: grid;
+  gap: 8px;
+  padding-bottom: clamp(24px, 4vh, 48px);
+}
+
+.line {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.index {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: var(--text-meta);
+  letter-spacing: var(--track-meta);
+  color: var(--accent);
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-variation-settings: var(--fraunces-heading);
+  font-weight: 600;
+  font-size: var(--text-heading);
+  line-height: 1.1;
+}
+
+.intro {
+  margin: 0;
+  max-width: 48ch;
+  color: var(--ink-muted);
+}
+
+@media (min-width: 768px) {
+  .line {
+    gap: 0;
+  }
+
+  .index {
+    width: var(--margin-rail);
+    margin-left: calc(var(--margin-rail) * -1);
+  }
+}

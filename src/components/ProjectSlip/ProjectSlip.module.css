@@ -1,0 +1,134 @@
+/* `.slot*` do comp 02, portado com tokens. O número da ficha usa a mesma
+   técnica do índice (Release) e do SectionHead — no fluxo do flex, alinhado
+   pela linha de base com o tipo, empurrado para o trilho a partir de 768px —
+   em vez do `top` absoluto do comp, para que todos os números alinhem. */
+
+.slip {
+  display: grid;
+  gap: 6px;
+  padding: clamp(24px, 3.5vh, 40px) 0;
+  border-top: 1px solid var(--rule);
+}
+
+.meta {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin: 0;
+}
+
+.index {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: var(--text-meta);
+  letter-spacing: var(--track-meta);
+  color: var(--accent);
+}
+
+.type {
+  font-family: var(--font-mono);
+  font-size: var(--text-micro);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-variation-settings: var(--fraunces-title);
+  font-weight: 600;
+  font-size: var(--text-title);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+.titleLink {
+  color: inherit;
+  text-decoration: none;
+}
+
+.titleLink:hover {
+  text-decoration-line: underline;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.12em;
+}
+
+.body {
+  display: grid;
+  gap: 6px;
+}
+
+.summary {
+  margin: 0;
+  max-width: 50ch;
+  color: var(--ink-muted);
+}
+
+.note {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-meta);
+  letter-spacing: var(--track-meta);
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+.stack,
+.year {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-meta);
+  color: var(--ink-muted);
+}
+
+/* Stack e links externos dividem a linha e quebram juntos. */
+.stack {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 1.5ch;
+  row-gap: 4px;
+}
+
+@media (min-width: 768px) {
+  .slip {
+    grid-template-columns: minmax(0, 3fr) minmax(0, 1fr);
+    grid-template-areas:
+      'type    year'
+      'title   title'
+      'summary stack';
+    column-gap: 32px;
+  }
+
+  .meta {
+    grid-area: type;
+    gap: 0;
+  }
+
+  .index {
+    width: var(--margin-rail);
+    margin-left: calc(var(--margin-rail) * -1);
+  }
+
+  .year {
+    grid-area: year;
+    justify-self: end;
+  }
+
+  .title {
+    grid-area: title;
+  }
+
+  .body {
+    grid-area: summary;
+  }
+
+  .stack {
+    grid-area: stack;
+    justify-self: end;
+    justify-content: flex-end;
+    align-content: start;
+    text-align: right;
+  }
+}

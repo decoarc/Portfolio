@@ -1,6 +1,15 @@
+/* O padding lê propriedades customizadas: uma seção que precisa de outro
+   respiro define `--sheet-pad-*` na própria classe, em vez de sobrepor
+   `padding` com a mesma especificidade (o que dependeria da ordem do CSS no
+   bundle). Os valores de fallback são o padrão das folhas. */
 .sheet {
-  padding: clamp(48px, 10vh, 112px) var(--gutter) clamp(48px, 10vh, 112px)
-    calc(var(--gutter) + var(--margin-rail));
+  padding-top: var(--sheet-pad-block-start, clamp(48px, 10vh, 112px));
+  padding-right: var(--sheet-pad-inline-end, var(--gutter));
+  padding-bottom: var(--sheet-pad-block-end, clamp(48px, 10vh, 112px));
+  padding-left: var(
+    --sheet-pad-inline-start,
+    calc(var(--gutter) + var(--margin-rail))
+  );
 }
 
 .cover {

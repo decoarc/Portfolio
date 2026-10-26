@@ -3,7 +3,8 @@
    do comp 02. */
 
 .release {
-  padding-block: clamp(32px, 6vh, 64px);
+  --sheet-pad-block-start: clamp(32px, 6vh, 64px);
+  --sheet-pad-block-end: clamp(32px, 6vh, 64px);
 }
 
 .list {

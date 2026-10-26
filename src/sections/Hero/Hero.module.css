@@ -1,12 +1,12 @@
 /* Hero do comp 02, portado com tokens. Flex no mobile, grid a partir de 768px. */
 
-/* Sobrepõe o padding da Sheet (mesma especificidade): Hero.tsx importa a Sheet
-   antes deste módulo, então este CSS vem depois no bundle. */
+/* O respiro vertical da Sheet é trocado pelas propriedades `--sheet-pad-*`,
+   não por `padding`: assim não depende da ordem do CSS no bundle. */
 .hero {
   /* A barra superior ocupa o topo da primeira dobra: o hero completa o resto. */
   min-height: calc(100svh - var(--masthead-h));
-  padding: var(--gutter) var(--gutter) var(--gutter)
-    calc(var(--gutter) + var(--margin-rail));
+  --sheet-pad-block-start: var(--gutter);
+  --sheet-pad-block-end: var(--gutter);
   display: flex;
   flex-direction: column;
   gap: clamp(24px, 4vh, 48px);

@@ -1,0 +1,6 @@
+/* `.work__list` do comp 02: cada lâmina traz o próprio filete superior. */
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
