@@ -5,14 +5,31 @@ test('/pt/ direto abre em português', async ({ page }) => {
   await expect(page.locator('html')).toHaveAttribute('lang', 'pt-BR')
 })
 
-test('rota inexistente sob /pt dá 404 em português com link para /pt', async ({ page }) => {
+test('rota inexistente sob /pt dá 404 em português com link para /pt', async ({
+  page,
+}) => {
   await page.goto('/pt/rota-inexistente')
-  await expect(page.getByRole('heading', { name: 'Página não encontrada' })).toBeVisible()
-  await expect(page.getByRole('link', { name: 'Voltar ao início' })).toHaveAttribute('href', '/pt')
+  await expect(
+    page.getByRole('heading', { name: 'Página não encontrada' }),
+  ).toBeVisible()
+  await expect(
+    page.getByRole('link', { name: 'Voltar ao início' }),
+  ).toHaveAttribute('href', '/pt')
 })
 
 test('recarregar /pt mantém o português', async ({ page }) => {
   await page.goto('/pt')
   await page.reload()
+  await expect(page.locator('html')).toHaveAttribute('lang', 'pt-BR')
+})
+
+test('/pt/work/token-killer direto e recarregado fica em português', async ({
+  page,
+}) => {
+  await page.goto('/pt/work/token-killer')
+  await page.reload()
+  await expect(
+    page.getByRole('heading', { level: 1, name: 'Token Killer' }),
+  ).toBeVisible()
   await expect(page.locator('html')).toHaveAttribute('lang', 'pt-BR')
 })
