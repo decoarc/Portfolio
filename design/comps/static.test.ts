@@ -4,8 +4,11 @@ import { describe, expect, it } from 'vitest'
 
 const COMPS_DIR = join(process.cwd(), 'design', 'comps')
 
-/** `animation:`, `transition:` e suas longhands, fora de comentário. */
-const FORBIDDEN = /(^|[\s;{])(animation|transition)(-[a-z-]+)?\s*:/
+/**
+ * `animation:`, `transition:`, suas longhands e variantes com prefixo de
+ * vendor (`-webkit-`, `-moz-` etc.), fora de comentário.
+ */
+const FORBIDDEN = /(^|[\s;{])(-[a-z]+-)?(animation|transition)(-[a-z-]+)?\s*:/
 
 describe('comps são estáticos', () => {
   const files = readdirSync(COMPS_DIR).filter((name) => name.endsWith('.css'))
@@ -19,5 +22,18 @@ describe('comps são estáticos', () => {
       // Comentários podem mencionar o que se moveria na Fase 3.
       .replace(/\/\*[\s\S]*?\*\//g, '')
     expect(css).not.toMatch(FORBIDDEN)
+  })
+})
+
+describe('FORBIDDEN cobre propriedades prefixadas por vendor', () => {
+  it.each([
+    ['-webkit-transition: opacity 0.3s;', true],
+    ['-moz-animation: spin 1s linear;', true],
+    ['transition: all 0.2s;', true],
+    ['animation-duration: 1s;', true],
+    ['--transition-note: foo;', false],
+    ['grid-template-areas: "a b";', false],
+  ])('%s → match esperado = %s', (declaration, shouldMatch) => {
+    expect(FORBIDDEN.test(declaration)).toBe(shouldMatch)
   })
 })
