@@ -75,7 +75,9 @@ passar do hero para os trabalhos é virar a página.
 ### 03 — Spatial Gallery
 
 Galeria espacial. Escuridão com uma fonte de luz fria atrás do nome; projetos
-como placas suspensas, deslocadas alternadamente, com luz de borda.
+como placas suspensas, com luz de borda, deslocadas alternadamente a partir de
+~900px — abaixo disso a placa ocupa a largura toda e as quatro empilham numa
+coluna só.
 
 - **Paleta:** `#08090B` fundo · `#121519` superfície · `#F0F2F5` tinta ·
   `#949CA6` tinta suave · `#333A43` filete · `#AFC7FF` acento

@@ -34,7 +34,7 @@ As capturas abaixo são o registro da decisão, em `<comp>-<viewport>-<locale>.p
 | | 01 Inspection Slot | 02 Editorial Rolodex | 03 Spatial Gallery |
 |---|---|---|---|
 | Base | Escura, metálica | Clara, papel | Escura, luz |
-| Composição dos trabalhos | Folha de contato: aberturas emolduradas, duas por linha | Pilha de lâminas de índice, filete entre elas | Placas suspensas, deslocadas alternadamente |
+| Composição dos trabalhos | Folha de contato: aberturas emolduradas, duas por linha | Pilha de lâminas de índice, filete entre elas | Placas suspensas, deslocadas alternadamente a partir de ~900px; em tablet empilham numa coluna só |
 | Display | Archivo | Fraunces | Syne |
 | Acento | Âmbar industrial `#FF6A1F` | Vermelho de arquivo `#A32114` | Luz fria `#AFC7FF` |
 | Depende de mídia | Média — cada abertura tem um recorte vazio esperando imagem | Baixa — é tipográfico | Alta — as placas pedem mídia |
