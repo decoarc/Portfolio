@@ -1,11 +1,15 @@
 import type { HomeSectionId } from '../content/types.ts'
+import { About } from '../sections/About/index.ts'
+import { Approach } from '../sections/Approach/index.ts'
+import { Contact } from '../sections/Contact/index.ts'
 import { Hero } from '../sections/Hero/index.ts'
+import { Interests } from '../sections/Interests/index.ts'
 import { Release } from '../sections/Release/index.ts'
 import { Work } from '../sections/Work/index.ts'
 import { homeSections } from './homeSections.ts'
 import { useContent, useLocale } from './LocaleContext.ts'
 
-/** As demais seções numeradas entram na Task 6; o índice já lista todas. */
+/** A home: frontispício, índice e as seções numeradas na ordem do índice. */
 export function HomeRoute() {
   const locale = useLocale()
   const { site, projects } = useContent()
@@ -23,6 +27,16 @@ export function HomeRoute() {
         projects={projects}
         locale={locale}
         labels={{ projectType: site.projectType, links: site.links }}
+      />
+      <Approach index={numberOf('approach')} copy={site.approach} />
+      <About index={numberOf('about')} copy={site.about} />
+      {sections.includes('interests') && (
+        <Interests index={numberOf('interests')} copy={site.interests} />
+      )}
+      <Contact
+        index={numberOf('contact')}
+        copy={site.contact}
+        externalHint={site.links.externalHint}
       />
     </>
   )

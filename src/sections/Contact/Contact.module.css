@@ -1,0 +1,27 @@
+/* Contracapa: volta ao `--bg` da capa, aberta pelo mesmo filete de 2px que
+   fecha o hero. */
+
+.contact {
+  border-top: 2px solid var(--ink);
+}
+
+.lead {
+  margin: 0;
+  max-width: 22ch;
+  font-family: var(--font-display);
+  font-variation-settings: var(--fraunces-title);
+  font-weight: 600;
+  font-size: var(--text-title);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.channels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 32px;
+  margin: clamp(24px, 4vh, 48px) 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--text-lead);
+}

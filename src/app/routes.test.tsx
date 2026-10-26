@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
 import { createMemoryRouter, RouterProvider } from 'react-router'
 import { describe, expect, it } from 'vitest'
 import { createRoutes } from './routes.tsx'
@@ -54,5 +54,42 @@ describe('rotas por locale', () => {
     const first = screen.getAllByRole('link')[0]
     expect(first).toHaveAttribute('href', '#main')
     expect(first).toHaveTextContent('Skip to content')
+  })
+
+  it('/ tem um só h1 e os h2 na ordem do índice', async () => {
+    renderAt('/')
+    await screen.findByRole('banner')
+    expect(screen.getAllByRole('heading', { level: 1 })).toHaveLength(1)
+    expect(
+      screen
+        .getAllByRole('heading', { level: 2 })
+        .map((heading) => heading.textContent),
+    ).toEqual(['Selected work', 'Approach', 'About', 'Interests', 'Contact'])
+  })
+
+  it('/ numera índice e cabeçalhos de seção com os mesmos números', async () => {
+    renderAt('/')
+    const nav = await screen.findByRole('navigation', { name: 'Contents' })
+    const fromIndex = within(nav)
+      .getAllByRole('link')
+      .map((link) => [
+        link.getAttribute('href')?.slice(1),
+        link.textContent?.slice(0, 2),
+      ])
+    const fromSections = screen
+      .getAllByRole('heading', { level: 2 })
+      .map((heading) => [
+        heading.closest('section')?.id,
+        heading.previousElementSibling?.textContent,
+      ])
+    expect(fromSections).toEqual(fromIndex)
+  })
+
+  it('/ fecha com o rodapé do shell', async () => {
+    renderAt('/')
+    const footer = await screen.findByRole('contentinfo')
+    expect(
+      within(footer).getByText('André Arcodaci — Full Stack Developer'),
+    ).toBeVisible()
   })
 })
