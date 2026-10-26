@@ -20,5 +20,11 @@
     "noUncheckedSideEffectImports": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["vite.config.ts", "eslint.config.js"]
+  "include": [
+    "vite.config.ts",
+    "eslint.config.js",
+    /* Teste de Node (lê os CSS dos comps do disco). Sai junto com a pasta
+       `design/comps` ao fim da Fase 2. */
+    "design/comps/static.test.ts"
+  ]
 }
