@@ -9,6 +9,7 @@
 .list {
   display: flex;
   flex-wrap: wrap;
+  column-gap: 1ch;
   row-gap: 4px;
   margin: 0;
   padding: 0;
@@ -22,6 +23,7 @@
 /* O ponto médio é só visual: o texto alternativo vazio o tira da leitura,
    e cada item continua um item de lista. */
 .item + .item::before {
+  content: '\00B7';
   content: '\00B7' / '';
   padding: 0 1.25ch;
   color: var(--accent);

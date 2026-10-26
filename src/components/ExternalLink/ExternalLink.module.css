@@ -14,6 +14,7 @@
    acessível (a dica falada é o `hint`). Inline-block para não herdar o
    sublinhado. */
 .link::after {
+  content: '\2197';
   content: '\2197' / '';
   display: inline-block;
   margin-left: 0.3em;
