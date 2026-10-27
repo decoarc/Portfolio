@@ -202,14 +202,19 @@ Hoje o hero é montado pelo JS, e o `Opening` esconde o nome (`pending`) antes
 da primeira pintura. Com o prerender, o HTML chega com o nome visível. Se o
 JS esconder depois, o nome pisca (anti-objetivo).
 
-**Decisão do Claude:** um script inline mínimo no `<head>` da home (só nas
-duas homes) marca `<html data-entrance-early>` quando a página abre no topo,
-sem hash e sem `prefers-reduced-motion: reduce`. O CSS do hero trata essa
-marca como o `pending` atual. O `Opening` assume o controle ao montar
-(passa para `pending`, `run`, `done` como hoje) e remove a marca. Se o JS
-não chegar em 3 s, o próprio script inline remove a marca e o nome aparece
-parado, sem entrada. Sem JS desde o início (script bloqueado), a marca nunca
-é posta e o nome está no HTML. O hash desse script entra no CSP (§6).
+**Decisão do Claude:** um script inline mínimo no `<head>` das duas homes
+marca `<html data-entrance-early="pending">` quando a página abre no topo, sem
+hash e sem `prefers-reduced-motion: reduce`. O CSS do hero trata
+`data-entrance-early="pending"` como o `pending` atual. O `Opening` assume ao
+montar e remove a marca. Se ela ainda for `pending`, segue `pending`, `run` e
+`done`, como hoje. Se a rolagem já não estiver no topo (recarga com posição
+restaurada), não há entrada.
+
+Se o JS não chegar em 3 s, o script inline troca a marca para `expired`: o
+nome aparece parado, e o `Opening`, ao montar depois, **não** faz a entrada.
+Isso evita o nome sumir depois de já ter sido lido. Sem JS desde o início
+(script bloqueado), a marca nunca é posta e o nome está no HTML. O hash
+desse script entra no CSP (§6).
 
 Alternativa considerada e descartada: abrir mão da entrada quando o HTML
 pinta antes do JS. Seria sempre, porque o HTML é o que pinta primeiro, e a
@@ -275,7 +280,7 @@ formato seguem `docs/m5/M5_AUDIT_AND_PLAN.md`, e o resultado vai em
 | 2.5.8, tamanho do alvo | todo alvo com 24 × 24 px ou espaçamento equivalente |
 | 3.1.1 e 3.1.2, idioma | `lang` da página e `lang` do seletor de idioma |
 | 4.1.2, nome e papel | links externos com o aviso "abre em nova aba" lido |
-| leitor de tela | NVDA no Windows, home e case, nos dois idiomas, só os pontos críticos: título, índice, lista de trabalhos, links externos |
+| leitor de tela | árvore de acessibilidade (`ariaSnapshot` do Playwright) da home e do case, nos dois idiomas: título, índice, lista de trabalhos, links externos. O teste com NVDA de verdade fica como pendência do dono no Gate 4 |
 
 **Itens já decididos para entrar:**
 
@@ -316,8 +321,10 @@ INP.
    vai em `public/fonts/`). Os demais subsets continuam do fontsource.
    - **Entra só se** o latin cair pelo menos 30% e as capturas da regressão
      visual não mudarem. Senão, fica registrado e sai.
-   - **Antes de gerar,** conferir a licença: se a OFL da Fraunces tiver Reserved
-     Font Name, a fonte modificada precisa de outro nome de família.
+   - **Licença:** a OFL 1.1 da Fraunces (conferida em 2026-10-27 no
+     `LICENSE` do pacote) não declara Reserved Font Name, então a versão
+     modificada pode manter o nome. O `LICENSE` vai junto, em
+     `public/fonts/`.
 2. **Preload** do latin da Fraunces e da Instrument Sans no head do HTML
    pré-renderizado, depois de medir. Se não melhorar o LCP, sai.
 3. O JS fica como está (o motion é o custo aprovado). Uma divisão por rota só
@@ -363,7 +370,8 @@ como está e falha por desenho enquanto houver mock.
 - **`docs/gate-4/README.md`**: como avaliar (`pnpm build:preview && pnpm
   preview`), a tabela dos critérios da §8 com a evidência de cada um,
   auditoria, performance e a pendência do dono. A pendência é testar no
-  celular real e, se quiser, o `wrangler pages dev`.
+  celular real, o NVDA nos pontos críticos de §7 e, se quiser, o
+  `wrangler pages dev`.
 
 **Gate 4:** critérios 1 a 8 e 10 da §8 satisfeitos com evidência,
 `pnpm validate:preview` verde e o dono aprova.
