@@ -19,9 +19,9 @@ describe('litProgress', () => {
 
   it('no meio do caminho, metade', () => {
     // from = 600 − 800 = −200; to = 700 − 500 = 200; t = 0,5
-    expect(
-      litProgress({ top: 600, bottom: 700 }, 1000, 5000, 10),
-    ).toBeCloseTo(6.25)
+    expect(litProgress({ top: 600, bottom: 700 }, 1000, 5000, 10)).toBeCloseTo(
+      6.25,
+    )
   })
 
   it('fim da página: na rolagem máxima fica aceso mesmo abaixo de 50%', () => {
@@ -33,9 +33,9 @@ describe('litProgress', () => {
     // Na rolagem máxima o fim do parágrafo para em 800 − 200 = 600 (> 500).
     expect(litProgress({ top: 900, bottom: 1000 }, 1000, 200, 10)).toBe(0)
     // Mesma linha de término (850 − 50 = 800): from = −50, to = 50, t = 0,5.
-    expect(
-      litProgress({ top: 750, bottom: 850 }, 1000, 50, 10),
-    ).toBeCloseTo(6.25)
+    expect(litProgress({ top: 750, bottom: 850 }, 1000, 50, 10)).toBeCloseTo(
+      6.25,
+    )
   })
 
   it('remaining negativo (overscroll) conta como 0', () => {

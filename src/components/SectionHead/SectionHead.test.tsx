@@ -19,6 +19,23 @@ describe('SectionHead', () => {
     expect(screen.getByText('Introdução.')).toBeVisible()
   })
 
+  it('litIntro liga o efeito só quando pedido', () => {
+    const { container, rerender } = render(
+      <SectionHead index={1} headingId="x" title="Título" intro="Intro." />,
+    )
+    expect(container.querySelector('p')).not.toHaveAttribute('data-lit')
+    rerender(
+      <SectionHead
+        index={1}
+        headingId="x"
+        title="Título"
+        intro="Intro."
+        litIntro
+      />,
+    )
+    expect(container.querySelector('p')).toHaveAttribute('data-lit')
+  })
+
   it('sem intro, não renderiza parágrafo', () => {
     const { container } = render(
       <SectionHead index={1} headingId="x" title="Título" />,

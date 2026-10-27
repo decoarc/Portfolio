@@ -1,5 +1,6 @@
 import type { SiteContent } from '../../content/types.ts'
 import { SectionHead } from '../../components/SectionHead/SectionHead.tsx'
+import { LitText } from '../../components/LitText/index.ts'
 import { Sheet } from '../../components/Sheet/Sheet.tsx'
 import styles from './About.module.css'
 
@@ -11,7 +12,7 @@ interface AboutProps {
 
 const HEADING_ID = 'about-heading'
 
-/** Sobre: medida curta, lead e corpo, e a stack numa linha mono. */
+/** Sobre: medida curta, lead (que acende com o scroll) e corpo, e a stack numa linha mono. */
 export function About({ index, copy }: AboutProps) {
   return (
     <Sheet
@@ -22,7 +23,7 @@ export function About({ index, copy }: AboutProps) {
     >
       <SectionHead index={index} headingId={HEADING_ID} title={copy.label} />
       <div className={styles.text}>
-        <p className={styles.lead}>{copy.lead}</p>
+        <LitText className={styles.lead} text={copy.lead} />
         <p className={styles.body}>{copy.body}</p>
         <p className={styles.stack}>
           <span className={styles.stackLabel}>{copy.stackLabel}</span>
