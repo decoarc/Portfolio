@@ -1,3 +1,4 @@
+import { useLayoutEffect, useRef } from 'react'
 import { Link, useLocation } from 'react-router'
 import { useContent, useLocale } from '../../app/LocaleContext.ts'
 import { htmlLang, localePath, switchLocalePath } from '../../lib/locale.ts'
@@ -8,6 +9,17 @@ export function Masthead() {
   const { site } = useContent()
   const { pathname, hash } = useLocation()
   const target = locale === 'en' ? 'pt' : 'en'
+  const href = switchLocalePath(pathname, hash, target)
+  const switchRef = useRef<HTMLAnchorElement>(null)
+
+  // O HTML pré-renderizado não sabe o hash nem o caminho pedido (o 404 é um
+  // arquivo só para qualquer caminho), e a hidratação não corrige atributo
+  // divergente. Escreve o href real no DOM; o React já o tem como valor.
+  useLayoutEffect(() => {
+    if (switchRef.current?.getAttribute('href') !== href) {
+      switchRef.current?.setAttribute('href', href)
+    }
+  }, [href])
 
   return (
     <header className={styles.masthead}>
@@ -15,7 +27,8 @@ export function Masthead() {
         {site.shell.homeMark}
       </Link>
       <a
-        href={switchLocalePath(pathname, hash, target)}
+        ref={switchRef}
+        href={href}
         hrefLang={htmlLang(target)}
         lang={htmlLang(target)}
         className={styles.switch}
