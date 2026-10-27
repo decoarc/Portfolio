@@ -14,6 +14,8 @@ export interface ProjectCover {
   alt: string
   width: number
   height: number
+  /** Miniatura 800×600, mesma proporção 4:3 da capa. */
+  thumbSrc?: string
 }
 /** Ao menos um de `paragraphs`/`items` é não vazio. */
 export interface CaseSection {
@@ -48,6 +50,7 @@ export interface ContactChannel {
   id: 'github' | 'linkedin'
   label: string
   href: string
+  peek: { mark: string; note: string }
 }
 
 export interface SiteContent {
@@ -70,7 +73,7 @@ export interface SiteContent {
   release: { label: string; entries: Record<HomeSectionId, string> }
   projectType: Record<ProjectType, string>
   links: { labels: Record<ProjectLinkKind, string>; externalHint: string }
-  work: { label: string; intro: string; previewNote: string }
+  work: { label: string; intro: string; previewNote: string; noCapture: string }
   approach: { label: string; intro: string; items: ApproachItem[] }
   about: {
     label: string

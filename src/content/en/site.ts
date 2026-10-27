@@ -53,6 +53,7 @@ export const siteEn: SiteContent = {
     intro:
       'Each entry is honest about what it is: verified work, or a concept study.',
     previewNote: 'Case study soon',
+    noCapture: 'no capture',
   },
   approach: {
     label: 'Approach',
@@ -100,11 +101,20 @@ export const siteEn: SiteContent = {
     label: 'Contact',
     lead: 'Open to roles, collaborations, and sharp technical conversations.',
     channels: [
-      { id: 'github', label: 'GitHub', href: 'https://github.com/decoarc' },
+      {
+        id: 'github',
+        label: 'GitHub',
+        href: 'https://github.com/decoarc',
+        peek: {
+          mark: 'GH',
+          note: 'Profile and repositories · opens in a new tab',
+        },
+      },
       {
         id: 'linkedin',
         label: 'LinkedIn',
         href: 'https://linkedin.com/in/andrearcodaci',
+        peek: { mark: 'in', note: 'Professional profile · opens in a new tab' },
       },
     ],
   },

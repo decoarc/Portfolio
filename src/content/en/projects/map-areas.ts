@@ -21,6 +21,7 @@ export const mapAreas: Project = {
     alt: 'Map Areas interface — sidebar controls beside a Leaflet map of São Paulo',
     width: 1200,
     height: 900,
+    thumbSrc: '/images/projects/map-areas-800.webp',
   },
   sections: [
     {

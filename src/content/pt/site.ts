@@ -51,6 +51,7 @@ export const sitePt: SiteContent = {
     intro:
       'Cada entrada é honesta sobre o que é: trabalho verificado ou estudo conceitual.',
     previewNote: 'Estudo de caso em breve',
+    noCapture: 'sem captura',
   },
   approach: {
     label: 'Abordagem',
@@ -98,11 +99,17 @@ export const sitePt: SiteContent = {
     label: 'Contato',
     lead: 'Aberto a vagas, colaborações e conversas técnicas de qualidade.',
     channels: [
-      { id: 'github', label: 'GitHub', href: 'https://github.com/decoarc' },
+      {
+        id: 'github',
+        label: 'GitHub',
+        href: 'https://github.com/decoarc',
+        peek: { mark: 'GH', note: 'Perfil e repositórios · abre em nova aba' },
+      },
       {
         id: 'linkedin',
         label: 'LinkedIn',
         href: 'https://linkedin.com/in/andrearcodaci',
+        peek: { mark: 'in', note: 'Perfil profissional · abre em nova aba' },
       },
     ],
   },
