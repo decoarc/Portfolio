@@ -45,16 +45,6 @@ acende, cortina do case study (a mais cara, mexe no router). Os dois ajustes
 pequenos da abertura (parar de reescrever com a folha no topo; `ScrollManager`
 como único dono da rolagem até âncoras) foram feitos em 2026-10-27.
 
-### O axe falha em `/` e `/pt`
-
-Achado em 2026-10-27, ao rodar `pnpm test:e2e` na segunda leva: `e2e/a11y.spec.ts`
-falha em `/` e `/pt` em 10 de 10 repetições, também no commit anterior a ela. O
-axe devolve `color-contrast` como _incomplete_ (não consegue decidir o
-contraste) para as palavras do nome no hero e para a frase de apresentação
-(`statement`). Provável causa: o axe roda com a entrada do nome ainda em curso
-ou sob o hero preso da abertura. Investigar antes de seguir com efeitos novos
-na home.
-
 ### A folha cobre o nome no meio do afastamento
 
 Na abertura aprovada, a folha do índice sobe ao mesmo tempo que o nome se
