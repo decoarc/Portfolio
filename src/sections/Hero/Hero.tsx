@@ -28,7 +28,9 @@ export function Hero({ person, copy }: HeroProps) {
             {index > 0 && ' '}
             <span className={styles.line}>
               <span className={styles.drift} data-drift={line.drift}>
-                <span className={styles.word}>{line.text}</span>
+                <span className={styles.word} data-motion="entrance">
+                  {line.text}
+                </span>
               </span>
             </span>
           </Fragment>

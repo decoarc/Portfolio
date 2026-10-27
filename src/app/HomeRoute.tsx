@@ -1,4 +1,5 @@
 import type { HomeSectionId } from '../content/types.ts'
+import { Opening } from '../motion/Opening.tsx'
 import { About } from '../sections/About/index.ts'
 import { Approach } from '../sections/Approach/index.ts'
 import { Contact } from '../sections/Contact/index.ts'
@@ -19,8 +20,10 @@ export function HomeRoute() {
   return (
     <>
       <title>{site.meta.homeTitle}</title>
-      <Hero person={site.person} copy={site.hero} />
-      <Release copy={site.release} sections={sections} />
+      <Opening>
+        <Hero person={site.person} copy={site.hero} />
+        <Release copy={site.release} sections={sections} />
+      </Opening>
       <Work
         index={numberOf('work')}
         copy={site.work}

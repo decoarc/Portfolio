@@ -5,7 +5,9 @@
 .release {
   --sheet-pad-block-start: clamp(32px, 6vh, 64px);
   --sheet-pad-block-end: clamp(32px, 6vh, 64px);
+  /* Sobe por cima do hero preso. */
   position: relative;
+  z-index: 1;
 }
 
 /* Borda curva da folha que sobe sobre o hero: o meio mais alto que as pontas.
