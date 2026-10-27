@@ -1,3 +1,4 @@
+import { LitText } from '../LitText/index.ts'
 import styles from './SectionHead.module.css'
 
 interface SectionHeadProps {
@@ -6,6 +7,8 @@ interface SectionHeadProps {
   headingId: string
   title: string
   intro?: string
+  /** A intro acende com o scroll (`LitText`). */
+  litIntro?: boolean
 }
 
 /** Cabeçalho de seção numerada: o número sai para o trilho de margem. */
@@ -14,6 +17,7 @@ export function SectionHead({
   headingId,
   title,
   intro,
+  litIntro = false,
 }: SectionHeadProps) {
   return (
     <div className={styles.head}>
@@ -23,7 +27,12 @@ export function SectionHead({
           {title}
         </h2>
       </div>
-      {intro && <p className={styles.intro}>{intro}</p>}
+      {intro &&
+        (litIntro ? (
+          <LitText className={styles.intro} text={intro} />
+        ) : (
+          <p className={styles.intro}>{intro}</p>
+        ))}
     </div>
   )
 }

@@ -28,6 +28,7 @@ export function Approach({ index, copy }: ApproachProps) {
         headingId={HEADING_ID}
         title={copy.label}
         intro={copy.intro}
+        litIntro
       />
       <ol className={styles.list}>
         {copy.items.map((item) => (

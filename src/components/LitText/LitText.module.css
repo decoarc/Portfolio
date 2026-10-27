@@ -1,0 +1,18 @@
+/* Texto que acende com o scroll. O componente escreve `--lit` (progresso em
+   palavras) no parágrafo; cada palavra tem o seu índice em `--i`. Os números
+   repetem `SCROLL_LIT` de `src/motion/scrollLit.ts`: apagada em 0,2, frente de
+   2,5 palavras. Só existe sob `[data-lit]`, que o script aplica quando vai
+   animar: sem ele (primeiro render, reduced motion) o texto está aceso. Sem
+   `transition`: a suavidade vem do scroll suave. */
+
+[data-lit] .word {
+  opacity: calc(0.2 + 0.8 * clamp(0, (var(--lit, 0) - var(--i)) / 2.5, 1));
+}
+
+/* A cópia para leitor de tela não entra na seleção: copiar o parágrafo traz a
+   frase uma vez, a das palavras visíveis. O build não prefixa, e Safaris mais
+   antigos só respeitam a forma com `-webkit-`. */
+.copy {
+  -webkit-user-select: none;
+  user-select: none;
+}

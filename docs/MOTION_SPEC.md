@@ -4,10 +4,11 @@
 - **Estado:** Fase 3 — abertura da home e scroll suave implementados,
   aprovados no Gate 3 (`docs/gate-3/README.md`); segunda leva (hover nos links
   de ação e na lista de trabalhos) implementada, com evidência em
-  `docs/fase-3/segunda-leva/`
+  `docs/fase-3/segunda-leva/`; texto que acende com o scroll implementado
 - **Design aprovado:** `docs/superpowers/specs/2026-10-26-fase-3-motion-design.md`
   e, para a segunda leva,
-  `docs/superpowers/specs/2026-10-27-fase-3-hover-design.md`
+  `docs/superpowers/specs/2026-10-27-fase-3-hover-design.md` e
+  `docs/superpowers/specs/2026-10-27-fase-3-texto-acende-design.md`
 - **Referência visual:** `docs/fase-3/prototipo/desktop.html` e
   `docs/fase-3/prototipo/mobile.html` — a função `frame()` de cada um é o
   comportamento aprovado
@@ -53,6 +54,9 @@ Valem para todo efeito, este e os próximos. Vêm de `docs/SPEC.md` §5.
   usada na ficha e na tira de capas.
 - `src/components/CoverStrip/` — a tira de capas da prévia do CTA primário.
 - `src/sections/Work/Work.module.css` — a reação tipográfica da lista.
+- `src/motion/scrollLit.ts` — valores aprovados e a conta do texto que acende.
+- `src/components/LitText/` — o parágrafo que acende, usado na intro da
+  Abordagem (via `SectionHead`, `litIntro`) e no lead do Sobre.
 - Guardas: `scripts/motion-guard.test.ts` (`transition` e `animation`, inclusive
   `@keyframes`, só dentro de `@media (prefers-reduced-motion: no-preference)`;
   a exceção antiga é a entrada do `Hero.module.css`, sob
@@ -197,6 +201,24 @@ Valem para todo efeito, este e os próximos. Vêm de `docs/SPEC.md` §5.
 | Reduced motion | Sem transição: o estado final vale na hora |
 | Sem JS | Funciona (só CSS) |
 | Evidência | `docs/fase-3/segunda-leva/lista-hover-1440.png`; `e2e/hover.spec.ts` |
+
+### Texto que acende
+
+| | |
+|---|---|
+| Objetivo | A leitura acontecer junto com a rolagem: o parágrafo acende palavra por palavra na medida exata do scroll (referência: yasingenc.net) |
+| Elemento | A intro da Abordagem e o lead do Sobre (`LitText`); só esses dois |
+| Gatilho | Posição da rolagem, lida em `onScroll` (o evento do Lenis, ou o scroll da janela um por frame) |
+| Estado inicial / final | Palavras em opacidade 0,2 até o topo do parágrafo cruzar 80% da janela; todas em 1 quando o fim cruza 50%. Reversível. A frente tem 2,5 palavras em transição. Só `opacity` muda; a cor é a de sempre |
+| Duração e easing | Sem duração própria (sem `transition`): acompanha a rolagem, e a suavidade vem do Lenis |
+| Fim da página | Se a página acaba antes de o fim do parágrafo chegar a 50%, a linha de término sobe até a rolagem máxima: nada fica meio apagado |
+| Contraste | O estado apagado fica abaixo de AA de propósito (exceção aceita pelo dono, 2026-10-27). `e2e/a11y.spec.ts` exclui só as palavras apagadas e audita os dois parágrafos acesos |
+| Leitor de tela | Lê a cópia inteira (`.visually-hidden`); as palavras são `aria-hidden`. A cópia tem `user-select: none`, para copiar trazer a frase uma vez |
+| Toque | Igual; no celular o scroll é nativo |
+| Reduced motion | Sem efeito: texto simples, sem quebra em palavras |
+| Sem JS | O primeiro render é o texto simples e aceso; o apagado só existe sob `[data-lit]`, aplicado pelo efeito |
+| Navegação | Troca de idioma refaz as palavras; abrir em `/#about` já mostra o lead aceso |
+| Evidência | `e2e/lit-text.spec.ts`; protótipo `docs/fase-3/prototipo/texto-acende.html` |
 
 ## Próximos efeitos
 
