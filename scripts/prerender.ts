@@ -10,6 +10,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { pathToFileURL } from 'node:url'
+import { buildHeaders, scriptHash } from './headers.ts'
 
 type Locale = 'en' | 'pt'
 type RouteKey = { locale: Locale; page: 'home' | 'case' | 'notFound' }
@@ -123,6 +124,12 @@ for (const { file, html } of pages) {
   fs.mkdirSync(path.dirname(target), { recursive: true })
   fs.writeFileSync(target, html)
 }
+
+// CSP: o único script inline é o da entrada; o hash é sobre o texto exato.
+fs.writeFileSync(
+  path.join(distDir, '_headers'),
+  buildHeaders([scriptHash(entry.ENTRANCE_EARLY_SCRIPT)]),
+)
 
 console.log(`prerender: ${pages.length} páginas em dist/`)
 for (const { file } of pages) console.log(`  ${file}`)

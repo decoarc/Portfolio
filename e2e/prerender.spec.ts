@@ -154,3 +154,77 @@ test('/work/TOKEN-KILLER (servido de work/token-killer.html) hidrata como o case
     page.getByRole('heading', { name: en.notFound.title }),
   ).toHaveCount(0)
 })
+
+test.describe('CSP', () => {
+  for (const url of ['/', '/pt/work/map-areas', '/nada']) {
+    test(`${url} roda sem violação de CSP`, async ({ page }) => {
+      const problems: string[] = []
+      await page.addInitScript(() => {
+        document.addEventListener('securitypolicyviolation', (event) => {
+          ;(window as unknown as { __csp: string[] }).__csp ??= []
+          ;(window as unknown as { __csp: string[] }).__csp.push(
+            `${event.violatedDirective} ${event.blockedURI}`,
+          )
+        })
+      })
+      page.on('console', (message) => {
+        if (/Content Security Policy/i.test(message.text())) {
+          problems.push(message.text())
+        }
+      })
+      const res = await page.goto(url, { waitUntil: 'networkidle' })
+      expect(res?.headers()['content-security-policy']).toContain(
+        "script-src 'self' 'sha256-",
+      )
+      // Passa pela entrada e rola até o fim.
+      await page.waitForTimeout(1500)
+      await page.evaluate(async () => {
+        for (let y = 0; y <= document.body.scrollHeight; y += 600) {
+          window.scrollTo(0, y)
+          await new Promise((r) => setTimeout(r, 30))
+        }
+      })
+      const violations = await page.evaluate(
+        () => (window as unknown as { __csp?: string[] }).__csp ?? [],
+      )
+      expect(violations).toEqual([])
+      expect(problems).toEqual([])
+    })
+  }
+
+  test('a home executa o script inline do head sob a CSP', async ({ page }) => {
+    await page.goto('/', { waitUntil: 'commit' })
+    await expect(page.locator('html')).toHaveAttribute(
+      'data-entrance-early',
+      /pending|expired/,
+    )
+  })
+})
+
+test.describe('imagens e cor do tema', () => {
+  test('og:image e apple-touch-icon respondem 200 image/png', async ({
+    page,
+    request,
+  }) => {
+    await page.goto('/pt')
+    const og = await page
+      .locator('meta[property="og:image"]')
+      .getAttribute('content')
+    const icon = await page
+      .locator('link[rel="apple-touch-icon"]')
+      .getAttribute('href')
+    for (const url of [og!, icon!]) {
+      const res = await request.get(url)
+      expect(res.status(), url).toBe(200)
+      expect(res.headers()['content-type'], url).toBe('image/png')
+    }
+  })
+
+  test('theme-color presente', async ({ page }) => {
+    await page.goto('/')
+    await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute(
+      'content',
+      '#e8dcc0',
+    )
+  })
+})
