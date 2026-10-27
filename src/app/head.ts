@@ -48,7 +48,7 @@ export function routeHead(
   if (key.page === 'notFound') {
     return {
       title: `${site.notFound.title}${site.meta.titleSuffix}`,
-      description: site.meta.description,
+      description: site.notFound.body,
       alternates: [],
       robots: 'noindex',
     }

@@ -56,6 +56,13 @@ describe('routeHead', () => {
     expect(nf).toMatchObject({ robots: 'noindex', alternates: [] })
     expect(nf.canonical).toBeUndefined()
     expect(nf.og).toBeUndefined()
+    expect(nf.description).toBe(siteEn.notFound.body)
+    const nfPt = routeHead(
+      { locale: 'pt', page: 'notFound' },
+      contentByLocale,
+      origin,
+    )
+    expect(nfPt.description).toBe(sitePt.notFound.body)
   })
 
   it('case sem acesso lança', () => {
