@@ -1,5 +1,7 @@
 # Gate 3 — Abertura da home com motion
 
+**Aprovado pelo dono em 2026-10-26.**
+
 A Fase 3 implementou a abertura aprovada nos protótipos: o nome sobe de trás da
 fenda, se afasta com o scroll ("André" para a esquerda, "Arcodaci" para a
 direita) enquanto a folha do índice sobe por cima do hero com a borda curva,
@@ -26,8 +28,8 @@ pnpm build:preview && pnpm preview
 | Item | Estado |
 | --- | --- |
 | Comparação com os protótipos em 1440, 768 e 390, nos dois idiomas | Capturas abaixo; diferenças listadas em "Comparação" |
-| Fluidez no Chrome desktop | Medido (ver "Fluidez"); falta a sensação do dono |
-| **Fluidez num celular real do dono** | **Pendente — só o dono pode fazer** |
+| Fluidez no Chrome desktop | Medido (ver "Fluidez") |
+| Fluidez num celular real do dono | Aprovado pelo dono em 2026-10-26 |
 | `pnpm validate` verde | Verde até o `build`, que falha por desenho enquanto houver mock (ver abaixo) |
 | Reduced motion idêntico ao Gate 2 | `e2e/motion.spec.ts`, capturas `*-reduce-p50.png` |
 

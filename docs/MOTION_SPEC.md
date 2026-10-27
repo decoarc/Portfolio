@@ -2,7 +2,7 @@
 
 - **Direção:** Editorial Rolodex (`docs/DESIGN_DECISIONS.md`)
 - **Estado:** Fase 3 — abertura da home e scroll suave implementados,
-  aguardando o Gate 3 (`docs/gate-3/README.md`)
+  aprovados no Gate 3 (`docs/gate-3/README.md`)
 - **Design aprovado:** `docs/superpowers/specs/2026-10-26-fase-3-motion-design.md`
 - **Referência visual:** `docs/fase-3/prototipo/desktop.html` e
   `docs/fase-3/prototipo/mobile.html` — a função `frame()` de cada um é o

@@ -53,5 +53,5 @@ sem `rtk` na frente, lendo o código de saída.
 Fase 3 (motion) implementada: abertura da home — o nome sobe da fenda e se
 afasta com o scroll enquanto a folha do índice sobe com a borda curva — e
 scroll suave no site, tudo desligado em reduced motion (`docs/MOTION_SPEC.md`).
-Aguarda o Gate 3 (`docs/gate-3/README.md`). Conteúdo real no lugar dos mocks é a
+Gate 3 aprovado (`docs/gate-3/README.md`). Conteúdo real no lugar dos mocks é a
 Fase 4.
