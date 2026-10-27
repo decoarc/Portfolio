@@ -12,23 +12,29 @@
    mas só o de teclado (`:focus-visible`): um clique ou toque num link da
    ficha (que abre nova aba) também a foca, e `:focus-within` deixaria a
    lista esmaecida presa sem cursor nenhum sobre ela. `:has()` não aninha,
-   então o gancho da lista é o descendente `[data-motion='slip'] :focus-visible`. */
-.list:has(> [data-motion='slip'] :focus-visible)
+   então o gancho da lista é o descendente `[data-motion='slip'] :focus-visible`.
+   Todas exigem `:not([data-settling])`: na volta de um case a ficha pousa em
+   repouso (Work.tsx), mesmo com o cursor parado sobre outra. */
+.list:not([data-settling]):has(> [data-motion='slip'] :focus-visible)
   > [data-motion='slip']:not(:has(:focus-visible)) {
   opacity: 0.35;
 }
 
-.list > [data-motion='slip']:has(:focus-visible) [data-motion='slip-title'] {
+.list:not([data-settling])
+  > [data-motion='slip']:has(:focus-visible)
+  [data-motion='slip-title'] {
   transform: translateX(clamp(16px, 3vw, 48px));
 }
 
-.list > [data-motion='slip']:has(:focus-visible) [data-motion='thumb'] {
+.list:not([data-settling])
+  > [data-motion='slip']:has(:focus-visible)
+  [data-motion='thumb'] {
   transform: scale(1.06);
 }
 
 /* Hover só com ponteiro fino: um toque não deixa a lista esmaecida presa. */
 @media (hover: hover) and (pointer: fine) {
-  .list:has(> [data-motion='slip']:hover)
+  .list:not([data-settling]):has(> [data-motion='slip']:hover)
     > [data-motion='slip']:not(:hover, :has(:focus-visible)) {
     opacity: 0.35;
   }
@@ -36,16 +42,20 @@
   /* Com o foco numa ficha (um link externo aberto, por exemplo) e o cursor
      em outra, as duas ficam acesas — a regra do foco esmaeceria a do cursor.
      Mesma especificidade da regra do foco, declarada depois. */
-  .list:has(> [data-motion='slip'] :focus-visible)
+  .list:not([data-settling]):has(> [data-motion='slip'] :focus-visible)
     > [data-motion='slip']:hover {
     opacity: 1;
   }
 
-  .list > [data-motion='slip']:hover [data-motion='slip-title'] {
+  .list:not([data-settling])
+    > [data-motion='slip']:hover
+    [data-motion='slip-title'] {
     transform: translateX(clamp(16px, 3vw, 48px));
   }
 
-  .list > [data-motion='slip']:hover [data-motion='thumb'] {
+  .list:not([data-settling])
+    > [data-motion='slip']:hover
+    [data-motion='thumb'] {
     transform: scale(1.06);
   }
 }

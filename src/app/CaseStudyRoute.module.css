@@ -10,7 +10,11 @@
   --measure: 62ch;
 }
 
+/* Os nomes de transição (`case-*`) são do título que viaja
+   (src/motion/titleFlight.css): o "Voltar", o cabeçalho e o corpo entram e
+   saem como blocos próprios; o texto do `h1` voa até a ficha. */
 .back {
+  view-transition-name: case-back;
   display: inline-block;
   margin-bottom: clamp(32px, 6vh, 64px);
   font-family: var(--font-mono);
@@ -33,6 +37,7 @@
 }
 
 .head {
+  view-transition-name: case-head;
   display: grid;
   gap: 12px;
   padding-bottom: clamp(24px, 4vh, 40px);
@@ -59,6 +64,17 @@
   overflow-wrap: break-word;
 }
 
+/* Só o texto viaja: o `h1` ocupa a linha inteira, a ficha não. */
+.titleText {
+  display: inline-block;
+  view-transition-name: case-title;
+}
+
+/* Recebe o foco ao abrir a página; mesma regra do `main:focus`. */
+.title:focus {
+  outline: none;
+}
+
 /* Aviso de preview e de estudo conceitual: frase inteira, sem caixa alta,
    marcada pelo filete do acento. */
 .notice {
@@ -73,6 +89,7 @@
 }
 
 .body {
+  view-transition-name: case-body;
   padding-top: clamp(24px, 4vh, 40px);
 }
 

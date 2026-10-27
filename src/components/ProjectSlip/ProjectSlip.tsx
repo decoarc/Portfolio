@@ -1,5 +1,11 @@
-import { Link } from 'react-router'
+import { Link, useViewTransitionState } from 'react-router'
+import { workAnchor } from '../../content/publication.ts'
 import type { Project, SiteContent } from '../../content/types.ts'
+import {
+  canFly,
+  markTitleFlight,
+  TITLE_FLIGHT,
+} from '../../motion/titleFlight.ts'
 import { ExternalLink } from '../ExternalLink/ExternalLink.tsx'
 import { ProjectThumb } from '../ProjectThumb/ProjectThumb.tsx'
 import styles from './ProjectSlip.module.css'
@@ -31,10 +37,17 @@ export function ProjectSlip({
   // Quem navega por título ou por link precisa ouvir o tipo (FR-04): um
   // conceito nunca passa por trabalho entregue.
   const typeName = <span className="visually-hidden">{labels.type}: </span>
+  // O nome de transição só vale na ficha envolvida (ida para o case dela ou
+  // volta dele): o nome precisa ser único na página.
+  const flying = useViewTransitionState(href ?? '') && href !== null
   return (
     // `data-motion` marca quem tem transição e serve de gancho para a reação
     // da lista (Work.module.css), sem compor classes entre módulos.
-    <li className={styles.slip} data-motion="slip">
+    <li
+      id={workAnchor(project.slug)}
+      className={styles.slip}
+      data-motion="slip"
+    >
       <p className={styles.meta}>
         <span className={styles.index}>{String(index).padStart(2, '0')}</span>
         {/* O tipo já entra no nome do título; aqui fica só o rótulo visual. */}
@@ -43,9 +56,22 @@ export function ProjectSlip({
         </span>
       </p>
       {/* A reação mexe no título, não no link: o Map Areas não tem link. */}
-      <h3 className={styles.title} data-motion="slip-title">
+      <h3
+        className={styles.title}
+        data-motion="slip-title"
+        {...(href === null && { 'data-anchor-focus': true, tabIndex: -1 })}
+      >
         {href ? (
-          <Link to={href} className={styles.titleLink}>
+          <Link
+            to={href}
+            className={styles.titleLink}
+            data-anchor-focus
+            viewTransition={canFly()}
+            onClick={() => markTitleFlight('open')}
+            style={
+              flying ? { viewTransitionName: TITLE_FLIGHT.title } : undefined
+            }
+          >
             {typeName}
             {project.title}
           </Link>

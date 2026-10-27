@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import type { ReactNode } from 'react'
-import { MemoryRouter } from 'react-router'
+import { createMemoryRouter, RouterProvider } from 'react-router'
 import { describe, expect, it } from 'vitest'
 import { siteEn } from '../../content/en/site.ts'
 import type { Project } from '../../content/types.ts'
@@ -29,12 +29,10 @@ const labels = {
   links: siteEn.links,
 }
 
+// Data router: a ficha usa `useViewTransitionState`, que exige um.
 function renderSlip(node: ReactNode) {
-  return render(
-    <MemoryRouter>
-      <ol>{node}</ol>
-    </MemoryRouter>,
-  )
+  const router = createMemoryRouter([{ path: '*', element: <ol>{node}</ol> }])
+  return render(<RouterProvider router={router} />)
 }
 
 describe('ProjectSlip', () => {
@@ -63,6 +61,33 @@ describe('ProjectSlip', () => {
       screen.getByRole('heading', { level: 3, name: new RegExp(item.title) }),
     ).toBeVisible()
     expect(screen.getByText(labels.preview)).toBeVisible()
+  })
+
+  it('com href: o <li> tem o id da âncora e o link do título recebe o foco', () => {
+    const item = project()
+    const { container } = renderSlip(
+      <ProjectSlip
+        project={item}
+        index={1}
+        href="/work/exemplo"
+        labels={labels}
+      />,
+    )
+    expect(container.querySelector('li')).toHaveAttribute('id', 'work-exemplo')
+    expect(
+      screen.getByRole('link', { name: new RegExp(item.title) }),
+    ).toHaveAttribute('data-anchor-focus')
+  })
+
+  it('sem href: o <h3> recebe o foco da âncora', () => {
+    const item = project({ status: 'preview' })
+    const { container } = renderSlip(
+      <ProjectSlip project={item} index={1} href={null} labels={labels} />,
+    )
+    expect(container.querySelector('li')).toHaveAttribute('id', 'work-exemplo')
+    const heading = screen.getByRole('heading', { level: 3 })
+    expect(heading).toHaveAttribute('data-anchor-focus')
+    expect(heading).toHaveAttribute('tabindex', '-1')
   })
 
   it('concept mostra o rótulo de estudo conceitual', () => {

@@ -4,11 +4,14 @@
 - **Estado:** Fase 3 — abertura da home e scroll suave implementados,
   aprovados no Gate 3 (`docs/gate-3/README.md`); segunda leva (hover nos links
   de ação e na lista de trabalhos) implementada, com evidência em
-  `docs/fase-3/segunda-leva/`; texto que acende com o scroll implementado
+  `docs/fase-3/segunda-leva/`; texto que acende com o scroll implementado;
+  título que viaja até o case study e volta implementado, com o que fecha a
+  segunda leva
 - **Design aprovado:** `docs/superpowers/specs/2026-10-26-fase-3-motion-design.md`
   e, para a segunda leva,
-  `docs/superpowers/specs/2026-10-27-fase-3-hover-design.md` e
-  `docs/superpowers/specs/2026-10-27-fase-3-texto-acende-design.md`
+  `docs/superpowers/specs/2026-10-27-fase-3-hover-design.md`,
+  `docs/superpowers/specs/2026-10-27-fase-3-texto-acende-design.md` e
+  `docs/superpowers/specs/2026-10-27-fase-3-titulo-viaja-design.md`
 - **Referência visual:** `docs/fase-3/prototipo/desktop.html` e
   `docs/fase-3/prototipo/mobile.html` — a função `frame()` de cada um é o
   comportamento aprovado
@@ -57,6 +60,15 @@ Valem para todo efeito, este e os próximos. Vêm de `docs/SPEC.md` §5.
 - `src/motion/scrollLit.ts` — valores aprovados e a conta do texto que acende.
 - `src/components/LitText/` — o parágrafo que acende, usado na intro da
   Abordagem (via `SectionHead`, `litIntro`) e no lead do Sobre.
+- `src/motion/titleFlight.ts` — os nomes de transição (`TITLE_FLIGHT`), o
+  sentido na raiz (`markTitleFlight`), `canFly` e
+  `forgetTitleFlightOnTraversal` (registrado em `main.tsx` antes do render).
+- `src/motion/titleFlight.css` — tempos e curvas dos pseudo-elementos
+  `::view-transition-*`, tudo sob `prefers-reduced-motion: no-preference`. Os
+  nomes ficam em `src/app/CaseStudyRoute.module.css` e, na ficha, no
+  `ProjectSlip.tsx` (nome condicional); `data-settling` em `src/sections/Work/`;
+  o estado de navegação em `src/app/navigationState.ts`, lido pelo
+  `ScrollManager` (rolagem imediata e foco).
 - Guardas: `scripts/motion-guard.test.ts` (`transition` e `animation`, inclusive
   `@keyframes`, só dentro de `@media (prefers-reduced-motion: no-preference)`;
   a exceção antiga é a entrada do `Hero.module.css`, sob
@@ -219,6 +231,25 @@ Valem para todo efeito, este e os próximos. Vêm de `docs/SPEC.md` §5.
 | Sem JS | O primeiro render é o texto simples e aceso; o apagado só existe sob `[data-lit]`, aplicado pelo efeito |
 | Navegação | Troca de idioma refaz as palavras; abrir em `/#about` já mostra o lead aceso |
 | Evidência | `e2e/lit-text.spec.ts`; protótipo `docs/fase-3/prototipo/texto-acende.html` |
+
+### Título que viaja
+
+| | |
+|---|---|
+| Objetivo | Dar continuidade entre a lista e o case study: o título da ficha voa até o `h1` do case ao abrir, e volta à ficha ao sair (referência: dennissnellenberg.com) |
+| Elemento | O título da ficha e o `h1` do case, ligados pelo nome de transição `case-title`; ainda `case-back`, `case-head` e `case-body` (só no case) para o resto da página |
+| Gatilho | Clique no título da ficha (ida) e no link "Voltar" (volta), por `Link` com `viewTransition` (View Transitions do React Router). O URL muda no clique; nada espera a animação. O nome `case-title` só vai para a ficha quando `useViewTransitionState(href)` é verdadeiro, para haver um só na página |
+| Estado inicial / final | Ida: o título na ficha, depois o `h1`. Volta: o `h1`, depois o título na ficha, que fica no topo da janela. Só a foto grande viaja: na ida a nova (o `h1`, reduzido ao tamanho da ficha), na volta a antiga; a outra fica invisível, nunca as duas cruzadas |
+| Duração e easing | Ida: grupo do título 800 ms, `cubic-bezier(0.76, 0, 0.24, 1)`; raiz (a home sai, o fundo do case entra) 450 ms, `cubic-bezier(0.2, 0.7, 0, 1)`; o resto do case sobe 20 px e aparece em 550 ms, mesma curva, atrasos de 380 ms ("Voltar"), 440 ms (cabeçalho) e 500 ms (corpo). Volta: o resto do case some em 250 ms; grupo do título 750 ms; raiz 450 ms com atraso de 200 ms |
+| Exceção de propriedades | O grupo `::view-transition-group(case-title)` anima `width` e `height` (padrão do navegador), só no pseudo-elemento, sem layout da página. É a exceção à regra "só `transform` e `opacity`" |
+| Volta, posição e foco | A volta vai para `#work-<slug>` (em PT, `/pt#work-<slug>`), com rolagem instantânea, e a ficha pousa no topo da janela (no protótipo era a ~30 %). O foco vai para o link do título da ficha (na prévia, para o `h3`). Ao abrir um case o foco vai para o `h1` (`tabIndex={-1}`, sem contorno) |
+| Reação da lista | Depois da volta, `data-settling` na lista suprime a reação tipográfica (hover/foco) até o primeiro `pointermove`, `keydown`, `wheel` ou `touchstart`; sem isso o cursor parado sobre a ficha a deslocaria e esmaeceria as outras ao pousar |
+| Toque | Igual. A reação da lista continua só com ponteiro fino |
+| Reduced motion | O `Link` não pede a transição (`canFly` falso): troca direta, mesmos URL, foco e posição. Toda declaração fica em `@media (prefers-reduced-motion: no-preference)` (guarda de motion) |
+| Sem JS | Links comuns; troca direta de página |
+| Navegação | Sem transição: voltar/avançar do navegador, troca de idioma, masthead, 404, primeira carga e a volta de um case em prévia. O router repete a View Transition ao voltar/avançar entre caminhos já percorridos; `forgetTitleFlightOnTraversal()` apaga a marca no `popstate` e o CSS deixa a transição sem marca com `animation: none` (só a foto nova). No POP, a posição volta à que o router gravou antes de sair da página (`src/app/scrollMemory.ts`, via `enableScrollRestoration`), aplicada pelo `ScrollManager`: com a troca de página adiada para dentro dessa transição repetida, a restauração nativa acontecia ainda sobre o case e cortava a posição (prova: `e2e/journey.spec.ts`, "devolve a home na posição de antes"). No POP com mudança de caminho, o foco vai para `#main`. Segundo clique durante a viagem: o router pula a em curso e vale o último clique |
+| Limite conhecido | Ligar o reduced motion no meio da sessão, depois de uma viagem, deixa o fade padrão de 250 ms do navegador ao voltar/avançar. Adiado (`docs/BACKLOG.md`) |
+| Evidência | `e2e/title-flight.spec.ts` e, para a pasta `docs/fase-3/segunda-leva/`, as 12 capturas `titulo-viaja-<1440\|390>-<ida\|volta>-<0\|50\|100>.png` (`e2e/title-flight.capture.ts`, com os helpers de `e2e/title-flight.helpers.ts`, que congelam as animações do navegador) |
 
 ## Próximos efeitos
 

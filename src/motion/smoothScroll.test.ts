@@ -63,6 +63,30 @@ describe('com Lenis', () => {
     }
     expect(instance.resize).toHaveBeenCalledTimes(1)
   })
+
+  it('scrollToTarget com immediate repassa a opção ao Lenis', () => {
+    setReducedMotion(false)
+    startSmoothScroll()
+    const target = document.createElement('section')
+    scrollToTarget(target, { immediate: true })
+    const instance = vi.mocked(Lenis).mock.instances[0] as unknown as {
+      scrollTo: ReturnType<typeof vi.fn>
+    }
+    expect(instance.scrollTo).toHaveBeenCalledWith(target, { immediate: true })
+  })
+
+  it('scrollToTarget sem opção deixa o deslize ligado', () => {
+    setReducedMotion(false)
+    startSmoothScroll()
+    const target = document.createElement('section')
+    scrollToTarget(target)
+    const instance = vi.mocked(Lenis).mock.instances[0] as unknown as {
+      scrollTo: ReturnType<typeof vi.fn>
+    }
+    expect(instance.scrollTo).toHaveBeenCalledWith(target, {
+      immediate: undefined,
+    })
+  })
 })
 
 describe('sem Lenis', () => {

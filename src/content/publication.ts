@@ -26,6 +26,11 @@ export function caseStudyHref(locale: Locale, project: Project): string | null {
   return localePath(locale, `/work/${project.slug}`)
 }
 
+/** Id da ficha do projeto na lista de trabalhos; alvo do "Voltar" do case study. */
+export function workAnchor(slug: string): string {
+  return `work-${slug}`
+}
+
 export function findProject(
   projects: Project[],
   slug: string | undefined,

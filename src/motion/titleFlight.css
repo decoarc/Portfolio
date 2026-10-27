@@ -1,0 +1,105 @@
+/* Título que viaja (docs/superpowers/specs/2026-10-27-fase-3-titulo-viaja-design.md).
+   O router troca a rota dentro de `document.startViewTransition`; aqui só o
+   tempo e as curvas dos pseudo-elementos. `markTitleFlight` marca o sentido
+   na raiz (`data-title-flight`). Os nomes (`case-*`) estão em
+   CaseStudyRoute.module.css e, na ficha envolvida, no `ProjectSlip`.
+
+   Só a foto grande do título viaja: na ida, a nova (o `h1`), que começa
+   reduzida ao tamanho da ficha; na volta, a antiga. A outra fica invisível o
+   tempo todo, nunca as duas cruzadas.
+
+   Com reduced motion o `Link` nem pede a transição (`canFly`); a guarda de
+   motion exige o mesmo daqui. */
+@media (prefers-reduced-motion: no-preference) {
+  /* Sem marca (voltar/avançar do navegador, que o router também anima):
+     troca direta. Nenhuma animação, e só a foto nova. */
+  :root:not([data-title-flight])::view-transition-group(*),
+  :root:not([data-title-flight])::view-transition-old(*),
+  :root:not([data-title-flight])::view-transition-new(*) {
+    animation: none;
+  }
+
+  :root:not([data-title-flight])::view-transition-old(*) {
+    opacity: 0;
+  }
+
+  ::view-transition-group(case-title) {
+    animation-duration: 800ms;
+    animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+  }
+
+  /* Ida: o fundo do case entra sobre a home; o resto do case sobe depois. */
+  :root[data-title-flight='open']::view-transition-old(case-title) {
+    animation: none;
+    opacity: 0;
+  }
+
+  :root[data-title-flight='open']::view-transition-new(case-title) {
+    animation: none;
+  }
+
+  :root[data-title-flight='open']::view-transition-old(root),
+  :root[data-title-flight='open']::view-transition-new(root) {
+    animation-duration: 450ms;
+    animation-timing-function: cubic-bezier(0.2, 0.7, 0, 1);
+  }
+
+  :root[data-title-flight='open']::view-transition-new(case-back),
+  :root[data-title-flight='open']::view-transition-new(case-head),
+  :root[data-title-flight='open']::view-transition-new(case-body) {
+    animation: title-flight-rise 550ms cubic-bezier(0.2, 0.7, 0, 1) both;
+  }
+
+  :root[data-title-flight='open']::view-transition-new(case-back) {
+    animation-delay: 380ms;
+  }
+
+  :root[data-title-flight='open']::view-transition-new(case-head) {
+    animation-delay: 440ms;
+  }
+
+  :root[data-title-flight='open']::view-transition-new(case-body) {
+    animation-delay: 500ms;
+  }
+
+  /* Volta: o resto do case some, o título desce até a ficha e o fundo do case
+     sai revelando a home, já rolada até ela. */
+  :root[data-title-flight='close']::view-transition-group(case-title) {
+    animation-duration: 750ms;
+  }
+
+  :root[data-title-flight='close']::view-transition-old(case-title) {
+    animation: none;
+  }
+
+  :root[data-title-flight='close']::view-transition-new(case-title) {
+    animation: none;
+    opacity: 0;
+  }
+
+  :root[data-title-flight='close']::view-transition-old(case-back),
+  :root[data-title-flight='close']::view-transition-old(case-head),
+  :root[data-title-flight='close']::view-transition-old(case-body) {
+    animation: title-flight-out 250ms cubic-bezier(0.2, 0.7, 0, 1) both;
+  }
+
+  :root[data-title-flight='close']::view-transition-old(root),
+  :root[data-title-flight='close']::view-transition-new(root) {
+    animation-duration: 450ms;
+    animation-delay: 200ms;
+    animation-timing-function: cubic-bezier(0.2, 0.7, 0, 1);
+  }
+
+  @keyframes title-flight-rise {
+    from {
+      opacity: 0;
+      translate: 0 20px;
+    }
+  }
+
+  @keyframes title-flight-out {
+    to {
+      opacity: 0;
+    }
+  }
+}
