@@ -217,20 +217,29 @@
   }
 }
 
+/* Os CTAs são `ActionLink`: traço, borda e `padding-bottom` do Gate 2 vêm do
+   tom; aqui só o tamanho e a cor do texto. */
 .action {
   font-family: var(--font-body);
   font-size: 0.9375rem;
-  text-decoration: none;
-  padding-bottom: 2px;
-  white-space: nowrap;
-}
-
-.primary {
-  color: var(--ink);
-  border-bottom: 2px solid var(--accent);
 }
 
 .ghost {
   color: var(--ink-muted);
-  border-bottom: 1px solid var(--rule);
+}
+
+/* Tira de capas do CTA primário. Só a partir de 1200px há espaço livre: acima
+   da régua de CTAs, nas colunas 8–12, ao lado do nome (colunas 1–7). Abaixo
+   disso a função e o statement ficam logo acima dos CTAs e não há onde pô-la
+   sem cobrir texto, então ela não aparece (spec §3.3). */
+.strip {
+  display: none;
+}
+
+@media (min-width: 1200px) {
+  .strip {
+    display: block;
+    left: 0;
+    bottom: calc(100% + 14px);
+  }
 }

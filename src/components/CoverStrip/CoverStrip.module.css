@@ -1,0 +1,16 @@
+/* `.peek.strip` do protótipo: capas de 96px lado a lado, cada uma com
+   moldura de 1px em --ink e um giro leve. A posição vem de quem usa. */
+.strip {
+  display: flex;
+  gap: 8px;
+}
+
+.cover {
+  display: block;
+  flex: none;
+  width: 96px;
+  overflow: hidden;
+  border: 1px solid var(--ink);
+  background: var(--bg);
+  transform: rotate(var(--tilt, 0deg));
+}

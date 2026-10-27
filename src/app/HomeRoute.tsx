@@ -1,3 +1,4 @@
+import { CoverStrip } from '../components/CoverStrip/index.ts'
 import type { HomeSectionId } from '../content/types.ts'
 import { Opening } from '../motion/Opening.tsx'
 import { About } from '../sections/About/index.ts'
@@ -21,7 +22,19 @@ export function HomeRoute() {
     <>
       <title>{site.meta.homeTitle}</title>
       <Opening>
-        <Hero person={site.person} copy={site.hero} />
+        <Hero
+          person={site.person}
+          copy={site.hero}
+          ctaPeek={
+            <CoverStrip
+              projects={projects}
+              labels={{
+                projectType: site.projectType,
+                noCapture: site.work.noCapture,
+              }}
+            />
+          }
+        />
         <Release copy={site.release} sections={sections} />
       </Opening>
       <Work

@@ -38,6 +38,19 @@ describe('Contact', () => {
     expect(link).toHaveAttribute('rel', 'noopener noreferrer')
   })
 
+  it('cada canal tem cartão com o endereço, fora do nome acessível', () => {
+    renderContact()
+    for (const channel of siteEn.contact.channels) {
+      const address = channel.href.replace(/^https?:\/\//, '')
+      const card = screen.getByText(address).closest('[aria-hidden="true"]')
+      expect(card, address).not.toBeNull()
+      expect(card).toHaveTextContent(channel.peek.mark)
+      expect(card).toHaveTextContent(channel.peek.note)
+    }
+    expect(screen.getByText('github.com/decoarc')).toBeInTheDocument()
+    expect(screen.getAllByRole('link')).toHaveLength(2)
+  })
+
   it('mostra exatamente os dois canais', () => {
     renderContact()
     expect(screen.getAllByRole('link')).toHaveLength(2)

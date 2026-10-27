@@ -1,15 +1,18 @@
-import { Fragment } from 'react'
+import { Fragment, type ReactNode } from 'react'
 import type { SiteContent } from '../../content/types.ts'
+import { ActionLink } from '../../components/ActionLink/ActionLink.tsx'
 import { Sheet } from '../../components/Sheet/Sheet.tsx'
 import styles from './Hero.module.css'
 
 interface HeroProps {
   person: SiteContent['person']
   copy: SiteContent['hero']
+  /** Prévia decorativa do CTA primário (a tira de capas). */
+  ctaPeek?: ReactNode
 }
 
 /** Frontispício: só tipografia, portado do comp 02. */
-export function Hero({ person, copy }: HeroProps) {
+export function Hero({ person, copy, ctaPeek }: HeroProps) {
   // Cada linha corta o que passa da sua altura (a fenda da entrada) e se
   // afasta para um lado no scroll; o espaço entre elas mantém o nome acessível.
   const [first, ...rest] = person.name.split(' ')
@@ -39,12 +42,22 @@ export function Hero({ person, copy }: HeroProps) {
       <p className={styles.role}>{person.role}</p>
       <p className={styles.statement}>{copy.statement}</p>
       <div className={styles.actions}>
-        <a className={`${styles.action} ${styles.primary}`} href="#work">
+        <ActionLink
+          href="#work"
+          tone="strong"
+          className={styles.action}
+          peek={ctaPeek}
+          peekClassName={styles.strip}
+        >
           {copy.ctaPrimary}
-        </a>
-        <a className={`${styles.action} ${styles.ghost}`} href="#contact">
+        </ActionLink>
+        <ActionLink
+          href="#contact"
+          tone="quiet"
+          className={`${styles.action} ${styles.ghost}`}
+        >
           {copy.ctaSecondary}
-        </a>
+        </ActionLink>
       </div>
       <p className={styles.location}>{person.location}</p>
     </Sheet>
