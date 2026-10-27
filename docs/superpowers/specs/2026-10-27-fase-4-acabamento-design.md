@@ -182,12 +182,25 @@ Por isso:
 - O `public/_redirects` perde o `/* /index.html 200`. Como regra vence arquivo,
   ele mandaria tudo para a home. O arquivo passa a ter só redirecionamentos
   explícitos, se algum for necessário (por exemplo `/pt/` para `/pt`).
-- **A verificar no primeiro passo da implementação:** que `/pt` é servido por
-  `pt.html` mesmo com a pasta `dist/pt/` ao lado, e que `/pt/x` recebe
-  `pt/404.html`. Fazer com `npx wrangler pages dev dist` (sem instalar
-  dependência). Se o Pages se comportar diferente, a saída é
-  `pt/index.html` com URL canônica `/pt/`, e esta seção é atualizada antes
-  de seguir.
+- **Verificado com `npx wrangler pages dev` em 2026-10-27** (site mínimo com
+  `index.html`, `pt.html`, `pt/work/x.html`, `work/x.html`, `404.html`,
+  `pt/404.html` e `_redirects` com `/pt/ /pt 301`):
+
+  | URL | Resposta |
+  | --- | --- |
+  | `/` | 200, `index.html` |
+  | `/pt` | 200, `pt.html` (a pasta `pt/` ao lado não atrapalha) |
+  | `/pt/` | 301 para `/pt` (pela regra do `_redirects`) |
+  | `/PT` | 200, `pt.html` (caixa não importa) |
+  | `/pt/work/x` | 200, `pt/work/x.html` |
+  | `/pt/work/x/` | 308 para `/pt/work/x` |
+  | `/pt/nada` | 404, `pt/404.html` |
+  | `/nada` | 404, `404.html` |
+  | `/work/x.html` | 308 para `/work/x` |
+  | `/work/x/` | 308 para `/work/x` |
+
+  Sem `404.html` na raiz (modo SPA): `/nada` e `/pt/nada` devolvem
+  `index.html` com 200; `/pt` continua em `pt.html`.
 
 **Preview local.** O `vite-spa-fallback.ts` vira um plugin que imita essas
 regras no `vite preview`: arquivo exato, depois `<caminho>.html`, depois

@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "node scripts/assert-no-mock.ts && tsc -b && vite build",
-    "build:preview": "node scripts/assert-no-mock.ts --allow-mock && tsc -b && vite build",
+    "build:preview": "node scripts/assert-no-mock.ts --allow-mock && tsc -b && vite build --mode preview",
     "preview": "vite preview",
     "typecheck": "tsc -b --pretty false",
     "lint": "eslint .",
