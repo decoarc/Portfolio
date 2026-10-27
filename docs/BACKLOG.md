@@ -23,6 +23,50 @@ dele. Ideia do dono, registrada no Gate 1.
   se uma substitui a outra.
 - **Registrar em:** `docs/MOTION_SPEC.md` quando implementado — objetivo,
   gatilho, estados, duração, alternativa reduced-motion, fallback sem JS.
+- **Referência levantada (2026-10-26):** a lista de trabalhos de
+  dennissnellenberg.com — a prévia segue o cursor com um círculo "View", o
+  título da linha recua e as outras linhas esmaecem.
+
+## Interação e motion — depois da abertura da home
+
+A Fase 3 começou só com a abertura da home (nome se afastando e folha do índice
+subindo com borda curva). Os efeitos abaixo vieram do mesmo levantamento de
+referências (yasingenc.net e dennissnellenberg.com, 2026-10-26) e ficaram para
+depois por decisão do dono. Momento: depois do Gate 3 aprovar a abertura, como
+segunda leva de motion — antes ou durante a Fase 4, a decidir naquele gate.
+Todos seguem as regras de `docs/MOTION_SPEC.md` (reduced-motion, teclado,
+fallback sem JS) e reaproveitam o scroll suave já instalado.
+
+### A folha cobre o nome no meio do afastamento
+
+Na abertura aprovada, a folha do índice sobe ao mesmo tempo que o nome se
+afasta e o cobre antes de o movimento terminar. O dono notou e escolheu manter
+assim por ora. Já foram testadas e recusadas duas alternativas (protótipo v5):
+segurar o hero até o nome terminar e só então subir a folha, e manter o nome por
+cima da folha até ela chegar ao topo. Se voltar ao tema, partir de outra ideia.
+
+### Texto que acende com o scroll
+
+Parágrafos começam apagados e clareiam palavra por palavra conforme a rolagem
+(referência: yasingenc.net). Candidatos: Abordagem e Sobre. Cuidado: o texto
+precisa estar legível sem o efeito e para leitor de tela desde o primeiro frame.
+
+### Lista de trabalhos reagindo ao mouse
+
+A parte tipográfica do preview no hover (título recua, outras linhas esmaecem)
+não depende de mídia e pode vir antes da prévia com imagem. Ver o item
+"Preview de projeto no hover" acima.
+
+### Cortina ao abrir um case study
+
+Na troca da home para `/work/:slug`, uma tela com o nome do projeto antes do
+conteúdo (referência: dennissnellenberg.com). Exige uma camada de transição
+no router; o link precisa funcionar em `t=0` e o foco ir para o conteúdo novo.
+
+### Botões e links que se enchem de cor no hover
+
+Preenchimento subindo de baixo para cima nos links de ação do hero e do contato
+(referência: dennissnellenberg.com). Precisa de equivalente em `:focus-visible`.
 
 ## Ferramental — depois da implementação visual
 

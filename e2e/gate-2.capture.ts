@@ -11,6 +11,9 @@ const LOCALES = [
   { name: 'pt', path: '/pt', prefix: '/pt' },
 ] as const
 
+/** O Gate 2 é o site sem motion: desde a Fase 3, isso exige reduced motion. */
+test.use({ reducedMotion: 'reduce' })
+
 for (const viewport of VIEWPORTS) {
   for (const locale of LOCALES) {
     test(`gate 2 · home · ${viewport.name} · ${locale.name}`, async ({

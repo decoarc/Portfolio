@@ -5,6 +5,23 @@
 .release {
   --sheet-pad-block-start: clamp(32px, 6vh, 64px);
   --sheet-pad-block-end: clamp(32px, 6vh, 64px);
+  /* Sobe por cima do hero preso. */
+  position: relative;
+  z-index: 1;
+}
+
+/* Borda curva da folha que sobe sobre o hero: o meio mais alto que as pontas.
+   A altura vem de `--opening-curve` (vh), escrita pelo `Opening`; 0 em repouso. */
+.release::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 100%;
+  height: calc(var(--opening-curve, 0) * 1vh);
+  background: var(--surface);
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+  pointer-events: none;
 }
 
 .list {

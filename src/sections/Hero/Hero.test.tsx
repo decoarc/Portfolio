@@ -26,4 +26,30 @@ describe('Hero', () => {
       screen.getByRole('link', { name: siteEn.hero.ctaSecondary }),
     ).toHaveAttribute('href', '#contact')
   })
+
+  it('divide o nome em duas linhas que se afastam em sentidos opostos', () => {
+    const { container } = render(
+      <Hero person={siteEn.person} copy={siteEn.hero} />,
+    )
+    const drifts = [...container.querySelectorAll('[data-drift]')]
+    expect(drifts.map((el) => el.getAttribute('data-drift'))).toEqual([
+      '-1',
+      '1',
+    ])
+    expect(drifts.map((el) => el.textContent)).toEqual(['André', 'Arcodaci'])
+  })
+
+  it('nome com três palavras: as demais vão juntas na segunda linha', () => {
+    const { container } = render(
+      <Hero
+        person={{ ...siteEn.person, name: 'Ana Maria Souza' }}
+        copy={siteEn.hero}
+      />,
+    )
+    const drifts = [...container.querySelectorAll('[data-drift]')]
+    expect(drifts.map((el) => el.textContent)).toEqual(['Ana', 'Maria Souza'])
+    expect(
+      screen.getByRole('heading', { level: 1, name: 'Ana Maria Souza' }),
+    ).toBeInTheDocument()
+  })
 })
