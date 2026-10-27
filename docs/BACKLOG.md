@@ -20,6 +20,23 @@ Hoje só `<title>` e `lang` mudam com o locale (Fase 2). Faltam `hreflang`,
 `description` e Open Graph por idioma. O mecanismo entra na Fase 4; os textos
 de `description` e Open Graph são revistos na Fase 5, com o conteúdo real.
 
+### Acessibilidade — P3 da auditoria da Fase 4
+
+Achados menores de `docs/gate-4/A11Y_AUDIT.md`, sem falha de critério AA:
+
+- **"sem captura" cortado na miniatura com texto a 200%** (até 334 px em
+  320). A miniatura é decorativa (`aria-hidden`) e repete o tipo e o título da
+  ficha. **Por quê adiado:** some com as capturas reais da Fase 5.
+- **Alto contraste: o traço dos CTAs e dos canais e o círculo do monograma do
+  cartão somem.** O link segue identificado por `LinkText` e pelo foco; o
+  monograma é decorativo. **Fazer, se quiser:** `border-bottom` em
+  `CanvasText` no traço, dentro de `@media (forced-colors: active)`.
+- **Tipo da ficha encosta na miniatura com texto a 200%** em 320 px (o
+  espaçamento de letra final de "CONCEPT" toca a moldura). Nada some.
+- **Números de seção e de ficha lidos como texto solto** ("01" antes do `h2`,
+  parágrafo "01" na ficha). **Quando:** confirmar com o NVDA do Gate 4; se
+  incomodar, `aria-hidden` no número.
+
 ## Fase 5 — Conteúdo real e publicação
 
 O conteúdo mock fica até o fim e só é trocado quando o repositório for

@@ -21,22 +21,22 @@ estilo inline, não script inline).
 
 0 = falha grave, 2 = falha pontual, 3 = passa com ressalva, 4 = passa.
 
-| Critério | Método | Antes | Achado |
-| --- | --- | --- | --- |
-| 1.4.4 Redimensionar texto | `html { font-size: 32px }` em 320 | 2 | "Arcodaci" cortado pelo `overflow-x: clip` do hero; CTA PT cortado; masthead 2 px além |
-| 1.4.10 Reflow | `scrollWidth` em 320 (texto normal e 200%) | 2 | Rolagem horizontal em `/`, `/pt` (cartões do contato) e `/pt/work/map-areas` (stack) |
-| 1.4.11 Contraste não textual | razão das cores calculadas | 3 | Foco 5,54:1 / 6,29:1. Filetes `--rule` 2,10:1 / 2,39:1, decorativos |
-| 1.4.12 Espaçamento de texto | estilo WCAG injetado, 4 larguras × 6 rotas | 2 | Stack do case vaza em 320 e 390; cartões do contato em 320 |
-| 1.4.13 Conteúdo no hover | `e2e/hover.spec.ts` (Escape, cartão que aceita o cursor) | 4 | — |
-| 2.4.3 / 2.4.7 Ordem e foco visível | Tab e Shift+Tab, 390 e 1440, EN e PT | 4 | — |
-| 2.4.11 Foco não escondido | `elementFromPoint` em 9 pontos do foco a cada Tab | 4 | — |
-| 2.5.8 Tamanho do alvo | `getBoundingClientRect` de todo `a`/`button` | 4 | Menores de 24 px passam pela exceção de espaçamento |
-| 3.1.1 / 3.1.2 Idioma | `lang` do `<html>` e do seletor | 4 | — |
-| 4.1.2 Nome e papel | `ariaSnapshot` | 4 | — |
-| Leitor de tela (árvore) | `ariaSnapshot` de `main`, home e case, EN e PT | 4 | — |
-| Alto contraste (`forced-colors`) | emulação + capturas | 2 | A borda da folha que sobe some na abertura |
-| Reduced motion no meio da sessão | `emulateMedia` + `goBack` | 2 | Fade padrão de 250 ms da View Transition |
-| **Total** | | **41/52** | **Bom; corrigir os P1 e P2 antes do Gate 4** |
+| Critério | Método | Antes | Depois | Achado |
+| --- | --- | --- | --- | --- |
+| 1.4.4 Redimensionar texto | `html { font-size: 32px }` em 320 | 2 | 4 | "Arcodaci" cortado pelo `overflow-x: clip` do hero; CTA PT cortado; convite do contato além da tela (correções 3, 4, 8) |
+| 1.4.10 Reflow | `scrollWidth` em 320 (texto normal e 200%) | 2 | 4 | Rolagem horizontal em `/`, `/pt` (cartões do contato), `/pt/work/map-areas` (stack) e masthead a 200% (correções 1, 2, 5) |
+| 1.4.11 Contraste não textual | razão das cores calculadas | 3 | 3 | Foco 5,54:1 / 6,29:1. Filetes `--rule` 2,10:1 / 2,39:1, decorativos (aguardando o dono) |
+| 1.4.12 Espaçamento de texto | estilo WCAG injetado, 4 larguras × 6 rotas | 2 | 4 | Stack do case vaza em 320 e 390; cartões do contato em 320 (correções 1, 2) |
+| 1.4.13 Conteúdo no hover | `e2e/hover.spec.ts` (Escape, cartão que aceita o cursor) | 4 | 4 | — |
+| 2.4.3 / 2.4.7 Ordem e foco visível | Tab e Shift+Tab, 390 e 1440, EN e PT | 4 | 4 | — |
+| 2.4.11 Foco não escondido | `elementFromPoint` em 9 pontos do foco a cada Tab | 4 | 4 | — |
+| 2.5.8 Tamanho do alvo | `getBoundingClientRect` de todo `a`/`button` | 4 | 4 | Menores de 24 px passam pela exceção de espaçamento |
+| 3.1.1 / 3.1.2 Idioma | `lang` do `<html>` e do seletor | 4 | 4 | — |
+| 4.1.2 Nome e papel | `ariaSnapshot` | 4 | 4 | — |
+| Leitor de tela (árvore) | `ariaSnapshot` de `main`, home e case, EN e PT | 4 | 4 | NVDA real fica com o dono no Gate 4 |
+| Alto contraste (`forced-colors`) | emulação + capturas + axe | 2 | 4 | A borda da folha que sobe sumia na abertura (correção 7) |
+| Reduced motion no meio da sessão | `emulateMedia` + `goBack` | 2 | 4 | Fade padrão de 250 ms da View Transition (correção 6) |
+| **Total** | | **41/52** | **51/52** | **Antes: bom, corrigir P1 e P2. Depois: P0–P2 corrigidos; resta a decisão do dono sobre os filetes** |
 
 ## O que já vale
 
@@ -237,18 +237,30 @@ varredura por texto, depois das correções 1–5)
   com o fundo forçado e acusa 1,36:1 e 2,86:1. As cores de sistema passam a
   ser declaradas no próprio modo, sem mudar o que aparece.
 
+### Aguardando o dono
+
+- **Filetes `--rule` abaixo de 3:1** (2,10:1 no `--bg`, 2,39:1 no `--surface`;
+  o mesmo tom é o sublinhado do "Live demo" e o traço do CTA secundário). A
+  leitura desta auditoria: os filetes separam itens que já se separam por
+  espaço, título e número, e os links se identificam pela posição e pela seta,
+  então ficam fora do 1.4.11 e do 1.4.1. Se o dono entender que algum filete é
+  necessário para entender o conteúdo, a correção muda a paleta aprovada.
+  **Proposta:** `--rule` para um tom com 3:1 nos dois fundos (em torno de
+  `#8c7b55`, a confirmar na medida), ou só o sublinhado dos links inline em
+  `--ink-muted`. **Medida:** 2,10:1 e 2,39:1; **critério:** 1.4.11.
+
 ### P3 — vão para `docs/BACKLOG.md`
 
-- **Filetes `--rule` abaixo de 3:1** (2,10:1 no `--bg`, 2,39:1 no `--surface`).
-  Separam itens que já se separam por espaço, título e número; não são
-  necessários para entender o conteúdo, então ficam fora do 1.4.11. Subir o
-  `--rule` mudaria a paleta aprovada.
 - **"sem captura" cortado na miniatura com texto a 200%** (até 334 px em 320,
   404 px em 390). A miniatura é decorativa (`aria-hidden`) e repete o tipo e o
   título da ficha.
 - **Alto contraste: traço dos CTAs e dos canais e o círculo do monograma
   somem.** O link continua identificado pela cor `LinkText` e pelo foco; o
   monograma é decorativo.
+- **Tipo da ficha encosta na miniatura com texto a 200%.** Em 320 com raiz
+  32 px, "CONCEPT STUDY" quebra em duas linhas, mas o espaçamento de letra
+  final de "CONCEPT" encosta na moldura da miniatura (caixa de 142 px,
+  conteúdo de 176 px). Nada some nem passa da tela.
 - **Números de seção e de ficha lidos como texto solto** ("01" antes do `h2`,
   parágrafo "01" na ficha). Não é falha; é ruído para leitor de tela que o NVDA
   do Gate 4 pode confirmar.
@@ -268,3 +280,23 @@ Cada linha: critério, antes → depois, propriedade. O teste está em
 | 5 | 1.4.10 | 200% em 320: "Português" até 322 px, `scrollWidth` 322 no case e no 404 → 320; com texto normal a barra continua com uma linha de 48 px | `Masthead.module.css`: `flex-wrap: wrap`, `height` → `min-height` |
 | 8 | 1.4.4, 1.4.10 | `/`, 200% em 320: "collaborations," até 350 px, `scrollWidth` 350 → 320 | `Contact.module.css`: `.lead { overflow-wrap: anywhere }` |
 | 7 | 1.4.11 em `forced-colors: active` | Borda da folha no meio da subida: nenhuma linha → 2 px `CanvasText` na curva; axe em alto contraste nas `GATE_ROUTES`: 9 nós do placeholder em `color-contrast` → 0 | `Release.module.css`: `.release::before { box-sizing: content-box; border-top: 2px solid CanvasText }`; `ProjectThumb.module.css`: `.placeholder { background: Canvas }`, `.placeholder, .line { color: CanvasText }`; tudo em `@media (forced-colors: active)` |
+
+## Estado depois
+
+2026-10-27, depois das correções, contra `pnpm build:preview` + `pnpm preview`:
+
+- `e2e/a11y-audit.spec.ts` (49 testes) verde: a varredura mede o texto
+  (`Range`) em todas as `GATE_ROUTES`, a 200% em 320 px e com o espaçamento
+  de texto em 320, 390, 768 e 1440 — nenhum trecho além da janela e
+  `scrollWidth` igual à largura em todas. Mais os testes de cada achado, o
+  alto contraste e o reduced motion no meio da sessão.
+- `e2e/a11y.spec.ts`: axe sem violações nem `color-contrast` incompleto nas
+  seis rotas, com e sem `forcedColors: 'active'`.
+- A suíte inteira (`pnpm test:e2e`, 228 testes) e `pnpm test` (245) verdes.
+- Com texto normal, nada mudou de lugar: todas as correções só agem quando a
+  palavra ou a barra não cabem (`overflow-wrap`, `flex-wrap`, `max-width`,
+  `pre-wrap`) ou dentro de `@media (forced-colors: active)` e
+  `@media (prefers-reduced-motion: reduce)`. As suítes de regressão do hover,
+  da abertura, da entrada e do responsivo seguem verdes.
+- Pendente do dono no Gate 4: NVDA real nos pontos críticos e a decisão sobre
+  os filetes (acima).
