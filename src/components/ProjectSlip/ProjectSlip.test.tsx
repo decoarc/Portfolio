@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import type { ReactNode } from 'react'
-import { MemoryRouter } from 'react-router'
+import { createMemoryRouter, RouterProvider } from 'react-router'
 import { describe, expect, it } from 'vitest'
 import { siteEn } from '../../content/en/site.ts'
 import type { Project } from '../../content/types.ts'
@@ -29,12 +29,10 @@ const labels = {
   links: siteEn.links,
 }
 
+// Data router: a ficha usa `useViewTransitionState`, que exige um.
 function renderSlip(node: ReactNode) {
-  return render(
-    <MemoryRouter>
-      <ol>{node}</ol>
-    </MemoryRouter>,
-  )
+  const router = createMemoryRouter([{ path: '*', element: <ol>{node}</ol> }])
+  return render(<RouterProvider router={router} />)
 }
 
 describe('ProjectSlip', () => {

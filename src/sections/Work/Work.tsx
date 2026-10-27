@@ -1,3 +1,6 @@
+import { useEffect, useState } from 'react'
+import { useLocation } from 'react-router'
+import { wantsInstantScroll } from '../../app/navigationState.ts'
 import type { Locale, Project, SiteContent } from '../../content/types.ts'
 import { caseStudyHref, listProjects } from '../../content/publication.ts'
 import { ProjectSlip } from '../../components/ProjectSlip/ProjectSlip.tsx'
@@ -20,8 +23,27 @@ interface WorkProps {
 
 const HEADING_ID = 'work-heading'
 
+/** Primeiro gesto que devolve a reação da lista depois do pouso. */
+const WAKE_EVENTS = ['pointermove', 'keydown', 'wheel', 'touchstart'] as const
+
 /** Trabalhos selecionados: as lâminas do arquivo, separadas por filetes. */
 export function Work({ index, copy, projects, locale, labels }: WorkProps) {
+  // Na volta de um case, a ficha pousa em repouso: o cursor parado sobre
+  // outra ficha não a esmaece nem desloca o título que chega. A reação volta
+  // no primeiro gesto.
+  const { state } = useLocation()
+  const [settling, setSettling] = useState(() => wantsInstantScroll(state))
+
+  useEffect(() => {
+    if (!settling) return
+    const wake = () => setSettling(false)
+    for (const type of WAKE_EVENTS)
+      window.addEventListener(type, wake, { once: true, passive: true })
+    return () => {
+      for (const type of WAKE_EVENTS) window.removeEventListener(type, wake)
+    }
+  }, [settling])
+
   return (
     <Sheet tone="sheet" id="work" labelledBy={HEADING_ID}>
       <SectionHead
@@ -30,7 +52,7 @@ export function Work({ index, copy, projects, locale, labels }: WorkProps) {
         title={copy.label}
         intro={copy.intro}
       />
-      <ol className={styles.list}>
+      <ol className={styles.list} data-settling={settling || undefined}>
         {listProjects(projects).map((project, position) => (
           <ProjectSlip
             key={project.slug}

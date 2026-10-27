@@ -1,6 +1,7 @@
-import { render, screen, within } from '@testing-library/react'
-import { MemoryRouter } from 'react-router'
+import { fireEvent, render, screen, within } from '@testing-library/react'
+import { createMemoryRouter, RouterProvider } from 'react-router'
 import { describe, expect, it } from 'vitest'
+import { INSTANT_SCROLL } from '../../app/navigationState.ts'
 import { siteEn } from '../../content/en/site.ts'
 import { sitePt } from '../../content/pt/site.ts'
 import type { Locale, Project, SiteContent } from '../../content/types.ts'
@@ -29,18 +30,27 @@ function renderWork(
   projects: Project[],
   locale: Locale = 'en',
   site: SiteContent = siteEn,
+  state: unknown = null,
 ) {
-  return render(
-    <MemoryRouter>
-      <Work
-        index={1}
-        copy={site.work}
-        projects={projects}
-        locale={locale}
-        labels={{ projectType: site.projectType, links: site.links }}
-      />
-    </MemoryRouter>,
+  // Data router: as fichas usam `useViewTransitionState`, que exige um.
+  const router = createMemoryRouter(
+    [
+      {
+        path: '*',
+        element: (
+          <Work
+            index={1}
+            copy={site.work}
+            projects={projects}
+            locale={locale}
+            labels={{ projectType: site.projectType, links: site.links }}
+          />
+        ),
+      },
+    ],
+    { initialEntries: [{ pathname: '/', state }] },
   )
+  return render(<RouterProvider router={router} />)
 }
 
 function slipNumbers(): string[] {
@@ -94,5 +104,28 @@ describe('Work', () => {
       screen.getByRole('heading', { level: 2, name: siteEn.work.label }),
     ).toBeVisible()
     expect(screen.getByText(siteEn.work.intro)).toBeVisible()
+  })
+
+  it('vindo de um case (rolagem imediata), a lista pousa em repouso até o primeiro gesto', () => {
+    renderWork(makeProjects(2), 'en', siteEn, INSTANT_SCROLL)
+    const list = screen.getByRole('list')
+    expect(list).toHaveAttribute('data-settling')
+    fireEvent.pointerMove(window)
+    expect(list).not.toHaveAttribute('data-settling')
+  })
+
+  for (const type of ['keyDown', 'wheel', 'touchStart'] as const) {
+    it(`o repouso também acaba com ${type}`, () => {
+      renderWork(makeProjects(2), 'en', siteEn, INSTANT_SCROLL)
+      const list = screen.getByRole('list')
+      expect(list).toHaveAttribute('data-settling')
+      fireEvent[type](window)
+      expect(list).not.toHaveAttribute('data-settling')
+    })
+  }
+
+  it('numa visita comum, a lista não fica em repouso', () => {
+    renderWork(makeProjects(2))
+    expect(screen.getByRole('list')).not.toHaveAttribute('data-settling')
   })
 })

@@ -7,6 +7,7 @@ import {
   workAnchor,
 } from '../content/publication.ts'
 import { localePath } from '../lib/locale.ts'
+import { canFly, markTitleFlight } from '../motion/titleFlight.ts'
 import styles from './CaseStudyRoute.module.css'
 import { INSTANT_SCROLL } from './navigationState.ts'
 import { useContent, useLocale } from './LocaleContext.ts'
@@ -34,6 +35,10 @@ export function CaseStudyRoute() {
         to={localePath(locale, `/#${workAnchor(project.slug)}`)}
         state={INSTANT_SCROLL}
         className={styles.back}
+        // Só o case com ficha clicável volta voando: a do preview não tem
+        // link para receber o título.
+        viewTransition={access === 'full' && canFly()}
+        onClick={() => markTitleFlight('close')}
       >
         {copy.backToWork}
       </Link>
@@ -49,7 +54,7 @@ export function CaseStudyRoute() {
           tabIndex={-1}
           data-route-focus
         >
-          {project.title}
+          <span className={styles.titleText}>{project.title}</span>
         </h1>
         {project.type === 'concept' && (
           <p className={styles.notice}>{copy.conceptNotice}</p>
