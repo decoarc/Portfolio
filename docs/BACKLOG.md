@@ -40,18 +40,20 @@ texto mock (texto que acende, lista reagindo ao mouse) é revisto na Fase 5.
 Todos seguem as regras de `docs/MOTION_SPEC.md` (reduced-motion, teclado,
 fallback sem JS) e reaproveitam o scroll suave já instalado.
 
-Ordem sugerida: os dois ajustes da abertura, links que se enchem de cor, lista
-reagindo ao mouse, texto que acende, cortina do case study (a mais cara, mexe
-no router).
+Ordem sugerida: links que se enchem de cor, lista reagindo ao mouse, texto que
+acende, cortina do case study (a mais cara, mexe no router). Os dois ajustes
+pequenos da abertura (parar de reescrever com a folha no topo; `ScrollManager`
+como único dono da rolagem até âncoras) foram feitos em 2026-10-27.
 
-### Ajustes pequenos da abertura
+### O axe falha em `/` e `/pt`
 
-Dois pontos que ficaram do review da Fase 3:
-
-- a abertura reescreve os valores a cada scroll mesmo depois que a folha chega
-  ao topo — parar de escrever quando o estado final já foi aplicado;
-- a opção `anchors` do Lenis repete o que o `ScrollManager` já faz — ficar com
-  um só dono para a rolagem até âncoras.
+Achado em 2026-10-27, ao rodar `pnpm test:e2e` na segunda leva: `e2e/a11y.spec.ts`
+falha em `/` e `/pt` em 10 de 10 repetições, também no commit anterior a ela. O
+axe devolve `color-contrast` como _incomplete_ (não consegue decidir o
+contraste) para as palavras do nome no hero e para a frase de apresentação
+(`statement`). Provável causa: o axe roda com a entrada do nome ainda em curso
+ou sob o hero preso da abertura. Investigar antes de seguir com efeitos novos
+na home.
 
 ### A folha cobre o nome no meio do afastamento
 

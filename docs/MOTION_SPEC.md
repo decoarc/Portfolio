@@ -93,14 +93,14 @@ Valem para todo efeito, este e os próximos. Vêm de `docs/SPEC.md` §5.
 | | |
 |---|---|
 | Objetivo | Continuidade: o scroll da roda e do trackpad desliza em vez de saltar |
-| Elemento | A página inteira (Lenis 1.3.26, `lerp 0.09`, `anchors: true`) |
+| Elemento | A página inteira (Lenis 1.3.26, `lerp 0.09`) |
 | Gatilho | Roda do mouse, trackpad, links de âncora |
 | Estado inicial / final | — |
 | Duração e easing | Interpolação do Lenis; âncoras com a duração padrão dele |
 | Toque | Nativo (padrão do Lenis) |
 | Reduced motion | Lenis não é iniciado; scroll nativo e salto direto para âncoras |
 | Sem JS | Scroll nativo |
-| Navegação | O `ScrollManager` rola por `scrollToTarget`/`scrollToTop` e remede a página a cada navegação (o Lenis só remede sozinho com 250 ms de atraso) |
+| Navegação | O `ScrollManager` é o único dono da rolagem: intercepta cliques em links `#hash` (sem o salto nativo), navega pelo router, rola por `scrollToTarget`/`scrollToTop`, foca o destino e remede a página a cada navegação (o Lenis só remede sozinho com 250 ms de atraso). O Lenis roda sem `anchors` |
 | Evidência | `e2e/smooth-scroll.spec.ts` |
 
 ## Próximos efeitos
