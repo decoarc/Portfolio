@@ -131,6 +131,13 @@ test.describe('1.4.4 · texto a 200% em 320 px', () => {
   }
 })
 
+test.describe('1.4.4 · texto a 200% em 320 px · PT', () => {
+  test('CTA e títulos de seção cabem', async ({ page }) => {
+    await open(page, '/pt', 320, TEXT_200)
+    expect(await textPastEdge(page, 'main')).toEqual([])
+  })
+})
+
 test.describe('reduced motion ligado no meio da sessão', () => {
   test('voltar do case não anima a View Transition', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'no-preference' })

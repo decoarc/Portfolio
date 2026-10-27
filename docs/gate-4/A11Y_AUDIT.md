@@ -169,17 +169,19 @@ Nenhum.
 - **Correção mínima:** a palavra pode quebrar quando não cabe
   (`overflow-wrap: anywhere`). Com texto normal ela cabe e nada muda.
 
-**4. CTA e títulos de seção em PT passam da tela com texto a 200%**
+**4. CTA, índice e títulos de seção em PT passam da tela com texto a 200%**
 
 - **Onde:** `ActionLink` `.link { white-space: nowrap }` no hero;
-  `SectionHead` `.title`.
+  `SectionHead` `.title`; rótulo do índice (`Release`).
 - **Medida:** `/pt` em 320 com raiz 32 px: o CTA "Trabalhos selecionados" vai
-  até 366 px e é cortado pelo hero; o `h2` "Trabalhos selecionados" até 379 px
+  até 366 px e é cortado pelo hero; a entrada do índice "Trabalhos
+  selecionados" até 362 px; o `h2` "Trabalhos selecionados" até 379 px
   ("selecionados" sozinho mede 288 px), "Abordagem" até 355, "Interesses" até
   321.
 - **WCAG:** 1.4.4 Redimensionar texto, 1.4.10 Reflow.
-- **Correção mínima:** CTA do hero com quebra normal; título de seção com
-  `overflow-wrap: anywhere`. Com texto normal nada quebra.
+- **Correção mínima:** CTA do hero com quebra normal; título de seção e
+  rótulo do índice com `overflow-wrap: anywhere`. Com texto normal nada
+  quebra.
 
 ### P2
 
@@ -244,3 +246,4 @@ Cada linha: critério, antes → depois, propriedade. O teste está em
 | 2 | 1.4.10, 1.4.12, 1.4.4 | `/pt/work/map-areas` em 320: `scrollWidth` 348 (normal), 420 (espaçamento), 650 (200%) → 320 | `CaseStudyRoute.module.css`: separador da stack `white-space: pre` → `pre-wrap`; `.facts` `overflow-wrap: anywhere` (antes só a partir de 768, `break-word`); `.text` `grid-template-columns: minmax(0, 1fr)` e `overflow-wrap: break-word` |
 | 1 | 1.4.10 | `/` e `/pt` em 320: `scrollWidth` 326 → 320; cartão do LinkedIn aberto de 46–326 px → dentro da janela, também a 200% | `Contact.module.css`: `.card { max-width: 100% }` abaixo de 768 px; `.address { overflow-wrap: anywhere }` |
 | 3 | 1.4.4 | 200% em 320: "Arcodaci" até 341 px, cortado pelo hero em 320 → quebra dentro da coluna, inteiro | `Hero.module.css`: `.name { overflow-wrap: anywhere }` |
+| 4 | 1.4.4, 1.4.10 | `/pt`, 200% em 320: CTA até 366 px (cortado), índice até 362, `h2` até 379 → tudo dentro da janela | `Hero.module.css`: `.actions .action { white-space: normal }`; `SectionHead.module.css` `.title` e `Release.module.css` `.label`: `overflow-wrap: anywhere` |

@@ -52,6 +52,12 @@
   color: var(--accent);
 }
 
+/* Com texto a 200% em 320 px, "SELECIONADOS" sozinho não cabe ao lado do
+   número (WCAG 1.4.4, 1.4.10): só então a palavra quebra. */
+.label {
+  overflow-wrap: anywhere;
+}
+
 .index {
   flex: none;
   font-size: var(--text-meta);

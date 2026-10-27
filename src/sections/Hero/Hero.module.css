@@ -236,6 +236,15 @@
   color: var(--ink-muted);
 }
 
+/* O `ActionLink` não quebra linha (`nowrap`). Com texto a 200% em 320 px,
+   "Trabalhos selecionados" passava da coluna e o `overflow-x: clip` do hero o
+   cortava (WCAG 1.4.4): aqui o CTA quebra quando não cabe. No tamanho normal
+   ele cabe numa linha e nada muda. Dois seletores, para não depender da ordem
+   do CSS no bundle. */
+.actions .action {
+  white-space: normal;
+}
+
 /* Tira de capas do CTA primário. Só a partir de 1200px há espaço livre: acima
    da régua de CTAs, nas colunas 8–12, ao lado do nome (colunas 1–7). Abaixo
    disso a função e o statement ficam logo acima dos CTAs e não há onde pô-la
