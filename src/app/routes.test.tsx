@@ -1,4 +1,4 @@
-import { render, screen, within } from '@testing-library/react'
+import { act, render, screen, within } from '@testing-library/react'
 import { createMemoryRouter, RouterProvider } from 'react-router'
 import { describe, expect, it } from 'vitest'
 import { createRoutes } from './routes.tsx'
@@ -96,4 +96,44 @@ describe('rotas por locale', () => {
       within(footer).getByText('André Arcodaci — Full Stack Developer'),
     ).toBeVisible()
   })
+})
+
+describe('head por rota na navegação', () => {
+  it('navegar da home ao case troca o head sem duplicar', async () => {
+    const router = createMemoryRouter(createRoutes(), {
+      initialEntries: ['/pt'],
+    })
+    render(<RouterProvider router={router} />)
+    await screen.findByRole('banner')
+    expect(
+      document.querySelector('link[rel="canonical"]')?.getAttribute('href'),
+    ).toBe('http://localhost:5173/pt')
+    await act(() => router.navigate('/pt/work/map-areas'))
+    expect(document.querySelectorAll('link[rel="canonical"]')).toHaveLength(1)
+    expect(
+      document.querySelector('link[rel="canonical"]')?.getAttribute('href'),
+    ).toBe('http://localhost:5173/pt/work/map-areas')
+    await act(() => router.navigate('/pt/nada'))
+    expect(
+      document.querySelector('meta[name="robots"]')?.getAttribute('content'),
+    ).toBe('noindex')
+    expect(document.querySelector('link[rel="canonical"]')).toBeNull()
+  })
+
+  it('slug inválido recebe o head de 404', async () => {
+    renderAt('/work/nao-existe')
+    await screen.findByRole('heading', { name: 'Page not found' })
+    expect(
+      document.querySelector('meta[name="robots"]')?.getAttribute('content'),
+    ).toBe('noindex')
+  })
+
+  it.each(['/', '/work/token-killer', '/nada'])(
+    '%s não renderiza <title> no corpo',
+    async (url) => {
+      const { container } = renderAt(url)
+      await screen.findByRole('main')
+      expect(container.querySelector('title')).toBeNull()
+    },
+  )
 })
