@@ -1,7 +1,7 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { Opening } from './Opening.tsx'
-import { scrollToTop } from './smoothScroll.ts'
+import { onScroll, scrollToTop } from './smoothScroll.ts'
 
 vi.mock('./smoothScroll.ts', () => ({
   onScroll: vi.fn(() => () => undefined),
@@ -103,6 +103,19 @@ describe('Opening', () => {
     expect(
       Number(root(container).style.getPropertyValue('--opening-drift')),
     ).toBe(40)
+  })
+
+  it('com a folha no topo, rolar mais não reescreve os valores', () => {
+    setWindow(900, 1440, 900)
+    const { container } = renderOpening()
+    const listener = vi.mocked(onScroll).mock.calls.at(-1)![0]
+    const spy = vi.spyOn(root(container).style, 'setProperty')
+    setWindow(1800, 1440, 900)
+    listener()
+    expect(spy).not.toHaveBeenCalled()
+    setWindow(450, 1440, 900)
+    listener()
+    expect(spy).toHaveBeenCalled()
   })
 
   it('no topo não há sombra', () => {

@@ -4,16 +4,18 @@ import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
 
 /**
- * Motion da Fase 3: a única transição declarada é a entrada do nome, no
- * Hero, e só sob `[data-entrance='run']` — atributo que o `Opening` aplica e
- * que nunca existe com reduced motion. O movimento por scroll não declara
- * transição: são custom properties escritas a cada frame.
+ * Motion da Fase 3: a entrada do nome, no Hero, só sob `[data-entrance='run']`
+ * — atributo que o `Opening` aplica e que nunca existe com reduced motion. Os
+ * hovers declaram transição e animação só dentro de
+ * `@media (prefers-reduced-motion: no-preference)`. O movimento por scroll não
+ * declara transição: são custom properties escritas a cada frame.
  */
 const MOTION =
   /(^|[\s;{])(-(webkit|moz|o|ms)-)?(animation|transition)(-[a-z-]+)?\s*:/m
 
 const ALLOWED = ['src/sections/Hero/Hero.module.css']
 const ALLOWED_SELECTOR = "[data-entrance='run']"
+const NO_PREFERENCE = 'prefers-reduced-motion: no-preference'
 
 function cssFiles(dir: string): string[] {
   return readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
@@ -51,17 +53,31 @@ function motionDeclarations(css: string) {
 }
 
 describe('guarda de motion', () => {
-  it('só a entrada do nome declara transição, e só sob data-entrance=run', () => {
+  it('motion só sob data-entrance=run (entrada) ou dentro de prefers-reduced-motion: no-preference', () => {
     const hits: string[] = []
     for (const file of cssFiles('src')) {
       const normalized = file.replaceAll('\\', '/')
       for (const hit of motionDeclarations(readFileSync(file, 'utf8'))) {
         const allowed =
-          ALLOWED.includes(normalized) &&
-          hit.selectors.some((selector) => selector.includes(ALLOWED_SELECTOR))
+          (ALLOWED.includes(normalized) &&
+            hit.selectors.some((selector) =>
+              selector.includes(ALLOWED_SELECTOR),
+            )) ||
+          hit.selectors.some((selector) => selector.includes(NO_PREFERENCE))
         if (!allowed) hits.push(`${normalized}:${hit.line}  ${hit.text}`)
       }
     }
     expect(hits).toEqual([])
+  })
+
+  it('o verificador aceita motion só dentro de no-preference', () => {
+    const css = `.a { transition: transform 1s; }
+@media (prefers-reduced-motion: no-preference) {
+  .b { transition: transform 1s; animation: x 1s; }
+}`
+    const hits = motionDeclarations(css).filter(
+      (hit) => !hit.selectors.some((s) => s.includes(NO_PREFERENCE)),
+    )
+    expect(hits.map((h) => h.line)).toEqual([1])
   })
 })

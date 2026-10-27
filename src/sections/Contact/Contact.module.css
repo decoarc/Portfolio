@@ -2,6 +2,12 @@
    fecha o hero. */
 
 .contact {
+  /* Piso do respiro inferior: o cartão aberto (12px abaixo do link, até
+     ~118px de altura quando o endereço do LinkedIn quebra em duas linhas, em
+     rem) cabe dentro da folha e não cobre o rodapé. Medido no Chromium em
+     1440×900, 1366×650, 1200, 768 e 390: o cartão passa até 131px da lista;
+     9,25rem (148px) deixa folga. Acima do piso vale o padrão das folhas. */
+  --sheet-pad-block-end: max(clamp(48px, 10vh, 112px), 9.25rem);
   border-top: 2px solid var(--ink);
 }
 
@@ -24,4 +30,64 @@
   padding: 0;
   list-style: none;
   font-size: var(--text-lead);
+}
+
+/* Canais: a cor do texto fica em --ink também no hover; quem marca o alvo é
+   o traço do `ActionLink`. */
+.channel {
+  color: var(--ink);
+}
+
+/* `.peek.card` do protótipo: abaixo do link, monograma à esquerda, endereço e
+   nota à direita. */
+.card {
+  top: calc(100% + 12px);
+  left: 0;
+  display: grid;
+  grid-template-columns: 44px 1fr;
+  gap: 4px 12px;
+  align-items: center;
+  width: 280px;
+  padding: 14px 16px;
+  background: var(--surface);
+  border: 1px solid var(--ink);
+  font-size: 1rem;
+}
+
+.mark {
+  display: grid;
+  place-items: center;
+  grid-row: span 2;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--bg);
+  font-family: var(--font-display);
+  font-weight: 600;
+}
+
+.address {
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.note {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--ink-muted);
+}
+
+/* Abaixo de 768px o cartão de 280px ancorado no LinkedIn passaria da borda
+   direita. Ali os cartões se ancoram na lista: o wrapper do `ActionLink` (o
+   filho do `li`) deixa de ser o bloco de contenção e os dois cartões abrem no
+   mesmo lugar, sob a linha dos canais, alinhados à margem. */
+@media (max-width: 767px) {
+  .channels {
+    position: relative;
+  }
+
+  .channels > li > span {
+    position: static;
+  }
 }

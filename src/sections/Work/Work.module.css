@@ -1,6 +1,66 @@
 /* `.work__list` do comp 02: cada lâmina traz o próprio filete superior. */
 .list {
+  --slip-ease: cubic-bezier(0.2, 0.7, 0, 1);
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+/* Reação tipográfica: a ficha ativa recua o título e amplia a miniatura; as
+   outras esmaecem. As fichas vêm de ProjectSlip, então os ganchos são os
+   atributos `data-motion`, não classes de outro módulo. O foco vale sempre,
+   mas só o de teclado (`:focus-visible`): um clique ou toque num link da
+   ficha (que abre nova aba) também a foca, e `:focus-within` deixaria a
+   lista esmaecida presa sem cursor nenhum sobre ela. `:has()` não aninha,
+   então o gancho da lista é o descendente `[data-motion='slip'] :focus-visible`. */
+.list:has(> [data-motion='slip'] :focus-visible)
+  > [data-motion='slip']:not(:has(:focus-visible)) {
+  opacity: 0.35;
+}
+
+.list > [data-motion='slip']:has(:focus-visible) [data-motion='slip-title'] {
+  transform: translateX(clamp(16px, 3vw, 48px));
+}
+
+.list > [data-motion='slip']:has(:focus-visible) [data-motion='thumb'] {
+  transform: scale(1.06);
+}
+
+/* Hover só com ponteiro fino: um toque não deixa a lista esmaecida presa. */
+@media (hover: hover) and (pointer: fine) {
+  .list:has(> [data-motion='slip']:hover)
+    > [data-motion='slip']:not(:hover, :has(:focus-visible)) {
+    opacity: 0.35;
+  }
+
+  /* Com o foco numa ficha (um link externo aberto, por exemplo) e o cursor
+     em outra, as duas ficam acesas — a regra do foco esmaeceria a do cursor.
+     Mesma especificidade da regra do foco, declarada depois. */
+  .list:has(> [data-motion='slip'] :focus-visible)
+    > [data-motion='slip']:hover {
+    opacity: 1;
+  }
+
+  .list > [data-motion='slip']:hover [data-motion='slip-title'] {
+    transform: translateX(clamp(16px, 3vw, 48px));
+  }
+
+  .list > [data-motion='slip']:hover [data-motion='thumb'] {
+    transform: scale(1.06);
+  }
+}
+
+/* Declaradas também em repouso: o estado desfaz com a mesma curva. */
+@media (prefers-reduced-motion: no-preference) {
+  .list > [data-motion='slip'] {
+    transition: opacity 0.35s var(--slip-ease);
+  }
+
+  .list [data-motion='slip-title'] {
+    transition: transform 0.45s var(--slip-ease);
+  }
+
+  .list [data-motion='thumb'] {
+    transition: transform 0.6s var(--slip-ease);
+  }
 }

@@ -68,11 +68,19 @@ Microinterações, reveals e profundidade, implementados sobre uma fundação qu
 
 **Gate 3:** comparação visual com os comps e medição de fluidez em hardware real.
 
+A Fase 3 foi entregue em duas levas. A primeira (abertura da home) passou no Gate 3; a segunda traz os efeitos adiados em `docs/BACKLOG.md`, ainda sobre conteúdo mock, e é avaliada no mesmo formato de gate.
+
 ### Fase 4 — Acabamento
 
-Acessibilidade WCAG 2.2 AA, metadados e `hreflang` por idioma, página 404, performance, reescrita completa da suíte de testes.
+Acessibilidade WCAG 2.2 AA, metadados e `hreflang` por idioma, página 404, performance, reescrita completa da suíte de testes. Ainda com conteúdo mock: a verificação completa roda com `pnpm build:preview` no lugar de `pnpm build`.
 
-**Gate 4:** critérios de aceitação da seção 8 deste documento satisfeitos.
+**Gate 4:** critérios de aceitação da seção 8 deste documento satisfeitos, exceto o 9, que depende de não haver mock.
+
+### Fase 5 — Conteúdo real e publicação
+
+Decisão do dono (2026-10-27): o conteúdo mock fica até o fim e só é trocado pelo real quando o repositório for publicado. Esta fase substitui todo item `mock: true` nos dois locales, calibra o que foi ajustado sobre o texto mock (motion e metadados), entra com o preview de projeto com imagem — que depende de mídia autorizada — e publica.
+
+**Gate 5:** critério 9 satisfeito (`pnpm validate` verde, sem `ALLOW_MOCK`) e o site publicado com deep links funcionando.
 
 ## 4. Arquitetura do novo `src/`
 

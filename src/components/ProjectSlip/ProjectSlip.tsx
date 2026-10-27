@@ -1,6 +1,7 @@
 import { Link } from 'react-router'
 import type { Project, SiteContent } from '../../content/types.ts'
 import { ExternalLink } from '../ExternalLink/ExternalLink.tsx'
+import { ProjectThumb } from '../ProjectThumb/ProjectThumb.tsx'
 import styles from './ProjectSlip.module.css'
 
 interface ProjectSlipProps {
@@ -14,6 +15,8 @@ interface ProjectSlipProps {
     type: string
     /** Nota mostrada quando não há case study. */
     preview: string
+    /** Linha do placeholder da miniatura, depois do tipo. */
+    noCapture: string
     links: SiteContent['links']
   }
 }
@@ -29,7 +32,9 @@ export function ProjectSlip({
   // conceito nunca passa por trabalho entregue.
   const typeName = <span className="visually-hidden">{labels.type}: </span>
   return (
-    <li className={styles.slip}>
+    // `data-motion` marca quem tem transição e serve de gancho para a reação
+    // da lista (Work.module.css), sem compor classes entre módulos.
+    <li className={styles.slip} data-motion="slip">
       <p className={styles.meta}>
         <span className={styles.index}>{String(index).padStart(2, '0')}</span>
         {/* O tipo já entra no nome do título; aqui fica só o rótulo visual. */}
@@ -37,7 +42,8 @@ export function ProjectSlip({
           {labels.type}
         </span>
       </p>
-      <h3 className={styles.title}>
+      {/* A reação mexe no título, não no link: o Map Areas não tem link. */}
+      <h3 className={styles.title} data-motion="slip-title">
         {href ? (
           <Link to={href} className={styles.titleLink}>
             {typeName}
@@ -67,6 +73,12 @@ export function ProjectSlip({
         ))}
       </p>
       <p className={styles.year}>{project.year}</p>
+      {/* Não é link: o título continua sendo o único alvo da ficha. */}
+      <ProjectThumb
+        project={project}
+        typeLabel={labels.type}
+        noCapture={labels.noCapture}
+      />
     </li>
   )
 }

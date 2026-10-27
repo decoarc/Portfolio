@@ -1,3 +1,6 @@
+/// <reference types="node" />
+import { existsSync } from 'node:fs'
+import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
 import { contentByLocale, getContent } from './index.ts'
 import { isValidSlug } from './publication.ts'
@@ -82,6 +85,22 @@ describe('projetos', () => {
       .filter(({ project }) => project.type === 'verified' && project.mock)
       .map(({ locale, project }) => `${locale}/${project.slug}`)
     expect(wrong).toEqual([])
+  })
+
+  it.each(all.filter(({ project }) => project.cover?.thumbSrc))(
+    '$locale/$project.slug: a miniatura existe em public/',
+    ({ project }) => {
+      expect(existsSync(join('public', project.cover!.thumbSrc!))).toBe(true)
+    },
+  )
+
+  it('Map Areas tem miniatura', () => {
+    for (const locale of locales) {
+      const map = contentByLocale[locale].projects.find(
+        (p) => p.slug === 'map-areas',
+      )
+      expect(map?.cover?.thumbSrc).toBe('/images/projects/map-areas-800.webp')
+    }
   })
 
   it('map-areas não linka repositório', () => {

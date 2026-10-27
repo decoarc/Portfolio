@@ -19,6 +19,7 @@ export const mapAreas: Project = {
     alt: 'Interface do Map Areas — controles na barra lateral ao lado de um mapa Leaflet de São Paulo',
     width: 1200,
     height: 900,
+    thumbSrc: '/images/projects/map-areas-800.webp',
   },
   sections: [
     {

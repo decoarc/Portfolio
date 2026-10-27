@@ -1,0 +1,54 @@
+/* Moldura 4:3 que corta o excesso quando a imagem cresce. A largura vem de
+   quem usa (168px na ficha, menos na tira de capas); o placeholder mede o
+   texto pela largura da moldura (`cqi`) para caber nos dois tamanhos. */
+.thumb {
+  container-type: inline-size;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+}
+
+.media {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+img.media {
+  object-fit: cover;
+}
+
+/* `.ph` do protótipo: linha mono em --rule no topo, título em Fraunces cor
+   --bg embaixo, sobre --ink. Os dois pares passam AA. */
+.placeholder {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: clamp(6px, 6cqi, 10px);
+  background: var(--ink);
+  color: var(--bg);
+}
+
+.line {
+  font-family: var(--font-mono);
+  font-size: clamp(0.5rem, 6cqi, 0.6875rem);
+  line-height: 1.25;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-wrap: balance;
+  color: var(--rule);
+}
+
+/* Em 168px, "TIPO · SEM CAPTURA" não cabe numa linha: com o par preso, a
+   quebra cai depois do ponto ("CONCEPT STUDY · / NO CAPTURE"). */
+.keep {
+  white-space: nowrap;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-variation-settings: var(--fraunces-title);
+  font-weight: 600;
+  font-size: clamp(0.8125rem, 9.5cqi, 1rem);
+  line-height: 1;
+}

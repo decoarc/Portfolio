@@ -53,5 +53,14 @@ sem `rtk` na frente, lendo o código de saída.
 Fase 3 (motion) implementada: abertura da home — o nome sobe da fenda e se
 afasta com o scroll enquanto a folha do índice sobe com a borda curva — e
 scroll suave no site, tudo desligado em reduced motion (`docs/MOTION_SPEC.md`).
-Gate 3 aprovado (`docs/gate-3/README.md`). Conteúdo real no lugar dos mocks é a
-Fase 4.
+Gate 3 aprovado (`docs/gate-3/README.md`).
+
+Próximos passos, nesta ordem (decisão do dono, 2026-10-27):
+
+1. **Fase 3, segunda leva** — dois ajustes pequenos da abertura e os efeitos de
+   motion adiados (`docs/BACKLOG.md`), ainda sobre o conteúdo mock.
+2. **Fase 4 — Acabamento** — acessibilidade, metadados por idioma, performance,
+   ainda com mock.
+3. **Fase 5 — Conteúdo real e publicação** — os mocks saem só aqui, quando o
+   repositório for publicado; é quando `pnpm build` e `pnpm validate` ficam
+   verdes.

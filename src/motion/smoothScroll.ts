@@ -4,13 +4,14 @@ import { prefersReducedMotion } from './reducedMotion.ts'
 /**
  * Scroll suave do site (Lenis), uma instância só. Desligado com reduced
  * motion: aí tudo cai no scroll nativo. Toque continua nativo (padrão do Lenis).
+ * Sem `anchors`: a rolagem até âncoras é do `ScrollManager`.
  */
 let lenis: Lenis | null = null
 
 export function startSmoothScroll(): boolean {
   if (lenis) return true
   if (prefersReducedMotion()) return false
-  lenis = new Lenis({ lerp: 0.09, anchors: true, autoRaf: true })
+  lenis = new Lenis({ lerp: 0.09, autoRaf: true })
   return true
 }
 

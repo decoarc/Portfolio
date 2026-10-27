@@ -5,7 +5,9 @@
 
 .slip {
   display: grid;
+  grid-template-columns: minmax(0, 1fr) 96px;
   gap: 6px;
+  column-gap: 16px;
   padding: clamp(24px, 3.5vh, 40px) 0;
   border-top: 1px solid var(--rule);
 }
@@ -43,16 +45,11 @@
   letter-spacing: -0.02em;
 }
 
+/* Sem sublinhado de hover: o recuo do título (Work.module.css) já marca o
+   alvo. O `:focus-visible` fica com o contorno global. */
 .titleLink {
   color: inherit;
   text-decoration: none;
-}
-
-.titleLink:hover {
-  text-decoration-line: underline;
-  text-decoration-color: var(--accent);
-  text-decoration-thickness: 2px;
-  text-underline-offset: 0.12em;
 }
 
 .body {
@@ -91,14 +88,45 @@
   row-gap: 4px;
 }
 
+/* < 768: a miniatura ao lado de meta e título, na coluna da direita; o resto
+   da ficha desce em largura total. A miniatura (`ProjectThumb`) é o último
+   filho e vem de outro módulo, daí o seletor por posição. */
+.meta {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.title {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.body,
+.stack,
+.year {
+  grid-column: 1 / -1;
+}
+
+.slip > :last-child {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  align-self: start;
+  border: 1px solid var(--rule);
+}
+
 @media (min-width: 768px) {
   .slip {
-    grid-template-columns: minmax(0, 3fr) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 3fr) minmax(0, 1fr) 168px;
     grid-template-areas:
-      'type    year'
-      'title   title'
-      'summary stack';
+      'type    year  thumb'
+      'title   title thumb'
+      'summary stack thumb';
     column-gap: 32px;
+  }
+
+  .slip > :last-child {
+    grid-area: thumb;
+    align-self: center;
   }
 
   .meta {
