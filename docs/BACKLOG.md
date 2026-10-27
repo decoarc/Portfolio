@@ -20,16 +20,6 @@ Hoje só `<title>` e `lang` mudam com o locale (Fase 2). Faltam `hreflang`,
 `description` e Open Graph por idioma. O mecanismo entra na Fase 4; os textos
 de `description` e Open Graph são revistos na Fase 5, com o conteúdo real.
 
-### Reduced motion ligado no meio da sessão
-
-Se o visitante ligar `prefers-reduced-motion` depois de uma viagem do título,
-voltar/avançar no navegador ainda mostra o fade padrão de 250 ms da View
-Transition (o CSS que o desliga só vale sob `no-preference`). Raro e curto.
-Ver a ficha "Título que viaja" em `docs/MOTION_SPEC.md`.
-
-- **Quando:** na auditoria de acessibilidade da Fase 4 (movido para cá em
-  2026-10-27; antes estava sem momento).
-
 ## Fase 5 — Conteúdo real e publicação
 
 O conteúdo mock fica até o fim e só é trocado quando o repositório for
