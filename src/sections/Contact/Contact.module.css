@@ -20,6 +20,9 @@
   font-size: var(--text-title);
   line-height: 1.1;
   letter-spacing: -0.02em;
+  /* Com texto a 200% em 320 px, "collaborations," não cabe na medida e
+     passava da tela (WCAG 1.4.4, 1.4.10): só então a palavra quebra. */
+  overflow-wrap: anywhere;
 }
 
 .channels {

@@ -183,6 +183,18 @@ Nenhum.
   rótulo do índice com `overflow-wrap: anywhere`. Com texto normal nada
   quebra.
 
+**8. Convite do contato passa da tela com texto a 200%** (achado na
+varredura por texto, depois das correções 1–5)
+
+- **Onde:** `src/sections/Contact/Contact.module.css` `.lead`.
+- **Medida:** `/` em 320 com raiz 32 px: "collaborations," e
+  "conversations." vão até 350 px; `scrollWidth` 350. As primeiras medidas
+  olhavam a caixa dos elementos, e a caixa do parágrafo fica em 300 px: só a
+  medida do texto (`Range`) viu a palavra passar.
+- **WCAG:** 1.4.4 Redimensionar texto, 1.4.10 Reflow.
+- **Correção mínima:** `overflow-wrap: anywhere`. Com texto normal nada
+  quebra.
+
 ### P2
 
 **5. Masthead 2 px além da tela com texto a 200%**
@@ -248,3 +260,4 @@ Cada linha: critério, antes → depois, propriedade. O teste está em
 | 3 | 1.4.4 | 200% em 320: "Arcodaci" até 341 px, cortado pelo hero em 320 → quebra dentro da coluna, inteiro | `Hero.module.css`: `.name { overflow-wrap: anywhere }` |
 | 4 | 1.4.4, 1.4.10 | `/pt`, 200% em 320: CTA até 366 px (cortado), índice até 362, `h2` até 379 → tudo dentro da janela | `Hero.module.css`: `.actions .action { white-space: normal }`; `SectionHead.module.css` `.title` e `Release.module.css` `.label`: `overflow-wrap: anywhere` |
 | 5 | 1.4.10 | 200% em 320: "Português" até 322 px, `scrollWidth` 322 no case e no 404 → 320; com texto normal a barra continua com uma linha de 48 px | `Masthead.module.css`: `flex-wrap: wrap`, `height` → `min-height` |
+| 8 | 1.4.4, 1.4.10 | `/`, 200% em 320: "collaborations," até 350 px, `scrollWidth` 350 → 320 | `Contact.module.css`: `.lead { overflow-wrap: anywhere }` |

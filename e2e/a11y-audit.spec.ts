@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test'
+import { GATE_ROUTES } from './routes.ts'
 import { flight } from './title-flight.helpers.ts'
 
 /**
@@ -31,35 +32,39 @@ function scrollWidth(page: Page) {
 }
 
 /**
- * Elementos visíveis com texto próprio que passam da borda direita (ou
- * esquerda) de `limit`, ou da janela. Ignora o que está fora da árvore de
- * acessibilidade e o que está escondido.
+ * Trechos de texto visíveis que passam da borda direita (ou esquerda) de
+ * `limit`, ou da janela. Mede o texto (`Range`), não a caixa: uma palavra
+ * longa passa da caixa do parágrafo sem alargá-la. Ignora o que está fora da
+ * árvore de acessibilidade e o que está escondido.
  */
 function textPastEdge(page: Page, limitSelector?: string) {
   return page.evaluate((limitSelector) => {
-    const limit = limitSelector
-      ? document.querySelector(limitSelector)?.getBoundingClientRect()
-      : null
-    const left = limit?.left ?? 0
-    const right = limit?.right ?? document.documentElement.clientWidth
-    const out: string[] = []
     const scope = limitSelector
       ? document.querySelector(limitSelector)
       : document.body
-    for (const el of scope?.querySelectorAll('*') ?? []) {
+    const limit = limitSelector ? scope?.getBoundingClientRect() : null
+    const left = limit?.left ?? 0
+    const right = limit?.right ?? document.documentElement.clientWidth
+    const out: string[] = []
+    if (!scope) return ['sem escopo']
+    const walker = document.createTreeWalker(scope, NodeFilter.SHOW_TEXT)
+    while (walker.nextNode()) {
+      const node = walker.currentNode
+      const el = node.parentElement
+      if (!el || !node.textContent?.trim()) continue
       if (el.closest('[aria-hidden="true"], .visually-hidden')) continue
-      const style = getComputedStyle(el)
-      if (style.visibility === 'hidden' || style.display === 'none') continue
-      const ownText = [...el.childNodes].some(
-        (node) => node.nodeType === Node.TEXT_NODE && node.textContent?.trim(),
-      )
-      if (!ownText) continue
-      const rect = el.getBoundingClientRect()
-      if (rect.width === 0) continue
-      if (rect.right > right + 0.5 || rect.left < left - 0.5)
-        out.push(
-          `${el.tagName.toLowerCase()} "${el.textContent?.trim().slice(0, 30)}" ${Math.round(rect.left)}–${Math.round(rect.right)}`,
-        )
+      if (getComputedStyle(el).visibility === 'hidden') continue
+      const range = document.createRange()
+      range.selectNodeContents(node)
+      for (const rect of range.getClientRects()) {
+        if (rect.width === 0) continue
+        if (rect.right > right + 0.5 || rect.left < left - 0.5) {
+          out.push(
+            `${el.tagName.toLowerCase()} "${node.textContent.trim().slice(0, 30)}" ${Math.round(rect.left)}–${Math.round(rect.right)}`,
+          )
+          break
+        }
+      }
     }
     return out
   }, limitSelector)
@@ -146,6 +151,28 @@ test.describe('1.4.4 · texto a 200% em 320 px · masthead', () => {
       const { scrollWidth: sw, clientWidth } = await scrollWidth(page)
       expect(sw).toBeLessThanOrEqual(clientWidth)
     })
+  }
+})
+
+test.describe('1.4.4 / 1.4.10 / 1.4.12 · varredura', () => {
+  for (const route of GATE_ROUTES) {
+    test(`texto a 200% em 320 px · ${route}`, async ({ page }) => {
+      await open(page, route, 320, TEXT_200)
+      expect(await textPastEdge(page)).toEqual([])
+      const { scrollWidth: sw, clientWidth } = await scrollWidth(page)
+      expect(sw).toBeLessThanOrEqual(clientWidth)
+    })
+
+    for (const width of [320, 390, 768, 1440]) {
+      test(`espaçamento de texto em ${width} px · ${route}`, async ({
+        page,
+      }) => {
+        await open(page, route, width, TEXT_SPACING)
+        expect(await textPastEdge(page)).toEqual([])
+        const { scrollWidth: sw, clientWidth } = await scrollWidth(page)
+        expect(sw).toBeLessThanOrEqual(clientWidth)
+      })
+    }
   }
 })
 
