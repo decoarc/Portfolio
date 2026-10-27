@@ -10,7 +10,9 @@
 }
 
 /* A cópia para leitor de tela não entra na seleção: copiar o parágrafo traz a
-   frase uma vez, a das palavras visíveis. */
+   frase uma vez, a das palavras visíveis. O build não prefixa, e Safaris mais
+   antigos só respeitam a forma com `-webkit-`. */
 .copy {
+  -webkit-user-select: none;
   user-select: none;
 }
