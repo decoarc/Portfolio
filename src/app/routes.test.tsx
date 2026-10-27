@@ -1,6 +1,6 @@
 import { act, render, screen, within } from '@testing-library/react'
 import { createMemoryRouter, RouterProvider } from 'react-router'
-import { describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it } from 'vitest'
 import { createRoutes } from './routes.tsx'
 
 function renderAt(url: string) {
@@ -99,6 +99,12 @@ describe('rotas por locale', () => {
 })
 
 describe('head por rota na navegação', () => {
+  beforeEach(() => {
+    document.head
+      .querySelectorAll('[data-head], title')
+      .forEach((node) => node.remove())
+  })
+
   it('navegar da home ao case troca o head sem duplicar', async () => {
     const router = createMemoryRouter(createRoutes(), {
       initialEntries: ['/pt'],
@@ -126,14 +132,35 @@ describe('head por rota na navegação', () => {
     expect(
       document.querySelector('meta[name="robots"]')?.getAttribute('content'),
     ).toBe('noindex')
+    expect(document.querySelector('link[rel="canonical"]')).toBeNull()
   })
 
-  it.each(['/', '/work/token-killer', '/nada'])(
-    '%s não renderiza <title> no corpo',
-    async (url) => {
-      const { container } = renderAt(url)
-      await screen.findByRole('main')
-      expect(container.querySelector('title')).toBeNull()
-    },
-  )
+  it.each([
+    ['/', 'André Arcodaci — Full Stack Developer'],
+    ['/work/token-killer', 'Token Killer — André Arcodaci'],
+    ['/nada', 'Page not found — André Arcodaci'],
+  ])('%s deixa um só <title> no documento', async (url, title) => {
+    renderAt(url)
+    await screen.findByRole('main')
+    await act(async () => {})
+    expect(document.querySelectorAll('title').length).toBeLessThanOrEqual(1)
+    expect(document.title).toBe(title)
+  })
+})
+
+describe('rotas sem <title> próprio', () => {
+  // React 19 eleva `<title>` para o head e `applyHead` apaga os extras, então
+  // a presença não aparece no DOM: a checagem é no fonte das rotas.
+  const sources = import.meta.glob('./*Route.tsx', {
+    query: '?raw',
+    import: 'default',
+    eager: true,
+  }) as Record<string, string>
+
+  it('nenhum componente de rota declara <title>', () => {
+    expect(Object.keys(sources)).toHaveLength(3)
+    for (const [file, source] of Object.entries(sources)) {
+      expect(source, file).not.toMatch(/<title[\s>]/)
+    }
+  })
 })
