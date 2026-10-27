@@ -69,6 +69,10 @@
   letter-spacing: -0.025em;
   /* Medida curta deliberada: o nome quebra em duas linhas e isso é o desenho. */
   max-width: 9ch;
+  /* Com texto a 200% em 320 px, "Arcodaci" (295 px) não cabe na coluna e o
+     `overflow-x: clip` do hero cortava o fim (WCAG 1.4.4): só então a palavra
+     quebra. No tamanho normal ela cabe e nada muda. */
+  overflow-wrap: anywhere;
 }
 
 /* A fenda: cada linha corta só na vertical; na horizontal a palavra pode sair

@@ -112,6 +112,25 @@ test.describe('1.4.10 · o cartão do contato cabe em 320 px', () => {
   }
 })
 
+test.describe('1.4.4 · texto a 200% em 320 px', () => {
+  for (const route of ['/', '/pt']) {
+    test(`o nome do hero inteiro · ${route}`, async ({ page }) => {
+      await open(page, route, 320, TEXT_200)
+      // O hero corta na borda (`overflow-x: clip`): o que passa dela some.
+      const words = await page
+        .locator('h1 [data-motion="entrance"]')
+        .evaluateAll((spans) =>
+          spans.map((span) => {
+            const rect = span.getBoundingClientRect()
+            return { text: span.textContent, right: Math.round(rect.right) }
+          }),
+        )
+      expect(words).toHaveLength(2)
+      expect(words.filter((word) => word.right > 320)).toEqual([])
+    })
+  }
+})
+
 test.describe('reduced motion ligado no meio da sessão', () => {
   test('voltar do case não anima a View Transition', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'no-preference' })
