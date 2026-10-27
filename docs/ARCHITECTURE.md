@@ -112,7 +112,7 @@ Cloudflare Pages, cuja imagem padrão pode ser mais antiga que esse piso.
 | `typecheck`, `lint`, `test`   | `tsc -b`, ESLint, Vitest                                                   |
 | `format`, `format:check`      | Prettier                                                                   |
 | `test:e2e`                    | Playwright, projeto `chromium` (sobe `build:preview` + `preview`)          |
-| `capture`                     | Playwright, projeto `capture`; grava `docs/gate-2/`                        |
+| `capture`                     | Playwright, projeto `capture`; grava `docs/gate-2/` e `docs/gate-3/`      |
 | `validate`                    | typecheck, lint, test, build, test:e2e; falha por desenho enquanto houver mock |
 
 ## Testes
