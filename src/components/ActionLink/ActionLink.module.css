@@ -1,0 +1,169 @@
+/* Âncora da prévia: o slot é posicionado contra este wrapper. */
+.wrapper {
+  --action-ease: cubic-bezier(0.2, 0.7, 0, 1);
+  position: relative;
+  display: inline-block;
+}
+
+/* Block dentro do wrapper inline-block: a linha é a do próprio link, sem o
+   strut do pai (com fonte maior que a do CTA, ele alongaria o wrapper). */
+.link {
+  position: relative;
+  display: block;
+  text-decoration: none;
+  white-space: nowrap;
+  transform: translate(var(--magnet-x, 0px), var(--magnet-y, 0px));
+}
+
+/* CTAs do hero: `padding-bottom` e borda do Gate 2 ficam, a borda
+   transparente; o traço é pintado sobre ela — em repouso, a mesma caixa e a
+   mesma linha de antes. */
+.strong,
+.quiet {
+  padding-bottom: 2px;
+  border-bottom: 1px solid transparent;
+}
+
+.strong {
+  color: var(--ink);
+  border-bottom-width: 2px;
+}
+
+.trace {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--rule);
+  transform-origin: 100% 50%;
+}
+
+.strong .trace {
+  height: 2px;
+  background: var(--accent);
+}
+
+/* Canais do contato: o traço repete o sublinhado do Gate 2 e cobre só texto
+   + dica. O `span` inline mede até o descendente (0,25em abaixo da linha de
+   base nesta fonte); o sublinhado ficava 3px abaixo da base
+   (`text-underline-offset`), com a espessura automática do Chromium, que
+   arredonda 0,1em para baixo — 2px a partir de 20px. Medido no Chromium em
+   1440, 1100, 768 e 390. */
+.external {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.label {
+  position: relative;
+}
+
+.label > .trace {
+  top: calc(100% - 0.25em + 3px);
+  height: 1px;
+  height: max(1px, round(down, 0.1em, 1px));
+}
+
+/* Seta de nova aba só para quem vê, fora do traço; o texto alternativo vazio
+   a tira do nome acessível (a dica falada é o `hint`). */
+.external::after {
+  content: '\2197';
+  content: '\2197' / '';
+  display: inline-block;
+  margin-left: 0.3em;
+}
+
+/* Estado ativo: o traço termina em --accent; a cor do texto não muda. Foco
+   sempre, hover só com ponteiro fino. */
+.link:focus-visible .trace {
+  background: var(--accent);
+}
+
+/* Prévia decorativa: fora da árvore de acessibilidade e invisível em repouso
+   (o axe não mede texto escondido com `visibility`). A posição vem do
+   chamador. */
+.peekSlot {
+  position: absolute;
+  z-index: 1;
+  pointer-events: none;
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+.link:focus-visible + .peekSlot {
+  visibility: visible;
+  opacity: 1;
+  transform: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .link:hover .trace {
+    background: var(--accent);
+  }
+
+  .link:hover + .peekSlot {
+    visibility: visible;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .link {
+    transition: transform 0.3s var(--action-ease);
+  }
+
+  .link:focus-visible .trace {
+    animation: trace-run 0.7s var(--action-ease);
+  }
+
+  /* Na saída a visibilidade espera o fade; na entrada vira na hora. */
+  .peekSlot {
+    transition:
+      opacity 0.3s var(--action-ease),
+      transform 0.4s var(--action-ease),
+      visibility 0s 0.3s;
+  }
+
+  .link:focus-visible + .peekSlot {
+    transition:
+      opacity 0.3s var(--action-ease),
+      transform 0.4s var(--action-ease),
+      visibility 0s;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .link:hover .trace {
+      animation: trace-run 0.7s var(--action-ease);
+    }
+
+    .link:hover + .peekSlot {
+      transition:
+        opacity 0.3s var(--action-ease),
+        transform 0.4s var(--action-ease),
+        visibility 0s;
+    }
+  }
+
+  /* O traço sai pela direita encolhendo e volta crescendo da esquerda. */
+  @keyframes trace-run {
+    0% {
+      transform: scaleX(1);
+      transform-origin: 100% 50%;
+    }
+    45% {
+      transform: scaleX(0);
+      transform-origin: 100% 50%;
+    }
+    46% {
+      transform: scaleX(0);
+      transform-origin: 0 50%;
+    }
+    100% {
+      transform: scaleX(1);
+      transform-origin: 0 50%;
+    }
+  }
+}
