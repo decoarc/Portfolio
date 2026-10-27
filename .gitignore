@@ -39,3 +39,6 @@ Desktop.ini
 
 # Vitest
 .vitest/
+
+# Protótipos do brainstorming (descartáveis)
+.superpowers/
