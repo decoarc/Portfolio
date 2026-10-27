@@ -25,6 +25,7 @@ function project(overrides: Partial<Project> = {}): Project {
 const labels = {
   type: siteEn.projectType.verified,
   preview: siteEn.work.previewNote,
+  noCapture: siteEn.work.noCapture,
   links: siteEn.links,
 }
 
@@ -131,5 +132,47 @@ describe('ProjectSlip', () => {
       />,
     )
     expect(screen.getByText('03')).toBeInTheDocument()
+  })
+
+  it('a miniatura não muda o nome do link do título', () => {
+    const item = project()
+    renderSlip(
+      <ProjectSlip
+        project={item}
+        index={1}
+        href="/work/exemplo"
+        labels={labels}
+      />,
+    )
+    // O placeholder repete o título, mas fica fora da árvore: o nome do link
+    // continua sendo o de antes, tipo + título.
+    const link = screen.getByRole('link', { name: new RegExp(item.title) })
+    expect(link).toHaveAccessibleName(`${labels.type}: ${item.title}`)
+  })
+
+  it('a miniatura não é link', () => {
+    const item = project({
+      links: [{ kind: 'repo', href: 'https://github.com/exemplo' }],
+    })
+    renderSlip(
+      <ProjectSlip
+        project={item}
+        index={1}
+        href="/work/exemplo"
+        labels={labels}
+      />,
+    )
+    // Título + um link externo; a miniatura não acrescenta alvo.
+    expect(screen.getAllByRole('link')).toHaveLength(2)
+    expect(document.querySelector('[data-motion="thumb"]')).not.toBeNull()
+    expect(document.querySelector('a [data-motion="thumb"]')).toBeNull()
+  })
+
+  it('preview sem href também tem miniatura', () => {
+    const item = project({ status: 'preview' })
+    renderSlip(
+      <ProjectSlip project={item} index={1} href={null} labels={labels} />,
+    )
+    expect(document.querySelector('[data-motion="thumb"]')).not.toBeNull()
   })
 })

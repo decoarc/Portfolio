@@ -2,13 +2,22 @@ import { expect, test, type Page } from '@playwright/test'
 
 const PAGES = ['/', '/work/token-killer'] as const
 
-async function exercise(page: Page, path: string) {
+async function visit(page: Page, path: string) {
   await page.goto(path)
   await page.evaluate(() => document.fonts.ready.then(() => true))
+}
+
+/** Passa por hover e foco: o título (ficha ou case study), um link e um Tab. */
+async function interact(page: Page) {
   const title = page.locator('main h3 a, main h1').first()
   await title.hover()
   await page.getByRole('link').nth(1).focus()
   await page.keyboard.press('Tab')
+}
+
+async function exercise(page: Page, path: string) {
+  await visit(page, path)
+  await interact(page)
 }
 
 /** Primeiro elemento com duração de transição ou animação; `allowMarked` ignora os que levam `data-motion`. */
@@ -52,19 +61,44 @@ test.describe('prefers-reduced-motion: reduce', () => {
 test.describe('prefers-reduced-motion: no-preference', () => {
   test.use({ reducedMotion: 'no-preference' })
 
-  for (const path of PAGES) {
-    test(`só a abertura tem motion · ${path}`, async ({ page }) => {
-      await exercise(page, path)
-      expect(await firstTimed(page, true)).toBeNull()
-      if (path === '/')
-        await expect(page.locator('[data-entrance]')).toHaveAttribute(
-          'data-entrance',
-          'done',
-        )
-      expect(await firstTimed(page, false)).toBeNull()
-      expect(await page.evaluate(() => document.getAnimations().length)).toBe(0)
-    })
-  }
+  /**
+   * Na home, as transições de saída (o esmaecimento desfazendo, o magnético
+   * voltando) precisam estar declaradas também em repouso: a guarda passa de
+   * "não existe motion" para "todo motion é declarado e marcado".
+   */
+  test('só elementos com data-motion têm duração · /', async ({ page }) => {
+    await visit(page, '/')
+    expect(await firstTimed(page, true)).toBeNull()
+    await expect(page.locator('[data-entrance]')).toHaveAttribute(
+      'data-entrance',
+      'done',
+    )
+    // Em repouso, sem hover nem foco, nada anda.
+    await page.mouse.move(0, 0)
+    await expect
+      .poll(() => page.evaluate(() => document.getAnimations().length))
+      .toBe(0)
+    await interact(page)
+    expect(await firstTimed(page, true)).toBeNull()
+    expect(
+      await page.evaluate(() =>
+        document
+          .getAnimations()
+          .every((a) =>
+            (a.effect as KeyframeEffect | null)?.target?.closest(
+              '[data-motion]',
+            ),
+          ),
+      ),
+    ).toBe(true)
+  })
+
+  test('só a abertura tem motion · /work/token-killer', async ({ page }) => {
+    await exercise(page, '/work/token-killer')
+    expect(await firstTimed(page, true)).toBeNull()
+    expect(await firstTimed(page, false)).toBeNull()
+    expect(await page.evaluate(() => document.getAnimations().length)).toBe(0)
+  })
 
   test('durante a entrada, só o nome tem transição', async ({ page }) => {
     await page.goto('/')

@@ -40,6 +40,7 @@ export function Work({ index, copy, projects, locale, labels }: WorkProps) {
             labels={{
               type: labels.projectType[project.type],
               preview: copy.previewNote,
+              noCapture: copy.noCapture,
               links: labels.links,
             }}
           />
