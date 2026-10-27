@@ -1,12 +1,18 @@
 import { useEffect } from 'react'
 import { useLocation, useNavigationType } from 'react-router'
+import {
+  refreshSmoothScroll,
+  scrollToTarget,
+  scrollToTop,
+} from '@/motion/smoothScroll.ts'
 
-/** Gerencia scroll e foco a cada navegação. Sem `behavior: 'smooth'` (motion é a Fase 3). */
+/** Gerencia scroll e foco a cada navegação. A rolagem passa pelo scroll suave quando ele está ativo. */
 export function ScrollManager() {
   const { pathname, hash } = useLocation()
   const navigationType = useNavigationType()
 
   useEffect(() => {
+    refreshSmoothScroll()
     if (hash) {
       let id = hash.slice(1)
       try {
@@ -18,13 +24,13 @@ export function ScrollManager() {
       if (!target) return
       if (!target.hasAttribute('tabindex'))
         target.setAttribute('tabindex', '-1')
-      target.scrollIntoView({ block: 'start' })
+      scrollToTarget(target)
       target.focus({ preventScroll: true })
       return
     }
     // Voltar/avançar deixa o navegador restaurar a posição.
     if (navigationType === 'POP') return
-    window.scrollTo(0, 0)
+    scrollToTop()
     document.getElementById('main')?.focus({ preventScroll: true })
   }, [pathname, hash, navigationType])
 
