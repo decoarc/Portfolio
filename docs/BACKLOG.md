@@ -54,6 +54,26 @@ voltar/avançar no navegador ainda mostra o fade padrão de 250 ms da View
 Transition (o CSS que o desliga só vale sob `no-preference`). Raro e curto;
 adiado. Ver a ficha "Título que viaja" em `docs/MOTION_SPEC.md`.
 
+### Endurecimentos do título que viaja
+
+Quatro pontos frágeis, hoje sem efeito visível, deixados de fora do review final:
+
+- `data-title-flight` só é limpo no `popstate`; deveria sair quando a view
+  transition termina. Um futuro `Link` com `viewTransition` herdaria regras de
+  abrir/fechar velhas.
+- O `ScrollManager` só escolhe o `[data-anchor-focus]` quando o alvo contém
+  exatamente um. Trocar por "o ancestral `[id]` mais próximo é o alvo"; quebra se
+  `#work` tiver uma única ficha.
+- Os ids de `workAnchor` (`work-<slug>`) dividem espaço com `work-heading`. Um
+  teste de conteúdo deve proibir o slug `heading`.
+- Com `data-settling`, quem volta pelo teclado com Enter vê só o contorno de foco
+  (não a reação da lista) até a próxima tecla.
+
+- **Fazer:** os quatro ajustes acima, cada um com seu teste.
+- **Por quê:** nenhum aparece com o conteúdo mock; todos podem aparecer com a
+  mudança de conteúdo ou de links.
+- **Quando:** Fase 5, com o conteúdo real.
+
 ## Ferramental — depois da implementação visual
 
 ### O wrapper `rtk` reporta sucesso falso

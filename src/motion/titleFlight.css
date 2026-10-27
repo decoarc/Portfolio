@@ -89,17 +89,17 @@
     animation-delay: 200ms;
     animation-timing-function: cubic-bezier(0.2, 0.7, 0, 1);
   }
-}
 
-@keyframes title-flight-rise {
-  from {
-    opacity: 0;
-    translate: 0 20px;
+  @keyframes title-flight-rise {
+    from {
+      opacity: 0;
+      translate: 0 20px;
+    }
   }
-}
 
-@keyframes title-flight-out {
-  to {
-    opacity: 0;
+  @keyframes title-flight-out {
+    to {
+      opacity: 0;
+    }
   }
 }

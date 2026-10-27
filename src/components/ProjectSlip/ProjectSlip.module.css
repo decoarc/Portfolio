@@ -46,8 +46,11 @@
 }
 
 /* Sem sublinhado de hover: o recuo do título (Work.module.css) já marca o
-   alvo. O `:focus-visible` fica com o contorno global. */
+   alvo. O `:focus-visible` fica com o contorno global. Em bloco para que o
+   `view-transition-name: case-title` nomeie uma caixa só: um `<a>` em linha
+   que quebra em duas linhas ocuparia duas caixas e o voo poderia falhar. */
 .titleLink {
+  display: inline-block;
   color: inherit;
   text-decoration: none;
 }
