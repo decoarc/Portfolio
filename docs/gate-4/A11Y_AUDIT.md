@@ -143,16 +143,20 @@ Nenhum.
 - **Correção mínima:** largura limitada à da lista (`min(280px, 100%)`) e o
   endereço podendo quebrar. Acima de 346 px nada muda.
 
-**2. A stack do case não quebra**
+**2. A stack e o texto do case não quebram**
 
 - **Onde:** `src/app/CaseStudyRoute.module.css`
-  `.stackItem + .stackItem::before { white-space: pre }`.
+  `.stackItem + .stackItem::before { white-space: pre }` e `.text` (grade de
+  uma trilha `auto`).
 - **Medida:** `/pt/work/map-areas` em 320: a linha da stack vai até 348 px
   (texto normal), 420 px (espaçamento) e 650 px (200%). Os `dd` em linha não
   têm espaço entre eles fora do separador, e o separador com `pre` não deixa
-  quebrar.
-- **WCAG:** 1.4.10 Reflow, 1.4.12 Espaçamento de texto.
-- **Correção mínima:** `white-space: pre-wrap` no separador.
+  quebrar. Com a stack corrigida, a 200% o texto inteiro do case ainda vai
+  até 400 px: "GEOMETRY(Polygon," mede 316 px numa coluna de 254 px e alarga a
+  trilha da grade.
+- **WCAG:** 1.4.10 Reflow, 1.4.12 Espaçamento de texto, 1.4.4.
+- **Correção mínima:** `white-space: pre-wrap` no separador; a trilha da
+  grade presa à coluna e a palavra longa podendo quebrar.
 
 **3. Nome do hero cortado com texto a 200%**
 
@@ -227,3 +231,13 @@ Nenhum.
 - **Números de seção e de ficha lidos como texto solto** ("01" antes do `h2`,
   parágrafo "01" na ficha). Não é falha; é ruído para leitor de tela que o NVDA
   do Gate 4 pode confirmar.
+
+## Correções
+
+Cada linha: critério, antes → depois, propriedade. O teste está em
+`e2e/a11y-audit.spec.ts`, visto falhando antes da correção.
+
+| # | Critério | Antes → depois | Propriedade |
+| --- | --- | --- | --- |
+| 6 | Reduced motion no meio da sessão | 13 animações de `::view-transition-*` ao voltar → 0 | `titleFlight.css`: `animation: none` e `opacity: 0` no antigo, sob `prefers-reduced-motion: reduce` |
+| 2 | 1.4.10, 1.4.12, 1.4.4 | `/pt/work/map-areas` em 320: `scrollWidth` 348 (normal), 420 (espaçamento), 650 (200%) → 320 | `CaseStudyRoute.module.css`: separador da stack `white-space: pre` → `pre-wrap`; `.facts` `overflow-wrap: anywhere` (antes só a partir de 768, `break-word`); `.text` `grid-template-columns: minmax(0, 1fr)` e `overflow-wrap: break-word` |

@@ -1,10 +1,88 @@
-import { expect, test } from '@playwright/test'
+import { expect, test, type Page } from '@playwright/test'
 import { flight } from './title-flight.helpers.ts'
 
 /**
  * Achados da auditoria WCAG 2.2 AA da Fase 4 (docs/gate-4/A11Y_AUDIT.md).
  * Cada teste repete a medida da auditoria que falhou antes da correção.
  */
+
+/** Texto a 200%: a fonte raiz dobra (o zoom só de texto do navegador). */
+const TEXT_200 = 'html { font-size: 32px !important }'
+
+/** Espaçamento de texto do 1.4.12 (o bookmarklet da WCAG). */
+const TEXT_SPACING =
+  '* { line-height: 1.5 !important; letter-spacing: .12em !important; word-spacing: .16em !important } p { margin-bottom: 2em !important }'
+
+async function open(page: Page, route: string, width: number, style?: string) {
+  await page.setViewportSize({ width, height: 844 })
+  await page.goto(route)
+  await page.evaluate(() => document.fonts.ready.then(() => true))
+  await expect(
+    page.locator('[data-entrance]:not([data-entrance="done"])'),
+  ).toHaveCount(0)
+  if (style) await page.addStyleTag({ content: style })
+}
+
+function scrollWidth(page: Page) {
+  return page.evaluate(() => ({
+    scrollWidth: document.documentElement.scrollWidth,
+    clientWidth: document.documentElement.clientWidth,
+  }))
+}
+
+/**
+ * Elementos visíveis com texto próprio que passam da borda direita (ou
+ * esquerda) de `limit`, ou da janela. Ignora o que está fora da árvore de
+ * acessibilidade e o que está escondido.
+ */
+function textPastEdge(page: Page, limitSelector?: string) {
+  return page.evaluate((limitSelector) => {
+    const limit = limitSelector
+      ? document.querySelector(limitSelector)?.getBoundingClientRect()
+      : null
+    const left = limit?.left ?? 0
+    const right = limit?.right ?? document.documentElement.clientWidth
+    const out: string[] = []
+    const scope = limitSelector
+      ? document.querySelector(limitSelector)
+      : document.body
+    for (const el of scope?.querySelectorAll('*') ?? []) {
+      if (el.closest('[aria-hidden="true"], .visually-hidden')) continue
+      const style = getComputedStyle(el)
+      if (style.visibility === 'hidden' || style.display === 'none') continue
+      const ownText = [...el.childNodes].some(
+        (node) => node.nodeType === Node.TEXT_NODE && node.textContent?.trim(),
+      )
+      if (!ownText) continue
+      const rect = el.getBoundingClientRect()
+      if (rect.width === 0) continue
+      if (rect.right > right + 0.5 || rect.left < left - 0.5)
+        out.push(
+          `${el.tagName.toLowerCase()} "${el.textContent?.trim().slice(0, 30)}" ${Math.round(rect.left)}–${Math.round(rect.right)}`,
+        )
+    }
+    return out
+  }, limitSelector)
+}
+
+test.describe('1.4.10 / 1.4.12 · a stack do case quebra', () => {
+  for (const [width, style] of [
+    [320, undefined],
+    [320, TEXT_SPACING],
+    [390, TEXT_SPACING],
+    [320, TEXT_200],
+  ] as const) {
+    test(`${width} px ${style === TEXT_200 ? '· texto a 200%' : style ? '· espaçamento' : ''}`, async ({
+      page,
+    }) => {
+      await open(page, '/pt/work/map-areas', width, style)
+      expect(await textPastEdge(page, 'main dl')).toEqual([])
+      expect(await textPastEdge(page)).toEqual([])
+      const { scrollWidth: sw, clientWidth } = await scrollWidth(page)
+      expect(sw).toBeLessThanOrEqual(clientWidth)
+    })
+  }
+})
 
 test.describe('reduced motion ligado no meio da sessão', () => {
   test('voltar do case não anima a View Transition', async ({ page }) => {

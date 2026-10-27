@@ -102,6 +102,8 @@
   font-family: var(--font-mono);
   font-size: var(--text-meta);
   line-height: 1.5;
+  /* Com texto a 200%, "PostgreSQL/PostGIS" sozinho não cabe em 320 px. */
+  overflow-wrap: anywhere;
 }
 
 .fact dt {
@@ -115,7 +117,10 @@
   margin: 0;
 }
 
-/* Em linha, os itens da stack dividem a linha com um ponto médio só visual. */
+/* Em linha, os itens da stack dividem a linha com um ponto médio só visual.
+   `pre-wrap` guarda os espaços do separador e ainda deixa a linha quebrar
+   depois dele: entre os `dd` não há outro espaço, e com `pre` a stack inteira
+   virava uma palavra só, que passava da tela em 320 px (WCAG 1.4.10). */
 .stackItem {
   display: inline;
 }
@@ -123,14 +128,19 @@
 .stackItem + .stackItem::before {
   content: ' \00B7  ';
   content: ' \00B7  ' / '';
-  white-space: pre;
+  white-space: pre-wrap;
   color: var(--ink-muted);
 }
 
+/* A coluna não cresce além do bloco: com texto a 200% em 320 px, uma palavra
+   longa ("GEOMETRY(Polygon,") alargava a trilha e o texto todo passava da tela
+   (WCAG 1.4.4 e 1.4.10); assim só a palavra quebra. */
 .text {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 0;
   max-width: var(--measure);
+  overflow-wrap: break-word;
 }
 
 .summary {
@@ -199,7 +209,6 @@
     width: var(--margin-rail);
     margin: 0 0 0 calc(var(--margin-rail) * -1);
     padding-right: 20px;
-    overflow-wrap: break-word;
   }
 
   .stackItem {
