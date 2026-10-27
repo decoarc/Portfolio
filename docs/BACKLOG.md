@@ -32,9 +32,9 @@ texto mock (texto que acende, lista reagindo ao mouse) é revisto na Fase 5.
 Todos seguem as regras de `docs/MOTION_SPEC.md` (reduced-motion, teclado,
 fallback sem JS) e reaproveitam o scroll suave já instalado.
 
-Feitos em 2026-10-27: hover nos links de ação e reação da lista de trabalhos
-(`docs/MOTION_SPEC.md`). Ordem sugerida do que resta: texto que acende,
-cortina do case study (a mais cara, mexe no router). Os dois ajustes
+Feitos em 2026-10-27: hover nos links de ação, reação da lista de trabalhos e
+texto que acende com o scroll (`docs/MOTION_SPEC.md`). Resta a cortina do case
+study (a mais cara, mexe no router). Os dois ajustes
 pequenos da abertura (parar de reescrever com a folha no topo; `ScrollManager`
 como único dono da rolagem até âncoras) foram feitos em 2026-10-27.
 
@@ -45,12 +45,6 @@ afasta e o cobre antes de o movimento terminar. O dono notou e escolheu manter
 assim por ora. Já foram testadas e recusadas duas alternativas (protótipo v5):
 segurar o hero até o nome terminar e só então subir a folha, e manter o nome por
 cima da folha até ela chegar ao topo. Se voltar ao tema, partir de outra ideia.
-
-### Texto que acende com o scroll
-
-Parágrafos começam apagados e clareiam palavra por palavra conforme a rolagem
-(referência: yasingenc.net). Candidatos: Abordagem e Sobre. Cuidado: o texto
-precisa estar legível sem o efeito e para leitor de tela desde o primeiro frame.
 
 ### Cortina ao abrir um case study
 
