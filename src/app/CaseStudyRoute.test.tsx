@@ -138,10 +138,19 @@ describe('case study', () => {
     expect(title).toHaveAttribute('data-route-focus')
   })
 
-  it.each(['/work/Token-Killer', '/work/..%2F'])('%s dá 404', async (url) => {
-    renderAt(url)
+  it('/work/..%2F dá 404', async () => {
+    renderAt('/work/..%2F')
     expect(
       await screen.findByRole('heading', { name: 'Page not found' }),
+    ).toBeInTheDocument()
+  })
+
+  // O Pages serve /work/Token-Killer de work/token-killer.html: o app casa
+  // igual, ou a hidratação trocaria o case pelo 404.
+  it('/work/Token-Killer abre o case, sem diferenciar caixa', async () => {
+    renderAt('/work/Token-Killer')
+    expect(
+      await screen.findByRole('heading', { level: 1, name: 'Token Killer' }),
     ).toBeInTheDocument()
   })
 })

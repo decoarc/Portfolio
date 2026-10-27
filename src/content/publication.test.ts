@@ -77,4 +77,10 @@ describe('findProject', () => {
     expect(findProject([p], '../etc')).toBeUndefined()
     expect(findProject([p], undefined)).toBeUndefined()
   })
+
+  it('ignora a caixa do slug: o Pages serve /work/X do arquivo em minúsculas', () => {
+    const p = project({ slug: 'token-killer' })
+    expect(findProject([p], 'TOKEN-KILLER')).toBe(p)
+    expect(findProject([p], 'Token-Killer')).toBe(p)
+  })
 })
