@@ -52,3 +52,18 @@ img.media {
   font-size: clamp(0.8125rem, 9.5cqi, 1rem);
   line-height: 1;
 }
+
+/* Alto contraste: o fundo vira `Canvas`, mas a cor declarada da linha
+   (--rule) e do título (--bg) é a do desenho normal, clara sobre clara para
+   quem a lê (o axe). Declara as cores de sistema que o modo já pinta; a
+   moldura é a borda da miniatura, na ficha e na tira de capas. */
+@media (forced-colors: active) {
+  .placeholder {
+    background: Canvas;
+  }
+
+  .placeholder,
+  .line {
+    color: CanvasText;
+  }
+}

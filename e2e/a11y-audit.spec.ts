@@ -176,6 +176,86 @@ test.describe('1.4.4 / 1.4.10 / 1.4.12 · varredura', () => {
   }
 })
 
+test.describe('alto contraste do Windows (forced-colors: active)', () => {
+  test.use({ viewport: { width: 1440, height: 900 } })
+
+  /**
+   * Linha de `side` (`outline` ou `border-top`) de um elemento ou
+   * pseudo-elemento: visível e de cor diferente do fundo da página.
+   */
+  function line(page: Page, selector: string, side: string, pseudo?: string) {
+    return page.evaluate(
+      ({ selector, side, pseudo }) => {
+        const el = document.querySelector(selector)
+        if (!el) return `sem ${selector}`
+        const style = getComputedStyle(el, pseudo)
+        const page = getComputedStyle(document.body).backgroundColor
+        const lineStyle = style.getPropertyValue(`${side}-style`)
+        const width = parseFloat(style.getPropertyValue(`${side}-width`))
+        const color = style.getPropertyValue(`${side}-color`)
+        if (lineStyle === 'none' || width < 1)
+          return `${side} ${lineStyle} ${width}px`
+        if (color === page || color === 'rgba(0, 0, 0, 0)')
+          return `${side} da cor do fundo (${color})`
+        return 'ok'
+      },
+      { selector, side, pseudo },
+    )
+  }
+
+  test.beforeEach(async ({ page }) => {
+    await page.emulateMedia({ forcedColors: 'active' })
+    await page.goto('/')
+    await page.evaluate(() => document.fonts.ready.then(() => true))
+    await expect(
+      page.locator('[data-entrance]:not([data-entrance="done"])'),
+    ).toHaveCount(0)
+  })
+
+  test('o foco de teclado aparece', async ({ page }) => {
+    await page.locator('#work-token-killer a[data-anchor-focus]').focus()
+    await page.keyboard.press('Shift+Tab')
+    await page.keyboard.press('Tab')
+    expect(await line(page, ':focus-visible', 'outline')).toBe('ok')
+  })
+
+  test('os filetes da lista de trabalhos aparecem', async ({ page }) => {
+    expect(await line(page, '#work-token-killer', 'border-top')).toBe('ok')
+  })
+
+  test('o placeholder "sem captura" tem moldura', async ({ page }) => {
+    // A moldura é a borda da miniatura, pai do placeholder.
+    expect(
+      await line(
+        page,
+        '#work-token-killer [aria-hidden="true"]:has(> [data-motion="thumb"])',
+        'border-top',
+      ),
+    ).toBe('ok')
+  })
+
+  test('a borda da folha aparece enquanto ela sobe sobre o hero', async ({
+    page,
+  }) => {
+    await page.mouse.wheel(0, 450)
+    await expect
+      .poll(() =>
+        page.evaluate(() =>
+          parseFloat(
+            getComputedStyle(
+              document.querySelector('main section:has(> nav)')!,
+              '::before',
+            ).height,
+          ),
+        ),
+      )
+      .toBeGreaterThan(40)
+    expect(
+      await line(page, 'main section:has(> nav)', 'border-top', '::before'),
+    ).toBe('ok')
+  })
+})
+
 test.describe('reduced motion ligado no meio da sessão', () => {
   test('voltar do case não anima a View Transition', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'no-preference' })

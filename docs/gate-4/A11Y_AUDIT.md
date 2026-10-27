@@ -111,8 +111,9 @@ ou `scrollHeight` maior que a caixa) em nenhuma combinação.
 
 Capturas em 1440 com foco num link: `forced-colors-home.png` (foco no título
 do Token Killer), `forced-colors-case.png` (foco em "Voltar"),
-`forced-colors-404.png` (foco em "Voltar ao início") e
-`forced-colors-abertura-antes.png` (a folha no meio da subida).
+`forced-colors-404.png` (foco em "Voltar ao início"),
+`forced-colors-abertura-antes.png` e `forced-colors-abertura-depois.png` (a
+folha no meio da subida, antes e depois da correção 7).
 
 - **Fica:** o foco (contorno de cor de sistema, `rgb(55, 0, 110)` na emulação),
   os filetes das fichas e do índice (`CanvasText`), a moldura da miniatura e do
@@ -230,6 +231,11 @@ varredura por texto, depois das correções 1–5)
 - **WCAG:** 1.4.11 no modo de alto contraste (spec §7, item decidido).
 - **Correção:** `border-top` em `CanvasText` dentro de
   `@media (forced-colors: active)`.
+- **Junto, para o axe em alto contraste:** o placeholder "sem captura" é
+  pintado `CanvasText` sobre `Canvas`, mas a cor declarada da linha (`--rule`)
+  e do título (`--bg`) continua a do desenho normal; o axe compara essa cor
+  com o fundo forçado e acusa 1,36:1 e 2,86:1. As cores de sistema passam a
+  ser declaradas no próprio modo, sem mudar o que aparece.
 
 ### P3 — vão para `docs/BACKLOG.md`
 
@@ -261,3 +267,4 @@ Cada linha: critério, antes → depois, propriedade. O teste está em
 | 4 | 1.4.4, 1.4.10 | `/pt`, 200% em 320: CTA até 366 px (cortado), índice até 362, `h2` até 379 → tudo dentro da janela | `Hero.module.css`: `.actions .action { white-space: normal }`; `SectionHead.module.css` `.title` e `Release.module.css` `.label`: `overflow-wrap: anywhere` |
 | 5 | 1.4.10 | 200% em 320: "Português" até 322 px, `scrollWidth` 322 no case e no 404 → 320; com texto normal a barra continua com uma linha de 48 px | `Masthead.module.css`: `flex-wrap: wrap`, `height` → `min-height` |
 | 8 | 1.4.4, 1.4.10 | `/`, 200% em 320: "collaborations," até 350 px, `scrollWidth` 350 → 320 | `Contact.module.css`: `.lead { overflow-wrap: anywhere }` |
+| 7 | 1.4.11 em `forced-colors: active` | Borda da folha no meio da subida: nenhuma linha → 2 px `CanvasText` na curva; axe em alto contraste nas `GATE_ROUTES`: 9 nós do placeholder em `color-contrast` → 0 | `Release.module.css`: `.release::before { box-sizing: content-box; border-top: 2px solid CanvasText }`; `ProjectThumb.module.css`: `.placeholder { background: Canvas }`, `.placeholder, .line { color: CanvasText }`; tudo em `@media (forced-colors: active)` |
