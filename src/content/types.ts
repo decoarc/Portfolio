@@ -54,7 +54,12 @@ export interface ContactChannel {
 }
 
 export interface SiteContent {
-  meta: { homeTitle: string; titleSuffix: string }
+  meta: {
+    homeTitle: string
+    titleSuffix: string
+    description: string
+    ogImageAlt: string
+  }
   shell: {
     skipToContent: string
     homeMark: string
