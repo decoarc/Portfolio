@@ -2,6 +2,12 @@
    fecha o hero. */
 
 .contact {
+  /* Piso do respiro inferior: o cartão aberto (12px abaixo do link, até
+     ~118px de altura quando o endereço do LinkedIn quebra em duas linhas, em
+     rem) cabe dentro da folha e não cobre o rodapé. Medido no Chromium em
+     1440×900, 1366×650, 1200, 768 e 390: o cartão passa até 131px da lista;
+     9,25rem (148px) deixa folga. Acima do piso vale o padrão das folhas. */
+  --sheet-pad-block-end: max(clamp(48px, 10vh, 112px), 9.25rem);
   border-top: 2px solid var(--ink);
 }
 

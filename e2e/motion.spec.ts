@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test'
+import { contentByLocale } from '../src/content/index.ts'
 
 const PAGES = ['/', '/work/token-killer'] as const
 
@@ -80,6 +81,21 @@ test.describe('prefers-reduced-motion: no-preference', () => {
       .toBe(0)
     await interact(page)
     expect(await firstTimed(page, true)).toBeNull()
+    // Hover no CTA primário: há animação de fato no link (traço, prévia), e
+    // o `every` abaixo não passa vazio.
+    const cta = page
+      .getByRole('region', { name: contentByLocale.en.site.person.name })
+      .getByRole('link', { name: contentByLocale.en.site.hero.ctaPrimary })
+    await cta.hover()
+    expect(
+      await cta.evaluate(
+        (link) =>
+          document.getAnimations().filter((a) => {
+            const target = (a.effect as KeyframeEffect | null)?.target
+            return target && link.parentElement!.contains(target)
+          }).length,
+      ),
+    ).toBeGreaterThan(0)
     expect(
       await page.evaluate(() =>
         document

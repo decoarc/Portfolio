@@ -35,7 +35,14 @@ img.media {
   line-height: 1.25;
   letter-spacing: 0.1em;
   text-transform: uppercase;
+  text-wrap: balance;
   color: var(--rule);
+}
+
+/* Em 168px, "TIPO · SEM CAPTURA" não cabe numa linha: com o par preso, a
+   quebra cai depois do ponto ("CONCEPT STUDY · / NO CAPTURE"). */
+.keep {
+  white-space: nowrap;
 }
 
 .title {

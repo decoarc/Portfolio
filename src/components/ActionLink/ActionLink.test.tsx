@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import { ActionLink } from './ActionLink.tsx'
 
@@ -77,5 +77,52 @@ describe('ActionLink', () => {
     const quiet = screen.getByRole('link', { name: 'Discreto' }).className
     expect(strong).not.toBe('')
     expect(strong).not.toBe(quiet)
+  })
+})
+
+describe('ActionLink · Escape dispensa a prévia', () => {
+  function renderPeek() {
+    render(
+      <>
+        <ActionLink href="#work" tone="strong" peek={<span>XYZ</span>}>
+          Trabalhos
+        </ActionLink>
+        <button type="button">Outro</button>
+      </>,
+    )
+    const link = screen.getByRole('link', { name: 'Trabalhos' })
+    const wrapper = link.parentElement!
+    return { link, wrapper }
+  }
+
+  it('com foco no link, Escape marca a prévia dispensada; sair do foco limpa', () => {
+    const { link, wrapper } = renderPeek()
+    link.focus()
+    fireEvent.keyDown(document, { key: 'Escape' })
+    expect(wrapper).toHaveAttribute('data-peek', 'dismissed')
+    screen.getByRole('button', { name: 'Outro' }).focus()
+    expect(wrapper).not.toHaveAttribute('data-peek')
+  })
+
+  it('com o cursor sobre o wrapper, Escape dispensa; sair com o cursor limpa', () => {
+    const { wrapper } = renderPeek()
+    fireEvent.pointerEnter(wrapper)
+    fireEvent.keyDown(document, { key: 'Escape' })
+    expect(wrapper).toHaveAttribute('data-peek', 'dismissed')
+    fireEvent.pointerLeave(wrapper)
+    expect(wrapper).not.toHaveAttribute('data-peek')
+  })
+
+  it('sem foco nem cursor, Escape não marca nada', () => {
+    const { wrapper } = renderPeek()
+    fireEvent.keyDown(document, { key: 'Escape' })
+    expect(wrapper).not.toHaveAttribute('data-peek')
+  })
+
+  it('outras teclas não dispensam', () => {
+    const { link, wrapper } = renderPeek()
+    link.focus()
+    fireEvent.keyDown(document, { key: 'Enter' })
+    expect(wrapper).not.toHaveAttribute('data-peek')
   })
 })

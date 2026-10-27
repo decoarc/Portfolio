@@ -52,6 +52,7 @@ export function Contact({ index, copy, externalHint }: ContactProps) {
               external={{ hint: externalHint }}
               className={styles.channel}
               peekClassName={styles.card}
+              peekHoverable
               peek={
                 <>
                   <span className={styles.mark}>{channel.peek.mark}</span>

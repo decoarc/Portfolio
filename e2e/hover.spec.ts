@@ -43,6 +43,21 @@ test.describe('reação da lista · sem reduce', () => {
     expect(await titleTransform(page, 1)).not.toBe('none')
   })
 
+  test('clique do mouse num link externo da ficha não deixa a lista esmaecida', async ({
+    page,
+    context,
+  }) => {
+    // O link abre nova aba: fecha a popup e segue na página da lista.
+    context.on('page', (popup) => void popup.close())
+    await open(page)
+    // A ficha 0 (Map Areas, verificada) é a que tem links externos.
+    const external = slip(page, 0).locator('a[target="_blank"]').first()
+    await external.click()
+    await page.mouse.move(0, 0)
+    await expect.poll(() => opacities(page)).toEqual(['1', '1', '1', '1'])
+    expect(await titleTransform(page, 1)).toBe('none')
+  })
+
   test('foco por teclado numa ficha faz o mesmo', async ({ page }) => {
     await open(page)
     await slip(page, 1).locator('h3 a').focus()
@@ -278,7 +293,11 @@ test.describe('links de ação · reduce', () => {
         const cta = primaryCta(page, site)
         await cta.focus()
         const strip = peekOf(cta)
-        if ((await style(strip, 'display')) === 'none') {
+        if (viewport.width >= 1200) {
+          // A partir de 1200 a tira existe: o teste não pode passar vazio.
+          expect(await style(strip, 'display')).not.toBe('none')
+        } else {
+          expect(await style(strip, 'display')).toBe('none')
           test.info().annotations.push({
             type: 'tira',
             description: `display: none em ${viewport.name} (sem espaço livre)`,
@@ -301,25 +320,96 @@ test.describe('links de ação · reduce', () => {
         expect(stripBox.x).toBeGreaterThanOrEqual(0)
         expect(stripBox.x + stripBox.width).toBeLessThanOrEqual(size.width)
       })
+    }
+  }
 
-      test(`foco no GitHub mostra o cartão sem cobrir o LinkedIn · ${viewport.name} · ${route.locale}`, async ({
+  // 1366×650: notebook comum, a altura em que o cartão alcançava o rodapé.
+  const LAPTOP = { name: 'laptop-1366x650', width: 1366, height: 650 }
+  for (const viewport of [...VIEWPORTS, WIDE, LAPTOP]) {
+    for (const route of ROUTES) {
+      const { site } = contentByLocale[route.locale]
+      const size = { width: viewport.width, height: viewport.height }
+
+      test(`o cartão não cobre o outro canal nem o rodapé · ${viewport.name} · ${route.locale}`, async ({
         page,
       }) => {
         await page.setViewportSize(size)
         await page.goto(route.path)
         await page.evaluate(() => document.fonts.ready.then(() => true))
-        const github = channel(page, 'GitHub', site)
-        await github.focus()
-        const card = peekOf(github)
-        expect(await style(card, 'visibility')).toBe('visible')
-        const cardBox = (await card.boundingBox())!
-        const linkedin = (await channel(page, 'LinkedIn', site).boundingBox())!
-        expect(overlaps(cardBox, linkedin)).toBe(false)
-        expect(cardBox.x).toBeGreaterThanOrEqual(0)
-        expect(cardBox.x + cardBox.width).toBeLessThanOrEqual(size.width)
+        for (const [label, other] of [
+          ['GitHub', 'LinkedIn'],
+          ['LinkedIn', 'GitHub'],
+        ]) {
+          const link = channel(page, label, site)
+          await link.focus()
+          const card = peekOf(link)
+          expect(await style(card, 'visibility'), label).toBe('visible')
+          const cardBox = (await card.boundingBox())!
+          const otherBox = (await channel(page, other, site).boundingBox())!
+          const footerBox = (await page.locator('footer p').boundingBox())!
+          expect(overlaps(cardBox, otherBox), `${label} × ${other}`).toBe(false)
+          expect(overlaps(cardBox, footerBox), `${label} × rodapé`).toBe(false)
+          expect(cardBox.x).toBeGreaterThanOrEqual(0)
+          expect(cardBox.x + cardBox.width).toBeLessThanOrEqual(size.width)
+        }
       })
     }
   }
+
+  test('o cursor passa do GitHub para o cartão e o cartão fica', async ({
+    page,
+  }) => {
+    await open(page)
+    const github = channel(page, 'GitHub')
+    await github.scrollIntoViewIfNeeded()
+    const box = (await github.boundingBox())!
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2)
+    const card = peekOf(github)
+    expect(await style(card, 'visibility')).toBe('visible')
+    const cardBox = (await card.boundingBox())!
+    // Em linha reta, do centro do link ao centro do cartão, passando pelo vão.
+    await page.mouse.move(
+      cardBox.x + cardBox.width / 2,
+      cardBox.y + cardBox.height / 2,
+      { steps: 12 },
+    )
+    expect(await style(card, 'visibility')).toBe('visible')
+    expect(await style(card, 'opacity')).toBe('1')
+  })
+
+  test('Escape esconde o cartão aberto pelo foco; Tab fora e de volta o reabre', async ({
+    page,
+  }) => {
+    await open(page)
+    await page.mouse.move(0, 0)
+    const github = channel(page, 'GitHub')
+    await github.focus()
+    const card = peekOf(github)
+    expect(await style(card, 'visibility')).toBe('visible')
+    await page.keyboard.press('Escape')
+    expect(await style(card, 'visibility')).toBe('hidden')
+    await expect(github).toBeFocused()
+    await page.keyboard.press('Tab')
+    await page.keyboard.press('Shift+Tab')
+    await expect(github).toBeFocused()
+    expect(await style(card, 'visibility')).toBe('visible')
+  })
+
+  test('Escape esconde a prévia aberta pelo hover até o cursor sair', async ({
+    page,
+  }) => {
+    await open(page)
+    const cta = primaryCta(page)
+    const box = (await cta.boundingBox())!
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2)
+    const strip = peekOf(cta)
+    expect(await style(strip, 'visibility')).toBe('visible')
+    await page.keyboard.press('Escape')
+    expect(await style(strip, 'visibility')).toBe('hidden')
+    await page.mouse.move(0, 0)
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2)
+    expect(await style(strip, 'visibility')).toBe('visible')
+  })
 })
 
 test.describe('toque · sem hover', () => {
@@ -336,6 +426,16 @@ test.describe('toque · sem hover', () => {
     expect(await opacities(page)).toEqual(['1', '1', '1', '1'])
   })
 
+  test('tap num link externo da ficha não esmaece as outras', async ({
+    page,
+    context,
+  }) => {
+    context.on('page', (popup) => void popup.close())
+    await open(page)
+    await slip(page, 0).locator('a[target="_blank"]').first().tap()
+    await expect.poll(() => opacities(page)).toEqual(['1', '1', '1', '1'])
+  })
+
   test('tap no CTA primário navega e não deixa a tira', async ({ page }) => {
     await open(page)
     const cta = primaryCta(page)
@@ -343,4 +443,56 @@ test.describe('toque · sem hover', () => {
     await expect(page).toHaveURL(/#work$/)
     expect(await style(peekOf(cta), 'visibility')).toBe('hidden')
   })
+})
+
+test.describe('miniatura sem captura', () => {
+  /** Linhas ocupadas pelo trecho "sem captura" na linha mono do placeholder. */
+  function noCaptureLines(page: Page, noCapture: string) {
+    return page
+      .locator('#work [data-motion="thumb"]:not(img)')
+      .evaluateAll((placeholders, needle) => {
+        const lines: number[] = []
+        for (const placeholder of placeholders) {
+          const walker = document.createTreeWalker(
+            placeholder,
+            NodeFilter.SHOW_TEXT,
+          )
+          for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+            const text = node as Text
+            const at = text.data.toUpperCase().indexOf(needle.toUpperCase())
+            if (at < 0) continue
+            const range = document.createRange()
+            range.setStart(text, at)
+            range.setEnd(text, at + needle.length)
+            const tops = new Set(
+              [...range.getClientRects()].map((r) => Math.round(r.top)),
+            )
+            lines.push(tops.size)
+          }
+        }
+        return lines
+      }, noCapture)
+  }
+
+  for (const viewport of VIEWPORTS) {
+    for (const route of ROUTES) {
+      const { site } = contentByLocale[route.locale]
+      test(`"${site.work.noCapture}" não quebra no meio · ${viewport.name} · ${route.locale}`, async ({
+        page,
+      }) => {
+        await page.setViewportSize({
+          width: viewport.width,
+          height: viewport.height,
+        })
+        await page.goto(route.path)
+        await page.evaluate(() => document.fonts.ready.then(() => true))
+        const lines = await noCaptureLines(page, site.work.noCapture)
+        expect(lines.length).toBeGreaterThan(0)
+        expect(
+          lines.every((count) => count === 1),
+          String(lines),
+        ).toBe(true)
+      })
+    }
+  }
 })

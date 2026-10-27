@@ -1,4 +1,4 @@
-import { useRef, type ReactNode } from 'react'
+import { useEffect, useRef, type ReactNode, type RefObject } from 'react'
 import { useMagnet } from '../../motion/magnet.ts'
 import styles from './ActionLink.module.css'
 
@@ -13,6 +13,11 @@ interface ActionLinkProps {
   peek?: ReactNode
   /** Posiciona o slot da prévia (top/bottom/left/right por faixa). */
   peekClassName?: string
+  /**
+   * A prévia aceita o cursor: passar do link para ela não a fecha (WCAG
+   * 1.4.13). Só o cartão do contato; a tira é decorativa e redundante.
+   */
+  peekHoverable?: boolean
   /** Aplicada ao <a> (tamanho e cor do texto vêm do chamador). */
   className?: string
 }
@@ -29,10 +34,13 @@ export function ActionLink({
   external,
   peek,
   peekClassName,
+  peekHoverable,
   className,
 }: ActionLinkProps) {
   const ref = useRef<HTMLAnchorElement>(null)
+  const wrapperRef = useRef<HTMLSpanElement>(null)
   useMagnet(ref)
+  usePeekDismiss(wrapperRef, ref, Boolean(peek))
 
   const trace = (
     <span className={styles.trace} data-motion="trace" aria-hidden="true" />
@@ -47,7 +55,7 @@ export function ActionLink({
     .join(' ')
 
   return (
-    <span className={styles.wrapper}>
+    <span ref={wrapperRef} className={styles.wrapper}>
       <a
         ref={ref}
         href={href}
@@ -72,7 +80,13 @@ export function ActionLink({
       </a>
       {peek && (
         <span
-          className={[styles.peekSlot, peekClassName].filter(Boolean).join(' ')}
+          className={[
+            styles.peekSlot,
+            peekHoverable && styles.hoverable,
+            peekClassName,
+          ]
+            .filter(Boolean)
+            .join(' ')}
           data-motion="peek"
           aria-hidden="true"
         >
@@ -81,4 +95,49 @@ export function ActionLink({
       )}
     </span>
   )
+}
+
+/**
+ * Escape dispensa a prévia aberta por hover ou foco (WCAG 1.4.13): marca
+ * `data-peek="dismissed"` no wrapper até o cursor sair dele e o foco sair do
+ * link. Só atributo no DOM: nenhum estado React, nenhum rAF.
+ */
+function usePeekDismiss(
+  wrapperRef: RefObject<HTMLSpanElement | null>,
+  linkRef: RefObject<HTMLAnchorElement | null>,
+  enabled: boolean,
+) {
+  useEffect(() => {
+    const wrapper = wrapperRef.current
+    const link = linkRef.current
+    if (!enabled || !wrapper || !link) return
+    let hovered = false
+    // Com cursor e foco juntos, a prévia só volta quando os dois saem.
+    const onEnter = () => {
+      hovered = true
+    }
+    const onLeave = () => {
+      hovered = false
+      if (document.activeElement !== link) wrapper.removeAttribute('data-peek')
+    }
+    const onBlur = () => {
+      if (!hovered) wrapper.removeAttribute('data-peek')
+    }
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape') return
+      if (hovered || document.activeElement === link) {
+        wrapper.setAttribute('data-peek', 'dismissed')
+      }
+    }
+    wrapper.addEventListener('pointerenter', onEnter)
+    wrapper.addEventListener('pointerleave', onLeave)
+    link.addEventListener('blur', onBlur)
+    document.addEventListener('keydown', onKey)
+    return () => {
+      wrapper.removeEventListener('pointerenter', onEnter)
+      wrapper.removeEventListener('pointerleave', onLeave)
+      link.removeEventListener('blur', onBlur)
+      document.removeEventListener('keydown', onKey)
+    }
+  }, [wrapperRef, linkRef, enabled])
 }

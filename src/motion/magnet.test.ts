@@ -86,6 +86,44 @@ describe('useMagnet', () => {
     expect(el.style.getPropertyValue('--magnet-x')).toBe('')
   })
 
+  it('reduced motion ligado no meio da sessão zera e para de escrever', () => {
+    const listeners = new Set<() => void>()
+    const query = {
+      matches: false,
+      media: '(prefers-reduced-motion: reduce)',
+      onchange: null,
+      addEventListener: (_type: string, listener: () => void) =>
+        listeners.add(listener),
+      removeEventListener: (_type: string, listener: () => void) =>
+        listeners.delete(listener),
+      addListener: () => undefined,
+      removeListener: () => undefined,
+      dispatchEvent: () => true,
+    }
+    vi.spyOn(window, 'matchMedia').mockImplementation(
+      () => query as unknown as MediaQueryList,
+    )
+    const el = anchor()
+    const { unmount } = renderHook(() => useMagnet({ current: el }))
+    fireEvent(el, pointer('pointermove', 'mouse'))
+    expect(el.style.getPropertyValue('--magnet-x')).toBe('15px')
+
+    query.matches = true
+    listeners.forEach((listener) => listener())
+    expect(el.style.getPropertyValue('--magnet-x')).toBe('')
+    expect(el.style.getPropertyValue('--magnet-y')).toBe('')
+    fireEvent(el, pointer('pointermove', 'mouse'))
+    expect(el.style.getPropertyValue('--magnet-x')).toBe('')
+
+    query.matches = false
+    listeners.forEach((listener) => listener())
+    fireEvent(el, pointer('pointermove', 'mouse'))
+    expect(el.style.getPropertyValue('--magnet-x')).toBe('15px')
+
+    unmount()
+    expect(listeners.size).toBe(0)
+  })
+
   it('desmontar remove os listeners e zera', () => {
     const el = anchor()
     const { unmount } = renderHook(() => useMagnet({ current: el }))

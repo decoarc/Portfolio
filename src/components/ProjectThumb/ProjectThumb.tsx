@@ -40,7 +40,12 @@ export function ProjectThumb({
           className={`${styles.media} ${styles.placeholder}`}
           data-motion="thumb"
         >
-          <span className={styles.line}>{`${typeLabel} · ${noCapture}`}</span>
+          {/* "sem captura" não se parte: a linha quebra no ponto, nunca
+              entre "sem" e "captura". */}
+          <span className={styles.line}>
+            {`${typeLabel} · `}
+            <span className={styles.keep}>{noCapture}</span>
+          </span>
           <span className={styles.title}>{project.title}</span>
         </div>
       )}
