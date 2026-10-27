@@ -138,6 +138,17 @@ test.describe('1.4.4 · texto a 200% em 320 px · PT', () => {
   })
 })
 
+test.describe('1.4.4 · texto a 200% em 320 px · masthead', () => {
+  for (const route of ['/work/token-killer', '/nao-existe']) {
+    test(`cabe · ${route}`, async ({ page }) => {
+      await open(page, route, 320, TEXT_200)
+      expect(await textPastEdge(page, 'header')).toEqual([])
+      const { scrollWidth: sw, clientWidth } = await scrollWidth(page)
+      expect(sw).toBeLessThanOrEqual(clientWidth)
+    })
+  }
+})
+
 test.describe('reduced motion ligado no meio da sessão', () => {
   test('voltar do case não anima a View Transition', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'no-preference' })
