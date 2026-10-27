@@ -19,11 +19,13 @@ pnpm lint           # ESLint
 pnpm test           # Vitest, uma execução
 pnpm format         # Prettier --write
 pnpm format:check
-pnpm test:e2e       # Playwright (projeto chromium); sobe build:preview + preview
+pnpm test:e2e       # Playwright (projetos chromium + visual); sobe build:preview + preview
+pnpm test:visual:update  # regrava as baselines da regressão visual (e2e/*-snapshots)
 pnpm capture        # regrava as capturas do Gate 2 em docs/gate-2/
 pnpm build          # trava de mock + tsc -b + vite build; falha enquanto houver mock
 pnpm build:preview  # igual, mas permite mock
 pnpm preview        # serve dist/
+pnpm validate:preview  # typecheck + lint + format:check + test + build:preview + test:e2e (Gate 4)
 pnpm validate       # typecheck + lint + test + build + test:e2e
 ```
 

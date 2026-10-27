@@ -14,8 +14,10 @@
     "format:check": "prettier --check .",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:e2e": "playwright test --project=chromium",
+    "test:e2e": "playwright test --project=chromium --project=visual",
+    "test:visual:update": "playwright test --project=visual --update-snapshots",
     "capture": "playwright test --project=capture",
+    "validate:preview": "pnpm typecheck && pnpm lint && pnpm format:check && pnpm test && pnpm build:preview && pnpm test:e2e",
     "validate": "pnpm typecheck && pnpm lint && pnpm test && pnpm build && pnpm test:e2e"
   },
   "dependencies": {
