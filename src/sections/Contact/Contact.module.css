@@ -70,6 +70,7 @@
 .address {
   font-size: 0.95rem;
   font-weight: 600;
+  overflow-wrap: anywhere;
 }
 
 .note {
@@ -89,5 +90,11 @@
 
   .channels > li > span {
     position: static;
+  }
+
+  /* Nunca mais largo que a lista: em 320 px os 280 px passavam da tela, e o
+     cartão, mesmo escondido, abria rolagem horizontal (WCAG 1.4.10). */
+  .card {
+    max-width: 100%;
   }
 }

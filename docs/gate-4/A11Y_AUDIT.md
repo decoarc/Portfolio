@@ -140,8 +140,9 @@ Nenhum.
   (`visibility: hidden` em repouso) vão de 46 a 326 px. Com texto a 200%, o
   endereço do LinkedIn vai até 325 px dentro do cartão aberto.
 - **WCAG:** 1.4.10 Reflow.
-- **Correção mínima:** largura limitada à da lista (`min(280px, 100%)`) e o
-  endereço podendo quebrar. Acima de 346 px nada muda.
+- **Correção mínima:** abaixo de 768 px (onde o cartão se ancora na lista)
+  `max-width: 100%`, e o endereço podendo quebrar. Com a lista a partir de
+  280 px (janela de ~345 px para cima) nada muda.
 
 **2. A stack e o texto do case não quebram**
 
@@ -241,3 +242,4 @@ Cada linha: critério, antes → depois, propriedade. O teste está em
 | --- | --- | --- | --- |
 | 6 | Reduced motion no meio da sessão | 13 animações de `::view-transition-*` ao voltar → 0 | `titleFlight.css`: `animation: none` e `opacity: 0` no antigo, sob `prefers-reduced-motion: reduce` |
 | 2 | 1.4.10, 1.4.12, 1.4.4 | `/pt/work/map-areas` em 320: `scrollWidth` 348 (normal), 420 (espaçamento), 650 (200%) → 320 | `CaseStudyRoute.module.css`: separador da stack `white-space: pre` → `pre-wrap`; `.facts` `overflow-wrap: anywhere` (antes só a partir de 768, `break-word`); `.text` `grid-template-columns: minmax(0, 1fr)` e `overflow-wrap: break-word` |
+| 1 | 1.4.10 | `/` e `/pt` em 320: `scrollWidth` 326 → 320; cartão do LinkedIn aberto de 46–326 px → dentro da janela, também a 200% | `Contact.module.css`: `.card { max-width: 100% }` abaixo de 768 px; `.address { overflow-wrap: anywhere }` |

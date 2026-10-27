@@ -65,6 +65,16 @@ function textPastEdge(page: Page, limitSelector?: string) {
   }, limitSelector)
 }
 
+test.describe('1.4.10 · 320 px sem rolagem horizontal', () => {
+  for (const route of ['/', '/pt', '/pt/work/map-areas']) {
+    test(`texto normal · ${route}`, async ({ page }) => {
+      await open(page, route, 320)
+      const { scrollWidth: sw, clientWidth } = await scrollWidth(page)
+      expect(sw).toBeLessThanOrEqual(clientWidth)
+    })
+  }
+})
+
 test.describe('1.4.10 / 1.4.12 · a stack do case quebra', () => {
   for (const [width, style] of [
     [320, undefined],
@@ -80,6 +90,24 @@ test.describe('1.4.10 / 1.4.12 · a stack do case quebra', () => {
       expect(await textPastEdge(page)).toEqual([])
       const { scrollWidth: sw, clientWidth } = await scrollWidth(page)
       expect(sw).toBeLessThanOrEqual(clientWidth)
+    })
+  }
+})
+
+test.describe('1.4.10 · o cartão do contato cabe em 320 px', () => {
+  for (const style of [undefined, TEXT_200]) {
+    test(`LinkedIn com foco ${style ? '· texto a 200%' : ''}`, async ({
+      page,
+    }) => {
+      await open(page, '/', 320, style)
+      const linkedin = page.locator('#contact a[href*="linkedin"]')
+      await linkedin.focus()
+      const card = page.locator('#contact a[href*="linkedin"] + span')
+      await expect(card).toBeVisible()
+      const box = await card.boundingBox()
+      expect(box!.x).toBeGreaterThanOrEqual(0)
+      expect(box!.x + box!.width).toBeLessThanOrEqual(320)
+      expect(await textPastEdge(page, '#contact')).toEqual([])
     })
   }
 })
