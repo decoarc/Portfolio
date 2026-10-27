@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Protótipo — transição para o case study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,100..900,0..100,0..1&family=Instrument+Sans:wght@400..700&family=Geist+Mono:wght@400..600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #e8dcc0; --surface: #f2ead6; --ink: #16130f; --ink-muted: #5a534a;
+    --rule: #a89771; --accent: #a32114;
+    --font-display: 'Fraunces', Georgia, serif;
+    --font-body: 'Instrument Sans', system-ui, sans-serif;
+    --font-mono: 'Geist Mono', ui-monospace, monospace;
+    --gutter: clamp(20px, 5vw, 80px);
+    --rail: clamp(0px, 8vw, 120px);
+    --pw: 340px;
+  }
+  @media (max-width: 900px) { :root { --pw: 0px; } }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font-body); line-height: 1.6; padding-right: var(--pw); }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  h1:focus { outline: none; }
+  .mono { font-family: var(--font-mono); font-size: .75rem; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-muted); }
+  [hidden] { display: none !important; }
+
+  /* ---------- home mock ---------- */
+  .masthead { display: flex; justify-content: space-between; padding: 14px var(--gutter); border-bottom: 1px solid var(--rule); }
+  .hero { padding: var(--gutter); border-bottom: 2px solid var(--ink); display: grid; gap: 20px; }
+  .name { margin: 0; font-family: var(--font-display); font-weight: 600; font-size: clamp(2.5rem, 1.2rem + 5vw, 5.5rem); font-variation-settings: 'opsz' 144, 'SOFT' 0, 'WONK' 1; line-height: .92; letter-spacing: -.025em; }
+  .statement { margin: 0; max-width: 42ch; font-size: 1.1rem; color: var(--ink-muted); }
+  .sheet { background: var(--surface); padding: var(--gutter); padding-left: calc(var(--gutter) + var(--rail)); }
+  .sheet > h2 { margin: 0 0 12px; font-family: var(--font-display); font-weight: 600; font-size: clamp(1.5rem, 1.1rem + 1.6vw, 2.5rem); font-variation-settings: 'opsz' 48; }
+  .list { margin: 0; padding: 0; list-style: none; }
+  .slip { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 1fr) 168px; grid-template-areas: 'type year thumb' 'title title thumb' 'summary stack thumb'; column-gap: 32px; row-gap: 6px; padding: 32px 0; border-top: 1px solid var(--rule); }
+  .slip .meta { grid-area: type; margin: 0; display: flex; align-items: baseline; }
+  .slip .idx { width: var(--rail); margin-left: calc(var(--rail) * -1); font-family: var(--font-mono); font-size: .75rem; color: var(--accent); }
+  .slip .type { font-family: var(--font-mono); font-size: .6875rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-muted); }
+  .slip .year { grid-area: year; justify-self: end; margin: 0; font-family: var(--font-mono); font-size: .75rem; color: var(--ink-muted); }
+  .slip h3 { grid-area: title; margin: 0; font-family: var(--font-display); font-weight: 600; font-size: clamp(1.5rem, 1.1rem + 1.8vw, 2.75rem); line-height: 1.05; letter-spacing: -.02em; font-variation-settings: 'opsz' 72, 'WONK' 1; }
+  .slip h3 a { color: inherit; text-decoration: none; display: inline-block; }
+  .slip h3 a:hover { text-decoration: underline 2px var(--accent); text-underline-offset: .12em; }
+  .slip .summary { grid-area: summary; margin: 0; max-width: 50ch; color: var(--ink-muted); }
+  .slip .stack { grid-area: stack; justify-self: end; margin: 0; font-family: var(--font-mono); font-size: .75rem; color: var(--ink-muted); text-align: right; }
+  .slip .thumb { grid-area: thumb; width: 168px; aspect-ratio: 4 / 3; align-self: center; overflow: hidden; border: 1px solid var(--rule); }
+  @media (max-width: 760px) {
+    .slip { grid-template-columns: 1fr auto; grid-template-areas: 'type year' 'title title' 'summary summary' 'stack stack' 'thumb thumb'; }
+    .slip .stack { justify-self: start; text-align: left; }
+    .slip .thumb { width: 100%; }
+  }
+  .cover { width: 100%; height: 100%; display: block; object-fit: cover; }
+  .ph { width: 100%; height: 100%; background: var(--ink); color: var(--bg); display: flex; flex-direction: column; justify-content: space-between; padding: 8px 10px; }
+  .ph b { font-family: var(--font-display); font-weight: 600; font-size: 1rem; line-height: 1; font-variation-settings: 'opsz' 72, 'WONK' 1; }
+  .ph span { font-family: var(--font-mono); font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; color: var(--rule); }
+  .contact { background: var(--bg); border-top: 2px solid var(--ink); min-height: 40vh; }
+
+  /* ---------- case study mock ---------- */
+  #case { background: var(--surface); min-height: 100vh; padding: clamp(32px, 6vh, 64px) var(--gutter) 96px calc(var(--gutter) + clamp(160px, 18vw, 240px)); }
+  @media (max-width: 767px) { #case { padding-left: var(--gutter); } }
+  .back { display: inline-block; margin-bottom: clamp(32px, 6vh, 64px); font-family: var(--font-mono); font-size: .75rem; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); text-decoration: none; }
+  .back::before { content: '\2190'; margin-right: .6em; }
+  .back:hover { text-decoration: underline; text-underline-offset: 3px; }
+  .chead { display: grid; gap: 12px; padding-bottom: clamp(24px, 4vh, 40px); border-bottom: 1px solid var(--rule); }
+  .ctype { margin: 0; font-family: var(--font-mono); font-size: .6875rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-muted); }
+  .ctitle { margin: 0; font-family: var(--font-display); font-weight: 600; font-variation-settings: 'opsz' 72, 'WONK' 1; font-size: clamp(2.75rem, 1.5rem + 5vw, 6rem); line-height: .95; letter-spacing: -.03em; }
+  .ctitle > span { display: inline-block; }
+  .cbody { padding-top: clamp(24px, 4vh, 40px); display: flex; align-items: flex-start; }
+  .facts { flex: none; width: clamp(160px, 18vw, 240px); margin: 0 0 0 calc(clamp(160px, 18vw, 240px) * -1); padding-right: 20px; display: grid; gap: 20px; font-family: var(--font-mono); font-size: .75rem; }
+  .facts dt { font-size: .6875rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-muted); }
+  .facts dd { margin: 0; }
+  @media (max-width: 767px) { .cbody { display: block; } .facts { width: auto; margin: 0 0 24px; display: flex; flex-wrap: wrap; gap: 12px 32px; } }
+  .ctext { max-width: 62ch; }
+  .csummary { margin: 0; font-size: 1.25rem; line-height: 1.5; }
+  .ccover { display: block; width: 100%; margin-top: 32px; border: 1px solid var(--rule); aspect-ratio: 16 / 9; overflow: hidden; }
+  .ctext section { margin-top: 48px; }
+  .ctext h2 { margin: 0 0 12px; font-family: var(--font-display); font-weight: 600; font-variation-settings: 'opsz' 48; font-size: 1.6rem; line-height: 1.1; }
+  .ctext p { margin: 0 0 1em; }
+
+  /* camada sobre a página durante a transição (sem cobrir o painel) */
+  .overlay { position: fixed !important; top: 0; left: 0; bottom: 0; right: var(--pw); overflow: auto; z-index: 15; }
+
+  /* ---------- 1 · cortina ---------- */
+  .curtain { position: fixed; top: 0; left: 0; bottom: 0; right: var(--pw); z-index: 20; overflow: hidden; pointer-events: auto; }
+  .curtain .cs { position: absolute; inset: 0; background: var(--c-bg); color: var(--c-ink); display: grid; place-items: center; }
+  .curtain .dome { position: absolute; left: -20%; right: -20%; height: 26vh; background: var(--c-bg); }
+  .curtain .dome.top { bottom: 100%; border-radius: 50% 50% 0 0 / 100% 100% 0 0; transform-origin: 50% 100%; }
+  .curtain .dome.bot { top: 100%; border-radius: 0 0 50% 50% / 0 0 100% 100%; transform-origin: 50% 0; }
+  .curtain .label { text-align: center; padding: 0 var(--gutter); }
+  .curtain .label .mono { color: var(--c-muted); display: block; margin-bottom: 14px; }
+  .curtain .label b { display: block; font-family: var(--font-display); font-weight: 600; font-variation-settings: 'opsz' 144, 'WONK' 1; font-size: clamp(2.5rem, 1.2rem + 6vw, 6.5rem); line-height: .95; letter-spacing: -.03em; }
+  .curtain[data-color="papel"] { --c-bg: var(--surface); --c-ink: var(--ink); --c-muted: var(--ink-muted); }
+  .curtain[data-color="tinta"] { --c-bg: var(--ink); --c-ink: var(--bg); --c-muted: var(--rule); }
+  .curtain[data-color="acento"] { --c-bg: var(--accent); --c-ink: var(--bg); --c-muted: #e8b7a8; }
+
+  /* ---------- 3 · título que viaja ---------- */
+  .flyer { position: fixed; z-index: 25; margin: 0; pointer-events: none; transform-origin: 0 0; white-space: nowrap; }
+
+  /* ---------- 4 · virada ---------- */
+  .turn-shade { position: fixed; top: 0; left: 0; bottom: 0; right: var(--pw); z-index: 14; background: var(--ink); pointer-events: none; }
+  .gloss { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(90deg, rgba(22,19,15,.35), rgba(22,19,15,0) 30%, rgba(255,255,255,.18) 70%, rgba(22,19,15,.25)); }
+
+  /* ---------- painel ---------- */
+  .panel { position: fixed; top: 0; right: 0; bottom: 0; width: 340px; overflow-y: auto; background: var(--ink); color: var(--bg); padding: 18px 18px 40px; font-size: .85rem; z-index: 30; line-height: 1.45; }
+  .panel.closed { width: auto; bottom: auto; }
+  .panel.closed .body { display: none; }
+  .panel h4 { margin: 0 0 6px; font-family: var(--font-mono); font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; color: var(--rule); display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+  .panel .grp { margin-top: 18px; padding-top: 14px; border-top: 1px solid #3a342c; }
+  .panel .hint { color: #bdb29a; margin: 6px 0 0; font-size: .8rem; }
+  .panel .option { padding: 8px 10px; margin-top: 6px; border: 1px solid #3a342c; cursor: pointer; }
+  .panel .option strong { display: block; color: var(--bg); font-weight: 600; }
+  .panel .option em { display: block; font-style: normal; color: #bdb29a; font-size: .78rem; margin-top: 2px; }
+  .panel .option.selected { border-color: var(--accent); background: #2a1a14; }
+  .panel .option.selected strong::before { content: '● '; color: var(--accent); }
+  .panel .tag { display: inline-block; margin-left: 6px; padding: 0 6px; font-family: var(--font-mono); font-size: .6rem; letter-spacing: .08em; text-transform: uppercase; background: var(--accent); color: var(--bg); vertical-align: 2px; }
+  .panel .row { display: flex; gap: 6px; }
+  .panel .row .option { flex: 1; }
+  .panel button { font: inherit; color: var(--bg); background: none; border: 1px solid #3a342c; padding: 4px 8px; cursor: pointer; }
+  .sub { display: none; }
+  body[data-t="cortina"] .sub.cortina { display: block; }
+</style>
+</head>
+<body data-t="titulo" data-color="papel" data-hold data-speed="1">
+
+<main id="home">
+  <header class="masthead mono"><span>André Arcodaci</span><span>PT · EN</span></header>
+  <section class="hero">
+    <h1 class="name">André Arcodaci</h1>
+    <p class="statement">Construo interfaces, APIs e automação — sistemas que você consegue rodar, ler e entender.</p>
+  </section>
+  <section class="sheet" id="work">
+    <h2>Trabalhos selecionados</h2>
+    <ul class="list" id="list"></ul>
+  </section>
+  <section class="sheet contact"><h2>Contato</h2></section>
+</main>
+
+<main id="case" hidden></main>
+
+<div class="curtain" id="curtain" hidden aria-hidden="true">
+  <div class="cs"><div class="dome top"></div><div class="dome bot"></div><div class="label"><span class="mono"></span><b></b></div></div>
+</div>
+
+<aside class="panel" id="panel">
+  <h4>Protótipo · troca para o case <button onclick="panel.classList.toggle('closed')">mostrar/ocultar</button></h4>
+  <div class="body">
+    <p class="hint">Descartável. Clique (ou Enter) no título de um projeto para abrir; use "Voltar aos trabalhos" para ver a volta. O foco vai para o título novo em cada troca.</p>
+
+    <div class="grp">
+      <h4>Transição</h4>
+      <div class="options" data-group="t">
+        <div class="option" data-v="cortina"><strong>1 · Folha que sobe</strong><em>Uma folha sobe com a borda curva (a da abertura), mostra o nome do projeto e sai pelo topo revelando o case.</em></div>
+        <div class="option" data-v="ficha"><strong>2 · A ficha se abre</strong><em>A linha clicada da lista se expande até ocupar a tela e vira o case. A volta fecha de novo na mesma linha.</em></div>
+        <div class="option" data-v="titulo"><strong>3 · Título que viaja <span class="tag">escolhida</span></strong><em>O título da ficha cresce e desliza até a posição do título do case; o resto da página troca por baixo.</em></div>
+        <div class="option" data-v="virada"><strong>4 · Virada leve</strong><em>O case cai sobre a home como uma página virando, presa pela borda esquerda. O aceno à "virada de folha", só com CSS 3D.</em></div>
+        <div class="option" data-v="minima"><strong>5 · Mínima</strong><em>A home se apaga e o case sobe alguns pixels enquanto aparece. Referência de "quase nada".</em></div>
+      </div>
+
+      <div class="sub cortina">
+        <h4 style="margin-top:14px">Cor da folha</h4>
+        <div class="row" data-group="color">
+          <div class="option" data-v="papel"><strong>Papel</strong></div>
+          <div class="option" data-v="tinta"><strong>Tinta</strong></div>
+          <div class="option" data-v="acento"><strong>Acento</strong></div>
+        </div>
+        <div data-toggle="hold" style="margin-top:6px">
+          <div class="option"><strong>Nome parado no centro</strong><em>Desligado, a folha passa direto: sobe e sai sem pausa.</em></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grp">
+      <h4>Velocidade</h4>
+      <div class="row" data-group="speed">
+        <div class="option" data-v="1"><strong>Normal</strong></div>
+        <div class="option" data-v="2.5"><strong>Lenta (2,5×)</strong></div>
+      </div>
+      <p class="hint">A lenta é só para ver o detalhe do movimento.</p>
+    </div>
+
+    <div class="grp">
+      <h4>Simular</h4>
+      <div data-toggle="reduce">
+        <div class="option"><strong>Reduced motion</strong><em>Troca direta, sem movimento, em todas as opções.</em></div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<script>
+  const projects = [
+    { idx: '01', type: 'Verificado', title: 'Map Areas', year: '2025–2026', role: 'Autor', stack: ['PHP', 'PostgreSQL/PostGIS', 'Leaflet', 'proj4'], summary: 'Desenhe e gerencie áreas poligonais em um mapa interativo. Salve áreas, limpe o mapa e adicione polígonos por coordenadas em Lat/Lng, UTM ou GMS.', img: '../../../public/images/projects/map-areas-800.webp' },
+    { idx: '02', type: 'Estudo conceitual', title: 'Token Killer', year: '2026', role: 'Autor', stack: ['Rust', 'Tokio'], summary: 'Um proxy de linha de comando que comprime a saída das ferramentas antes de ela chegar ao modelo.' },
+    { idx: '03', type: 'Estudo conceitual', title: 'Atlas Ledger', year: '2025', role: 'Autor', stack: ['Go', 'PostgreSQL'], summary: 'Primitivas de partidas dobradas sobre um log de eventos append-only que dá para auditar na mão.' },
+    { idx: '04', type: 'Estudo conceitual', title: 'Field Notes', year: '2024', role: 'Autor', stack: ['TypeScript', 'CRDT'], summary: 'Captura offline-first que reconcilia edições conflitantes sem ida e volta ao servidor.' },
+  ];
+  const cover = (p) => p.img
+    ? `<img class="cover" src="${p.img}" alt="">`
+    : `<div class="ph"><span>${p.type} · sem captura</span><b>${p.title}</b></div>`;
+
+  const body = document.body;
+  const home = document.getElementById('home');
+  const kase = document.getElementById('case');
+  const list = document.getElementById('list');
+  const curtain = document.getElementById('curtain');
+
+  list.innerHTML = projects.map((p, i) => `
+    <li class="slip" data-i="${i}">
+      <p class="meta"><span class="idx">${p.idx}</span><span class="type">${p.type}</span></p>
+      <h3><a href="#case-${i}" data-i="${i}">${p.title}</a></h3>
+      <p class="summary">${p.summary}</p>
+      <p class="stack">${p.stack.join(' · ')}</p>
+      <p class="year">${p.year}</p>
+      <div class="thumb" aria-hidden="true">${cover(p)}</div>
+    </li>`).join('');
+
+  function renderCase(i) {
+    const p = projects[i];
+    kase.innerHTML = `
+      <a class="back" href="#work">Voltar aos trabalhos</a>
+      <header class="chead">
+        <p class="ctype">${p.type}</p>
+        <h1 class="ctitle" tabindex="-1"><span>${p.title}</span></h1>
+      </header>
+      <div class="cbody">
+        <dl class="facts">
+          <div><dt>Papel</dt><dd>${p.role}</dd></div>
+          <div><dt>Ano</dt><dd>${p.year}</dd></div>
+          <div><dt>Stack</dt>${p.stack.map((s) => `<dd>${s}</dd>`).join('')}</div>
+        </dl>
+        <div class="ctext">
+          <p class="csummary">${p.summary}</p>
+          <div class="ccover">${cover(p)}</div>
+          <section><h2>O problema</h2><p>Texto mock do case. Aqui entra o contexto: o que existia antes, o que incomodava e por que valeu construir.</p><p>Um segundo parágrafo para dar altura à página e permitir rolar antes de voltar.</p></section>
+          <section><h2>Decisões</h2><p>As escolhas técnicas e o que foi deixado de fora de propósito.</p><p>Mais um parágrafo de texto mock para a rolagem.</p></section>
+          <section><h2>Resultado</h2><p>O que ficou de pé e como rodar.</p></section>
+        </div>
+      </div>`;
+    kase.querySelector('.back').addEventListener('click', (e) => { e.preventDefault(); go('home'); });
+  }
+
+  // ---------- utilidades ----------
+  const EASE = 'cubic-bezier(0.2, 0.7, 0, 1)';
+  const INOUT = 'cubic-bezier(0.76, 0, 0.24, 1)';
+  const D = () => Number(body.dataset.speed);
+  let live = [];
+  function anim(el, kf, { duration, delay = 0, easing = EASE } = {}) {
+    const a = el.animate(kf, { duration: duration * D(), delay: delay * D(), easing, fill: 'both' });
+    live.push(a);
+    return a.finished;
+  }
+  function clearAnims() { live.forEach((a) => a.cancel()); live = []; }
+  const wait = (ms) => new Promise((r) => setTimeout(r, ms * D()));
+  const vw = () => innerWidth - parseFloat(getComputedStyle(body).paddingRight);
+
+  let current = 0;
+  let busy = false;
+  let slipScroll = 0;
+
+  // estado final de cada lado: a troca em si, igual em todas as opções
+  function show(to) {
+    home.hidden = to !== 'home';
+    kase.hidden = to !== 'case';
+    if (to === 'case') {
+      scrollTo(0, 0);
+      kase.querySelector('.ctitle').focus({ preventScroll: true });
+    } else {
+      scrollTo(0, slipScroll);
+      list.querySelector(`a[data-i="${current}"]`).focus({ preventScroll: true });
+    }
+  }
+  // deixa o lado de chegada pronto por baixo, na rolagem certa
+  function slipToView() {
+    home.hidden = false;
+    const slip = list.querySelector(`.slip[data-i="${current}"]`);
+    const r = slip.getBoundingClientRect();
+    slipScroll = Math.max(0, scrollY + r.top - innerHeight * 0.3);
+    scrollTo(0, slipScroll);
+  }
+  function caseAsOverlay() {
+    const y = scrollY;
+    kase.hidden = false;
+    kase.classList.add('overlay');
+    kase.scrollTop = y;
+  }
+
+  // ---------- 1 · folha que sobe ----------
+  async function tCortina(to) {
+    const p = projects[current];
+    const cs = curtain.querySelector('.cs');
+    const top = curtain.querySelector('.top');
+    const bot = curtain.querySelector('.bot');
+    const label = curtain.querySelector('.label');
+    curtain.dataset.color = body.dataset.color;
+    label.querySelector('.mono').textContent = to === 'case' ? `${p.idx} · ${p.type}` : 'André Arcodaci';
+    label.querySelector('b').textContent = to === 'case' ? p.title : 'Trabalhos';
+    curtain.hidden = false;
+    const hold = 'hold' in body.dataset;
+    const enter = hold ? 700 : 600;
+    anim(label, [{ opacity: 0, transform: 'translateY(40px)' }, { opacity: 1, transform: 'none' }], { duration: 500, delay: 250 });
+    anim(top, [{ transform: 'scaleY(1)' }, { transform: 'scaleY(0)' }], { duration: enter, easing: INOUT });
+    await anim(cs, [{ transform: 'translateY(100%)' }, { transform: 'translateY(0)' }], { duration: enter, easing: INOUT });
+    // tela coberta: a rota troca aqui por baixo
+    if (to === 'case') { home.hidden = true; kase.hidden = false; scrollTo(0, 0); }
+    else { kase.hidden = true; slipToView(); }
+    if (hold) await wait(450);
+    const exit = hold ? 700 : 550;
+    anim(label, [{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'translateY(-60px)' }], { duration: exit * 0.6, easing: INOUT });
+    anim(bot, [{ transform: 'scaleY(0)' }, { transform: 'scaleY(1)' }], { duration: exit, easing: INOUT });
+    await anim(cs, [{ transform: 'translateY(0)' }, { transform: 'translateY(-100%)' }], { duration: exit, easing: INOUT });
+    curtain.hidden = true;
+  }
+
+  // ---------- 2 · a ficha se abre ----------
+  function insetOf(r) {
+    return `inset(${r.top}px ${vw() - r.right}px ${innerHeight - r.bottom}px ${r.left}px)`;
+  }
+  async function tFicha(to) {
+    const slip = list.querySelector(`.slip[data-i="${current}"]`);
+    if (to === 'case') {
+      const from = insetOf(slip.getBoundingClientRect());
+      kase.hidden = false;
+      kase.classList.add('overlay');
+      kase.scrollTop = 0;
+      anim([...kase.children][1], [{ opacity: 0, transform: 'translateY(24px)' }, { opacity: 1, transform: 'none' }], { duration: 600, delay: 250 });
+      anim([...kase.children][2], [{ opacity: 0, transform: 'translateY(40px)' }, { opacity: 1, transform: 'none' }], { duration: 650, delay: 340 });
+      anim(kase.querySelector('.back'), [{ opacity: 0 }, { opacity: 1 }], { duration: 400, delay: 400 });
+      await anim(kase, [{ clipPath: from }, { clipPath: 'inset(0px 0px 0px 0px)' }], { duration: 750, easing: INOUT });
+      kase.classList.remove('overlay');
+      home.hidden = true;
+      scrollTo(0, 0);
+    } else {
+      caseAsOverlay();
+      slipToView();
+      const to_ = insetOf(slip.getBoundingClientRect());
+      anim(kase.querySelector('.chead').parentElement, [{ opacity: 1 }, { opacity: 0 }], { duration: 350, delay: 250 });
+      await anim(kase, [{ clipPath: 'inset(0px 0px 0px 0px)' }, { clipPath: to_ }], { duration: 700, easing: INOUT });
+      kase.classList.remove('overlay');
+      kase.hidden = true;
+    }
+  }
+
+  // ---------- 3 · título que viaja ----------
+  // Uma cópia do título no tamanho do case, escalada até o tamanho da ficha.
+  // Os dois títulos usam o mesmo corte da Fraunces (opsz 72 fixo), então
+  // escalar não troca o desenho das letras; só o espaçamento difere, e ele é
+  // animado junto (em `em`, acompanha a escala).
+  function flyer(caseTitle, link) {
+    const cs = getComputedStyle(caseTitle);
+    const f = document.createElement('div');
+    f.className = 'flyer';
+    f.textContent = caseTitle.textContent;
+    Object.assign(f.style, { fontFamily: cs.fontFamily, fontWeight: cs.fontWeight, fontSize: cs.fontSize, fontVariationSettings: cs.fontVariationSettings, lineHeight: cs.lineHeight, color: cs.color });
+    document.body.append(f);
+    const ls = { slip: getComputedStyle(link).letterSpacing, kase: cs.letterSpacing };
+    const em = parseFloat(cs.fontSize);
+    const spacing = { slip: `${parseFloat(ls.slip) / parseFloat(getComputedStyle(link).fontSize)}em`, kase: `${parseFloat(ls.kase) / em}em` };
+    // largura da cópia com o espaçamento da ficha: é dela que sai a escala
+    f.style.letterSpacing = spacing.slip;
+    const wSlip = f.getBoundingClientRect().width;
+    const r0 = link.getBoundingClientRect();
+    const r1 = caseTitle.getBoundingClientRect();
+    Object.assign(f.style, { left: r1.left + 'px', top: r1.top + 'px' });
+    const atSlip = { transform: `translate(${r0.left - r1.left}px, ${r0.top - r1.top}px) scale(${r0.width / wSlip})`, letterSpacing: spacing.slip };
+    const atCase = { transform: 'none', letterSpacing: spacing.kase };
+    return { f, atSlip, atCase };
+  }
+  async function tTitulo(to) {
+    const link = list.querySelector(`a[data-i="${current}"]`);
+    if (to === 'case') {
+      kase.hidden = false;
+      kase.classList.add('overlay');
+      kase.scrollTop = 0;
+    } else {
+      caseAsOverlay();
+      slipToView();
+    }
+    const h = kase.querySelector('.ctitle > span');
+    const { f, atSlip, atCase } = flyer(h, link);
+    h.style.visibility = link.style.visibility = 'hidden';
+    if (to === 'case') {
+      anim(kase, [{ backgroundColor: 'rgba(242,234,214,0)' }, { backgroundColor: 'rgba(242,234,214,1)' }], { duration: 450 });
+      kase.querySelectorAll('.back, .ctype, .cbody').forEach((el, k) =>
+        anim(el, [{ opacity: 0, transform: 'translateY(20px)' }, { opacity: 1, transform: 'none' }], { duration: 550, delay: 380 + k * 60 }));
+      await anim(f, [atSlip, atCase], { duration: 800, easing: INOUT });
+    } else {
+      kase.querySelectorAll('.back, .ctype, .cbody').forEach((el) =>
+        anim(el, [{ opacity: 1 }, { opacity: 0 }], { duration: 250 }));
+      anim(kase, [{ backgroundColor: 'rgba(242,234,214,1)' }, { backgroundColor: 'rgba(242,234,214,0)' }], { duration: 450, delay: 200 });
+      await anim(f, [atCase, atSlip], { duration: 750, easing: INOUT });
+    }
+    h.style.visibility = link.style.visibility = '';
+    f.remove();
+    kase.classList.remove('overlay');
+    if (to === 'case') { home.hidden = true; scrollTo(0, 0); }
+    else kase.hidden = true;
+  }
+
+  // ---------- 4 · virada leve ----------
+  async function tVirada(to) {
+    const shade = document.createElement('div');
+    shade.className = 'turn-shade';
+    document.body.append(shade);
+    const gloss = document.createElement('div');
+    gloss.className = 'gloss';
+    const open = 'perspective(1800px) rotateY(-92deg)';
+    const mid = 'perspective(1800px) rotateY(-28deg) skewY(-1.2deg)';
+    const shut = 'perspective(1800px) rotateY(0deg)';
+    if (to === 'case') {
+      kase.hidden = false;
+      kase.classList.add('overlay');
+      kase.scrollTop = 0;
+      kase.append(gloss);
+      kase.style.transformOrigin = '0 50%';
+      anim(shade, [{ opacity: 0 }, { opacity: 0.35 }], { duration: 800 });
+      anim(gloss, [{ opacity: 1 }, { opacity: 0 }], { duration: 900, easing: INOUT });
+      await anim(kase, [{ transform: open }, { transform: mid, offset: 0.6 }, { transform: shut }], { duration: 900, easing: INOUT });
+      kase.classList.remove('overlay');
+      home.hidden = true;
+      scrollTo(0, 0);
+    } else {
+      caseAsOverlay();
+      slipToView();
+      kase.append(gloss);
+      kase.style.transformOrigin = '0 50%';
+      anim(shade, [{ opacity: 0.35 }, { opacity: 0 }], { duration: 850 });
+      anim(gloss, [{ opacity: 0 }, { opacity: 1 }], { duration: 850, easing: INOUT });
+      await anim(kase, [{ transform: shut }, { transform: mid, offset: 0.4 }, { transform: open }], { duration: 850, easing: INOUT });
+      kase.classList.remove('overlay');
+      kase.hidden = true;
+    }
+    gloss.remove();
+    shade.remove();
+    kase.style.transformOrigin = '';
+  }
+
+  // ---------- 5 · mínima ----------
+  async function tMinima(to) {
+    const out = to === 'case' ? home : kase;
+    const inn = to === 'case' ? kase : home;
+    await anim(out, [{ opacity: 1 }, { opacity: 0 }], { duration: 220, easing: 'ease-out' });
+    out.hidden = true;
+    inn.hidden = false;
+    if (to === 'case') scrollTo(0, 0); else slipToView();
+    clearAnims();
+    await anim(inn, [{ opacity: 0, transform: 'translateY(16px)' }, { opacity: 1, transform: 'none' }], { duration: 450 });
+  }
+
+  const T = { cortina: tCortina, ficha: tFicha, titulo: tTitulo, virada: tVirada, minima: tMinima };
+
+  async function go(to) {
+    if (busy) return;
+    if (to === 'case') { slipScroll = scrollY; renderCase(current); }
+    if ('reduce' in body.dataset) { show(to); return; }
+    busy = true;
+    try { await T[body.dataset.t](to); }
+    finally { clearAnims(); busy = false; show(to); }
+  }
+
+  list.addEventListener('click', (e) => {
+    const a = e.target.closest('a[data-i]');
+    if (!a) return;
+    e.preventDefault();
+    current = Number(a.dataset.i);
+    go('case');
+  });
+
+  // ---------- painel ----------
+  if (innerWidth < 900) document.getElementById('panel').classList.add('closed');
+  document.querySelectorAll('[data-group]').forEach((g) => {
+    const key = g.dataset.group;
+    g.querySelectorAll('.option').forEach((o) => {
+      if (body.dataset[key] === o.dataset.v) o.classList.add('selected');
+      o.onclick = () => {
+        g.querySelectorAll('.option').forEach((x) => x.classList.remove('selected'));
+        o.classList.add('selected');
+        body.dataset[key] = o.dataset.v;
+      };
+    });
+  });
+  document.querySelectorAll('[data-toggle]').forEach((g) => {
+    const key = g.dataset.toggle;
+    const o = g.querySelector('.option');
+    if (key in body.dataset) o.classList.add('selected');
+    o.onclick = () => {
+      const on = !(key in body.dataset);
+      if (on) body.dataset[key] = ''; else delete body.dataset[key];
+      o.classList.toggle('selected', on);
+    };
+  });
+</script>
+</body>
+</html>
