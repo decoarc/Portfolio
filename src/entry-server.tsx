@@ -19,6 +19,7 @@ import {
 import { createRoutes } from './app/routes.tsx'
 import { siteOrigin } from './app/siteOrigin.ts'
 
+export { ENTRANCE_EARLY_SCRIPT } from './app/entranceEarly.ts'
 export { renderHeadTags, routeHead } from './app/head.ts'
 export { prerenderRoutes } from './app/prerenderRoutes.ts'
 export { siteOrigin } from './app/siteOrigin.ts'

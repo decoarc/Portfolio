@@ -1,4 +1,5 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { StrictMode } from 'react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { Opening } from './Opening.tsx'
 import { onScroll, scrollToTop } from './smoothScroll.ts'
@@ -44,6 +45,7 @@ const root = (container: HTMLElement) =>
 
 afterEach(() => {
   reduce = false
+  delete document.documentElement.dataset.entranceEarly
   setWindow(0)
   vi.mocked(scrollToTop).mockClear()
 })
@@ -131,6 +133,50 @@ describe('Opening', () => {
     renderOpening()
     fireEvent.focusIn(screen.getByRole('link', { name: 'Get in touch' }))
     expect(scrollToTop).not.toHaveBeenCalled()
+  })
+
+  describe('marca do script inline (data-entrance-early)', () => {
+    const html = document.documentElement
+
+    it('expired: sem entrada, e a marca sai do <html>', async () => {
+      setWindow(0)
+      html.dataset.entranceEarly = 'expired'
+      const { container } = renderOpening()
+      expect(html).not.toHaveAttribute('data-entrance-early')
+      expect(root(container)).not.toHaveAttribute('data-entrance')
+      await new Promise((resolve) => setTimeout(resolve, 50))
+      expect(root(container)).not.toHaveAttribute('data-entrance')
+    })
+
+    it('pending: o Opening assume (pending) e a marca sai do <html>', () => {
+      setWindow(0)
+      html.dataset.entranceEarly = 'pending'
+      const { container } = renderOpening()
+      expect(html).not.toHaveAttribute('data-entrance-early')
+      expect(root(container)).toHaveAttribute('data-entrance', 'pending')
+    })
+
+    it('com reduced motion a marca também sai', () => {
+      reduce = true
+      html.dataset.entranceEarly = 'pending'
+      const { container } = renderOpening()
+      expect(html).not.toHaveAttribute('data-entrance-early')
+      expect(root(container)).not.toHaveAttribute('data-entrance')
+    })
+
+    it('expired sobrevive ao efeito duplo do StrictMode', () => {
+      setWindow(0)
+      html.dataset.entranceEarly = 'expired'
+      const { container } = render(
+        <StrictMode>
+          <Opening>
+            <section>hero</section>
+            <section>índice</section>
+          </Opening>
+        </StrictMode>,
+      )
+      expect(root(container)).not.toHaveAttribute('data-entrance')
+    })
   })
 
   it('foco no índice não mexe no scroll', () => {

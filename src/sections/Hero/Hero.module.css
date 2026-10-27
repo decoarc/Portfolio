@@ -87,7 +87,11 @@
 }
 
 /* Entrada: o nome sobe de trás da fenda. `data-entrance` só existe quando o
-   script vai animar (nunca com reduced motion nem sem JS). */
+   script vai animar (nunca com reduced motion nem sem JS). No HTML
+   pré-renderizado, o script inline do `<head>` esconde o nome antes do JS com
+   `data-entrance-early` no `<html>` (src/app/entranceEarly.ts); o `Opening`
+   tira a marca ao montar. */
+:global(html[data-entrance-early='pending']) .word,
 [data-entrance='pending'] .word {
   transform: translateY(105%);
 }

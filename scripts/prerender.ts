@@ -25,6 +25,7 @@ interface ServerEntry {
   siteOrigin(): string
   htmlLang(locale: Locale): string
   contentByLocale: Record<Locale, { site: { notFound: { title: string } } }>
+  ENTRANCE_EARLY_SCRIPT: string
 }
 
 const root = process.cwd()
@@ -96,6 +97,12 @@ for (const route of routes) {
   }
   if (!/name="description" content="[^"]+"/.test(headTags)) {
     fail(`${route.url}: o head não tem description`)
+  }
+
+  // Só nas homes: esconde o nome antes do JS para a entrada não piscar
+  // (design §5.3). O texto vai exato, porque o CSP usa o hash dele.
+  if (route.key.page === 'home') {
+    headTags = `<script>${entry.ENTRANCE_EARLY_SCRIPT}</script>\n${headTags}`
   }
 
   // Funções de substituição: `$` no conteúdo não vira padrão de replace.

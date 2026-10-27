@@ -11,6 +11,17 @@ const round = (value: number) => String(Math.round(value * 1000) / 1000)
 const ENTRANCE_TIMEOUT_MS = 1800
 
 /**
+ * Assume a marca do script inline do `<head>` (`src/app/entranceEarly.ts`) e
+ * a tira do `<html>`. Devolve o valor que ela tinha.
+ */
+function takeEarlyMark(): string | undefined {
+  const html = document.documentElement
+  const mark = html.dataset.entranceEarly
+  delete html.dataset.entranceEarly
+  return mark
+}
+
+/**
  * A abertura da home: envolve o hero (primeiro filho, preso no topo) e a
  * folha do índice que sobe por cima. Escreve as `--opening-*` que Hero e
  * Release leem no CSS e conduz a entrada do nome por `data-entrance`. Com
@@ -18,8 +29,13 @@ const ENTRANCE_TIMEOUT_MS = 1800
  */
 export function Opening({ children }: { children: ReactNode }) {
   const ref = useRef<HTMLDivElement>(null)
+  // Lida uma vez por montagem: o efeito duplo do StrictMode não perde o
+  // `expired` que a primeira passada já tirou do `<html>`.
+  const earlyMark = useRef<string | undefined | null>(null)
 
   useLayoutEffect(() => {
+    // Sempre, inclusive com reduced motion: a marca não pode ficar no `<html>`.
+    if (earlyMark.current === null) earlyMark.current = takeEarlyMark()
     const root = ref.current
     if (!root || prefersReducedMotion()) return
     const hero = root.firstElementChild as HTMLElement | null
@@ -71,8 +87,11 @@ export function Opening({ children }: { children: ReactNode }) {
     window.addEventListener('resize', onResize)
 
     // Entrada só para quem chega no topo; antes da primeira pintura, para o
-    // nome não piscar no lugar. Com hash a página ainda está em 0 aqui (o
-    // ScrollManager rola depois), mas vai abrir rolada. Começa depois das
+    // nome não piscar no lugar. No HTML pré-renderizado quem o esconde antes
+    // do JS é o script inline (`pending`); se o JS demorou mais de 3 s ele já
+    // reapareceu (`expired`) e não some de novo para entrar. Com hash a
+    // página ainda está em 0 aqui (o ScrollManager rola depois), mas vai
+    // abrir rolada. Começa depois das
     // fontes, para não revelar a fonte de fallback, e com dois frames para o
     // estado escondido ser pintado. Se nesse meio-tempo o navegador restaurou
     // a posição (voltar), não há entrada: o nome aparece no lugar.
@@ -81,7 +100,11 @@ export function Opening({ children }: { children: ReactNode }) {
     const finish = () => {
       if (root.dataset.entrance === 'run') root.dataset.entrance = 'done'
     }
-    if (window.scrollY === 0 && !window.location.hash) {
+    if (
+      earlyMark.current !== 'expired' &&
+      window.scrollY === 0 &&
+      !window.location.hash
+    ) {
       root.dataset.entrance = 'pending'
       const fontsReady = document.fonts?.ready ?? Promise.resolve()
       void fontsReady.then(() => {
