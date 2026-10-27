@@ -196,6 +196,18 @@ test.describe('links de ação · sem reduce', () => {
     expect(await style(traceOf(cta), 'animation-name')).not.toBe('none')
     await expect.poll(() => style(peekOf(cta), 'visibility')).toBe('visible')
     await expect.poll(() => style(peekOf(cta), 'opacity')).toBe('1')
+    // A cor do texto não muda: só o traço troca.
+    expect(await style(cta, 'color')).toBe(INK)
+  })
+
+  test('foco num canal do contato não muda a cor do texto', async ({
+    page,
+  }) => {
+    await open(page)
+    const github = channel(page, 'GitHub')
+    await github.focus()
+    expect(await style(traceOf(github), 'background-color')).toBe(ACCENT)
+    expect(await style(github, 'color')).toBe(INK)
   })
 
   test('magnético: o mouse dentro do link o puxa', async ({ page }) => {
@@ -250,7 +262,9 @@ test.describe('links de ação · reduce', () => {
     expect(await translation(cta)).toEqual({ x: 0, y: 0 })
   })
 
-  for (const viewport of VIEWPORTS) {
+  // 1200×800: a faixa mais apertada em que a tira aparece.
+  const WIDE = { name: 'wide-1200', width: 1200, height: 800 }
+  for (const viewport of [...VIEWPORTS, WIDE]) {
     for (const route of ROUTES) {
       const { site } = contentByLocale[route.locale]
       const size = { width: viewport.width, height: viewport.height }
@@ -306,4 +320,27 @@ test.describe('links de ação · reduce', () => {
       })
     }
   }
+})
+
+test.describe('toque · sem hover', () => {
+  test.use({
+    hasTouch: true,
+    isMobile: true,
+    viewport: { width: 390, height: 844 },
+    reducedMotion: 'no-preference',
+  })
+
+  test('tap numa ficha não esmaece as outras', async ({ page }) => {
+    await open(page)
+    await slip(page, 1).locator('p').nth(1).tap()
+    expect(await opacities(page)).toEqual(['1', '1', '1', '1'])
+  })
+
+  test('tap no CTA primário navega e não deixa a tira', async ({ page }) => {
+    await open(page)
+    const cta = primaryCta(page)
+    await cta.tap()
+    await expect(page).toHaveURL(/#work$/)
+    expect(await style(peekOf(cta), 'visibility')).toBe('hidden')
+  })
 })

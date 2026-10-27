@@ -5,29 +5,21 @@ Item sem momento definido vira item esquecido.
 
 ## Interação e motion — Fase 5 (com conteúdo real)
 
-### Preview de projeto no hover
+### Miniaturas com mídia real
 
-Ao passar o mouse sobre um projeto na lista de trabalhos, revelar um preview
-dele. Ideia do dono, registrada no Gate 1.
+As fichas da lista de trabalhos já têm miniatura (segunda leva da Fase 3). Hoje
+só o Map Areas tem imagem (`cover`); os outros projetos usam o placeholder
+escuro "sem captura", aprovado pelo dono até a Fase 5.
 
-- **Depende de:** mídia de projeto autorizada. Hoje existe um único projeto
-  verificado (`map-areas`) e nenhuma captura de produto liberada; sem isso o
-  preview não tem o que mostrar. Por isso fica para a Fase 5, junto da troca
-  dos mocks (decisão do dono, 2026-10-27): o tamanho e o formato da mídia real
-  definem o desenho. A parte tipográfica vem antes, na segunda leva da Fase 3.
-- **Restrições que já valem:** `docs/SPEC.md` §5.2 e §6 — todo hover precisa de
-  equivalente por teclado e por toque, o preview não pode esconder conteúdo nem
-  mover o alvo de clique para longe do cursor, e tudo desliga em
-  `prefers-reduced-motion`.
-- **Nota de direção:** a nota de motion do comp vencedor previa as lâminas se
-  separando verticalmente na entrada em viewport. O preview no hover é uma
-  camada a mais, não um substituto; decidir na Fase 3 se as duas coexistem ou
-  se uma substitui a outra.
-- **Registrar em:** `docs/MOTION_SPEC.md` quando implementado — objetivo,
-  gatilho, estados, duração, alternativa reduced-motion, fallback sem JS.
-- **Referência levantada (2026-10-26):** a lista de trabalhos de
-  dennissnellenberg.com — a prévia segue o cursor com um círculo "View", o
-  título da linha recua e as outras linhas esmaecem.
+- **Fazer:** trocar os placeholders por capturas autorizadas, junto da troca dos
+  mocks (decisão do dono, 2026-10-27). Cada projeto passa a ter a própria fonte
+  (`thumbSrc`) e o tamanho e o formato da mídia real podem rever o 4:3.
+- **Restrições que já valem:** `docs/SPEC.md` §5.2 e §6; a imagem continua
+  decorativa (`alt=""`) e sem depender de hover.
+- **Registrar em:** as fichas "Miniatura da ficha" e "Prévias dos links de ação"
+  de `docs/MOTION_SPEC.md`, se o desenho mudar.
+- **Recusado:** a prévia que segue o cursor com um círculo "View"
+  (dennissnellenberg.com) foi vista no protótipo e não entrou.
 
 ## Interação e motion — Fase 3, segunda leva
 
@@ -40,8 +32,9 @@ texto mock (texto que acende, lista reagindo ao mouse) é revisto na Fase 5.
 Todos seguem as regras de `docs/MOTION_SPEC.md` (reduced-motion, teclado,
 fallback sem JS) e reaproveitam o scroll suave já instalado.
 
-Ordem sugerida: links que se enchem de cor, lista reagindo ao mouse, texto que
-acende, cortina do case study (a mais cara, mexe no router). Os dois ajustes
+Feitos em 2026-10-27: hover nos links de ação e reação da lista de trabalhos
+(`docs/MOTION_SPEC.md`). Ordem sugerida do que resta: texto que acende,
+cortina do case study (a mais cara, mexe no router). Os dois ajustes
 pequenos da abertura (parar de reescrever com a folha no topo; `ScrollManager`
 como único dono da rolagem até âncoras) foram feitos em 2026-10-27.
 
@@ -59,22 +52,11 @@ Parágrafos começam apagados e clareiam palavra por palavra conforme a rolagem
 (referência: yasingenc.net). Candidatos: Abordagem e Sobre. Cuidado: o texto
 precisa estar legível sem o efeito e para leitor de tela desde o primeiro frame.
 
-### Lista de trabalhos reagindo ao mouse
-
-A parte tipográfica do preview no hover (título recua, outras linhas esmaecem)
-não depende de mídia e pode vir antes da prévia com imagem. Ver o item
-"Preview de projeto no hover" acima.
-
 ### Cortina ao abrir um case study
 
 Na troca da home para `/work/:slug`, uma tela com o nome do projeto antes do
 conteúdo (referência: dennissnellenberg.com). Exige uma camada de transição
 no router; o link precisa funcionar em `t=0` e o foco ir para o conteúdo novo.
-
-### Botões e links que se enchem de cor no hover
-
-Preenchimento subindo de baixo para cima nos links de ação do hero e do contato
-(referência: dennissnellenberg.com). Precisa de equivalente em `:focus-visible`.
 
 ## Ferramental — depois da implementação visual
 
