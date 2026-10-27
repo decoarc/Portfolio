@@ -33,8 +33,9 @@ Todos seguem as regras de `docs/MOTION_SPEC.md` (reduced-motion, teclado,
 fallback sem JS) e reaproveitam o scroll suave já instalado.
 
 Feitos em 2026-10-27: hover nos links de ação, reação da lista de trabalhos e
-texto que acende com o scroll (`docs/MOTION_SPEC.md`). Resta a cortina do case
-study (a mais cara, mexe no router). Os dois ajustes
+texto que acende com o scroll (`docs/MOTION_SPEC.md`). Também em 2026-10-27, o
+título que viaja da ficha ao case study e volta (no lugar da cortina antes
+prevista), que termina a segunda leva. Os dois ajustes
 pequenos da abertura (parar de reescrever com a folha no topo; `ScrollManager`
 como único dono da rolagem até âncoras) foram feitos em 2026-10-27.
 
@@ -46,11 +47,12 @@ assim por ora. Já foram testadas e recusadas duas alternativas (protótipo v5):
 segurar o hero até o nome terminar e só então subir a folha, e manter o nome por
 cima da folha até ela chegar ao topo. Se voltar ao tema, partir de outra ideia.
 
-### Cortina ao abrir um case study
+### Reduced motion ligado no meio da sessão
 
-Na troca da home para `/work/:slug`, uma tela com o nome do projeto antes do
-conteúdo (referência: dennissnellenberg.com). Exige uma camada de transição
-no router; o link precisa funcionar em `t=0` e o foco ir para o conteúdo novo.
+Se o visitante ligar `prefers-reduced-motion` depois de uma viagem do título,
+voltar/avançar no navegador ainda mostra o fade padrão de 250 ms da View
+Transition (o CSS que o desliga só vale sob `no-preference`). Raro e curto;
+adiado. Ver a ficha "Título que viaja" em `docs/MOTION_SPEC.md`.
 
 ## Ferramental — depois da implementação visual
 
