@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Protótipo — hover (configuração aprovada)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,100..900,0..100,0..1&family=Instrument+Sans:wght@400..700&family=Geist+Mono:wght@400..600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #e8dcc0; --surface: #f2ead6; --ink: #16130f; --ink-muted: #5a534a;
+    --rule: #a89771; --accent: #a32114;
+    --font-display: 'Fraunces', Georgia, serif;
+    --font-body: 'Instrument Sans', system-ui, sans-serif;
+    --font-mono: 'Geist Mono', ui-monospace, monospace;
+    --gutter: clamp(20px, 5vw, 80px);
+    --rail: clamp(0px, 8vw, 120px);
+    --fill: var(--accent);
+    --ease: cubic-bezier(0.2, 0.7, 0, 1);
+  }
+  body[data-fillcolor="ink"] { --fill: var(--ink); }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font-body); line-height: 1.6; padding-right: 340px; }
+  @media (max-width: 900px) { body { padding-right: 0; } }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .mono { font-family: var(--font-mono); font-size: .75rem; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-muted); }
+
+  /* ---------- página mock ---------- */
+  .masthead { display: flex; justify-content: space-between; padding: 14px var(--gutter); border-bottom: 1px solid var(--rule); }
+  .hero { padding: var(--gutter); border-bottom: 2px solid var(--ink); display: grid; gap: 28px; }
+  .metaRow { display: flex; justify-content: space-between; }
+  .name { margin: 0; font-family: var(--font-display); font-weight: 600; font-size: clamp(2.75rem, 1.2rem + 7vw, 7rem); font-variation-settings: 'opsz' 144, 'SOFT' 0, 'WONK' 1; line-height: .92; letter-spacing: -.025em; max-width: 9ch; }
+  .bottom { display: grid; grid-template-columns: 1fr 1.6fr 1.6fr; gap: 24px; align-items: end; }
+  @media (max-width: 760px) { .bottom { grid-template-columns: 1fr; } }
+  .role { color: var(--accent); }
+  .statement { margin: 0; max-width: 38ch; font-size: 1.15rem; color: var(--ink-muted); }
+  .actions { display: flex; flex-wrap: wrap; gap: 20px; align-items: baseline; position: relative; }
+
+  .sheet { background: var(--surface); padding: var(--gutter); padding-left: calc(var(--gutter) + var(--rail)); position: relative; }
+  .sheet h2 { margin: 0 0 12px; font-family: var(--font-display); font-weight: 600; font-size: clamp(1.5rem, 1.1rem + 1.6vw, 2.5rem); font-variation-settings: 'opsz' 48; }
+  .contact { background: var(--bg); border-top: 2px solid var(--ink); }
+  .contact .lead { margin: 0; max-width: 22ch; font-family: var(--font-display); font-weight: 600; font-size: clamp(1.5rem, 1.1rem + 1.8vw, 2.75rem); line-height: 1.1; letter-spacing: -.02em; font-variation-settings: 'opsz' 72, 'WONK' 1; }
+  .channels { display: flex; flex-wrap: wrap; gap: 12px 32px; margin: 40px 0 0; padding: 0; list-style: none; font-size: 1.25rem; position: relative; }
+
+  /* ---------- A · links de ação ---------- */
+  .cta { position: relative; display: inline-block; color: var(--ink); text-decoration: none; white-space: nowrap; isolation: isolate; }
+  .cta.primary { font-size: .95rem; border-bottom: 2px solid var(--accent); padding-bottom: 2px; }
+  .cta.ghost { font-size: .95rem; color: var(--ink-muted); border-bottom: 1px solid var(--rule); padding-bottom: 2px; }
+  .cta.ext { text-decoration: underline; text-decoration-color: var(--rule); text-underline-offset: 3px; }
+  .cta.ext::after { content: '\2197'; display: inline-block; margin-left: .3em; }
+  .roll { display: inline-grid; vertical-align: bottom; overflow: hidden; }
+  .roll > span { grid-area: 1 / 1; }
+  .roll > span + span { visibility: hidden; }
+
+  /* atual (Gate 2) */
+  body[data-cta="atual"] .cta.ext:is(:hover, :focus-visible) { color: var(--accent); text-decoration-color: var(--accent); }
+
+  /* A1 · preenchimento sobe */
+  body[data-cta="fill"] .cta { padding: .15em .4em .2em; margin: 0 -.4em; }
+  body[data-cta="fill"] .cta::before { content: ''; position: absolute; inset: 0; z-index: -1; background: var(--fill); transform: scaleY(0); transform-origin: 50% 100%; transition: transform .45s var(--ease); }
+  body[data-cta="fill"] .cta { transition: color .3s var(--ease); }
+  body[data-cta="fill"] .cta:is(:hover, :focus-visible) { color: var(--bg); text-decoration-color: transparent; }
+  body[data-cta="fill"] .cta:is(:hover, :focus-visible)::before { transform: scaleY(1); }
+
+  /* A2 · pílula que se enche (mais "botão", como no dennis) */
+  body[data-cta="pill"] .cta { padding: .55em 1.2em; border: 1px solid var(--ink); border-radius: 999px; overflow: hidden; text-decoration: none; transition: color .35s var(--ease); }
+  body[data-cta="pill"] .cta.ghost { border-color: var(--rule); }
+  body[data-cta="pill"] .cta::before { content: ''; position: absolute; left: -10%; right: -10%; top: 0; height: 220%; z-index: -1; background: var(--fill); border-radius: 50%; transform: translateY(100%); transition: transform .5s var(--ease); }
+  body[data-cta="pill"] .cta:is(:hover, :focus-visible) { color: var(--bg); }
+  body[data-cta="pill"] .cta:is(:hover, :focus-visible)::before { transform: translateY(-25%); }
+
+  /* A3 · sublinhado que corre */
+  body[data-cta="line"] .cta { border-bottom-color: transparent; text-decoration: none; }
+  body[data-cta="line"] .cta > .line { position: absolute; left: 0; right: 0; bottom: -2px; height: 2px; background: var(--accent); transform-origin: 100% 50%; }
+  body[data-cta="line"] .cta.ghost > .line, body[data-cta="line"] .cta.ext > .line { background: var(--rule); height: 1px; }
+  body[data-cta="line"] .cta:is(:hover, :focus-visible) > .line { animation: sweep .7s var(--ease); background: var(--accent); }
+  body[data-cta="line"] .cta:is(:hover, :focus-visible) { color: var(--ink); }
+  @keyframes sweep { 0% { transform: scaleX(1); transform-origin: 100% 50%; } 45% { transform: scaleX(0); transform-origin: 100% 50%; } 46% { transform: scaleX(0); transform-origin: 0 50%; } 100% { transform: scaleX(1); transform-origin: 0 50%; } }
+  .cta > .line { display: none; }
+  body[data-cta="line"] .cta > .line { display: block; }
+
+  /* A4 · texto que rola */
+  body[data-cta="roll"] .roll > span { transition: transform .5s var(--ease); }
+  body[data-cta="roll"] .roll > span + span { visibility: visible; transform: translateY(100%); color: var(--accent); }
+  body[data-cta="roll"] .cta:is(:hover, :focus-visible) .roll > span:first-child { transform: translateY(-100%); }
+  body[data-cta="roll"] .cta:is(:hover, :focus-visible) .roll > span + span { transform: translateY(0); }
+
+  /* modificador · magnético */
+  .cta { transition-property: color, transform; }
+  body[data-magnet] .cta.magnet-on { transition: transform .15s linear, color .3s var(--ease); }
+
+  /* ---------- B · lista de trabalhos ---------- */
+  .list { margin: 0; padding: 0; list-style: none; position: relative; }
+  .slip { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 1fr); grid-template-areas: 'type year' 'title title' 'summary stack'; column-gap: 32px; row-gap: 6px; padding: 32px 0; border-top: 1px solid var(--rule); transition: opacity .35s var(--ease); }
+  .slip .meta { grid-area: type; margin: 0; display: flex; align-items: baseline; }
+  .slip .idx { width: var(--rail); margin-left: calc(var(--rail) * -1); font-family: var(--font-mono); font-size: .75rem; color: var(--accent); }
+  .slip .type { font-family: var(--font-mono); font-size: .6875rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-muted); }
+  .slip .year { grid-area: year; justify-self: end; margin: 0; font-family: var(--font-mono); font-size: .75rem; color: var(--ink-muted); }
+  .slip h3 { grid-area: title; margin: 0; font-family: var(--font-display); font-weight: 600; font-size: clamp(1.5rem, 1.1rem + 1.8vw, 2.75rem); line-height: 1.05; letter-spacing: -.02em; font-variation-settings: 'opsz' 72, 'WONK' 1; }
+  .slip h3 a { color: inherit; text-decoration: none; display: inline-block; transition: transform .45s var(--ease); }
+  .slip .summary { grid-area: summary; margin: 0; max-width: 50ch; color: var(--ink-muted); }
+  .slip .stack { grid-area: stack; justify-self: end; margin: 0; font-family: var(--font-mono); font-size: .75rem; color: var(--ink-muted); text-align: right; }
+  .slip .thumb { display: none; }
+
+  body[data-list="atual"] .slip h3 a:is(:hover, :focus-visible) { text-decoration: underline 2px var(--accent); text-underline-offset: .12em; }
+
+  /* B1 · reação tipográfica (vale sozinha e como camada das prévias) */
+  body[data-typo] .list:has(.slip:is(:hover, :focus-within)) .slip:not(:hover, :focus-within) { opacity: .35; }
+  body[data-typo] .slip:is(:hover, :focus-within) h3 a { transform: translateX(clamp(16px, 3vw, 48px)); }
+
+  /* B4 · miniatura fixa na linha (funciona no toque, sem hover) */
+  body[data-list="thumb"] .slip { grid-template-columns: minmax(0, 3fr) minmax(0, 1fr) 168px; grid-template-areas: 'type year thumb' 'title title thumb' 'summary stack thumb'; }
+  body[data-list="thumb"] .slip .thumb { display: block; grid-area: thumb; width: 168px; aspect-ratio: 4 / 3; align-self: center; overflow: hidden; border: 1px solid var(--rule); }
+  body[data-list="thumb"] .slip .thumb > * { transition: transform .6s var(--ease); }
+  body[data-list="thumb"] .slip:is(:hover, :focus-within) .thumb > * { transform: scale(1.06); }
+
+  /* B3 · janela fixa ao lado da lista */
+  .workGrid { display: block; }
+  .dock { display: none; }
+  body[data-list="dock"] .workGrid { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 40px; align-items: start; }
+  body[data-list="dock"] .dock { display: block; position: sticky; top: 24px; aspect-ratio: 4 / 3; overflow: hidden; border: 1px solid var(--rule); background: var(--bg); }
+  body[data-list="dock"] .slip { grid-template-columns: 1fr auto; grid-template-areas: 'type year' 'title title' 'summary summary' 'stack stack'; }
+  body[data-list="dock"] .slip .stack { justify-self: start; text-align: left; }
+  .dock .reel { position: absolute; inset: 0; transition: transform .6s var(--ease); }
+  .dock .reel > * { height: 100%; }
+  .dock .idle { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; padding: 24px; }
+
+  /* B2 · prévia seguindo o cursor */
+  .float { position: fixed; left: 0; top: 0; width: 320px; aspect-ratio: 4 / 3; pointer-events: none; z-index: 20; opacity: 0; }
+  .float .frame { position: absolute; inset: 0; overflow: hidden; transform: scale(0); transition: transform .45s var(--ease); background: var(--bg); }
+  .float .reel { position: absolute; inset: 0; transition: transform .6s var(--ease); }
+  .float .reel > * { height: 100%; }
+  .float .view { position: absolute; left: 50%; top: 50%; width: 84px; height: 84px; margin: -42px 0 0 -42px; border-radius: 50%; background: var(--accent); color: var(--bg); display: grid; place-items: center; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .1em; text-transform: uppercase; transform: scale(0); transition: transform .45s var(--ease) .05s; }
+  body[data-list="cursor"] .float { opacity: 1; }
+  body[data-list="cursor"] .float.on .frame, body[data-list="cursor"] .float.on .view { transform: scale(1); }
+  body[data-list="cursor"] .list:has(.slip:hover) .slip h3 a { cursor: none; }
+
+  /* capas: a do Map Areas é a captura real; as outras são placeholders honestos */
+  .cover { width: 100%; height: 100%; display: block; object-fit: cover; }
+  .ph { width: 100%; height: 100%; background: var(--ink); color: var(--bg); display: flex; flex-direction: column; justify-content: space-between; padding: 14px 16px; }
+  .ph b { font-family: var(--font-display); font-weight: 600; font-size: 1.6rem; line-height: 1; font-variation-settings: 'opsz' 72, 'WONK' 1; }
+  .ph span { font-family: var(--font-mono); font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; color: var(--rule); }
+  .thumb .ph b { font-size: 1rem; }
+  .thumb .ph { padding: 8px 10px; }
+
+  /* ---------- C · prévias nos links de ação ---------- */
+  .peek { position: absolute; z-index: 10; pointer-events: none; opacity: 0; transform: translateY(8px); transition: opacity .3s var(--ease), transform .4s var(--ease); }
+  .peek.strip { left: 0; bottom: calc(100% + 14px); display: flex; gap: 8px; }
+  .peek.strip > div { width: 96px; aspect-ratio: 4 / 3; overflow: hidden; border: 1px solid var(--ink); background: var(--bg); transform: rotate(var(--r)); }
+  .peek.strip .ph b { font-size: .8rem; }
+  .peek.strip .ph { padding: 6px 8px; }
+  .peek.card { left: 0; top: calc(100% + 12px); width: 280px; background: var(--surface); border: 1px solid var(--ink); padding: 14px 16px; display: grid; grid-template-columns: 44px 1fr; gap: 4px 12px; align-items: center; }
+  .peek.card .mono-mark { grid-row: span 2; width: 44px; height: 44px; border-radius: 50%; background: var(--ink); color: var(--bg); display: grid; place-items: center; font-family: var(--font-display); font-weight: 600; }
+  .peek.card b { font-size: .95rem; }
+  .peek.card small { font-family: var(--font-mono); font-size: .7rem; color: var(--ink-muted); }
+  body[data-ctapeek] .actions:has(.primary:is(:hover, :focus-visible)) .strip,
+  body[data-linkpeek] li:has(.cta:is(:hover, :focus-visible)) .card { opacity: 1; transform: none; }
+  .channels li { position: relative; }
+
+  /* reduced motion simulado */
+  body[data-reduce] *, body[data-reduce] *::before, body[data-reduce] *::after { transition: none !important; animation: none !important; }
+
+  /* ---------- painel ---------- */
+  .panel { position: fixed; top: 0; right: 0; bottom: 0; width: 340px; overflow-y: auto; background: var(--ink); color: var(--bg); padding: 18px 18px 40px; font-size: .85rem; z-index: 30; line-height: 1.45; }
+  .panel.closed { width: auto; bottom: auto; }
+  .panel.closed .body { display: none; }
+  .panel h4 { margin: 0 0 6px; font-family: var(--font-mono); font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; color: var(--rule); display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+  .panel .grp { margin-top: 18px; padding-top: 14px; border-top: 1px solid #3a342c; }
+  .panel .hint { color: #bdb29a; margin: 6px 0 0; font-size: .8rem; }
+  .panel .option { padding: 8px 10px; margin-top: 6px; border: 1px solid #3a342c; cursor: pointer; }
+  .panel .option strong { display: block; color: var(--bg); font-weight: 600; }
+  .panel .option em { display: block; font-style: normal; color: #bdb29a; font-size: .78rem; margin-top: 2px; }
+  .panel .option.selected { border-color: var(--accent); background: #2a1a14; }
+  .panel .option.selected strong::before { content: '● '; color: var(--accent); }
+  .panel .tag { display: inline-block; margin-left: 6px; padding: 0 6px; font-family: var(--font-mono); font-size: .6rem; letter-spacing: .08em; text-transform: uppercase; background: var(--accent); color: var(--bg); vertical-align: 2px; }
+  .panel .tag.new { background: #3a342c; color: var(--rule); }
+  .panel button { font: inherit; color: var(--bg); background: none; border: 1px solid #3a342c; padding: 4px 8px; cursor: pointer; }
+</style>
+</head>
+<body data-cta="line" data-fillcolor="accent" data-magnet data-list="thumb" data-typo data-ctapeek data-linkpeek>
+
+<header class="masthead mono"><span>André Arcodaci</span><span>PT · EN</span></header>
+
+<section class="hero">
+  <div class="metaRow mono"><span>BR · Remoto</span><span>Portfólio 2026</span></div>
+  <h1 class="name">André Arcodaci</h1>
+  <div class="bottom">
+    <p class="mono role">Desenvolvedor Full Stack</p>
+    <p class="statement">Construo interfaces, APIs e automação — sistemas que você consegue rodar, ler e entender.</p>
+    <div class="actions">
+      <a class="cta primary" href="#work">Trabalhos selecionados</a>
+      <a class="cta ghost" href="#contact">Entrar em contato</a>
+      <div class="peek strip" aria-hidden="true"></div>
+    </div>
+  </div>
+</section>
+
+<section class="sheet" id="work">
+  <h2>Trabalhos selecionados</h2>
+  <div class="workGrid">
+    <ul class="list" id="list"></ul>
+    <div class="dock" aria-hidden="true"><div class="reel"></div><div class="idle mono">passe o mouse ou o foco<br>sobre um projeto</div></div>
+  </div>
+</section>
+
+<section class="sheet contact" id="contact">
+  <h2>Contato</h2>
+  <p class="lead">Aberto a vagas, colaborações e conversas técnicas de qualidade.</p>
+  <ul class="channels">
+    <li><a class="cta ext" href="#contact">GitHub</a>
+      <div class="peek card" aria-hidden="true"><span class="mono-mark">GH</span><b>github.com/decoarc</b><small>perfil e repositórios · abre em nova aba</small></div></li>
+    <li><a class="cta ext" href="#contact">LinkedIn</a>
+      <div class="peek card" aria-hidden="true"><span class="mono-mark">in</span><b>linkedin.com/in/andrearcodaci</b><small>perfil profissional · abre em nova aba</small></div></li>
+  </ul>
+</section>
+
+<div class="float" aria-hidden="true"><div class="frame"><div class="reel"></div></div><div class="view">Ver</div></div>
+
+<aside class="panel" id="panel">
+  <h4>Protótipo · ideias de hover <button onclick="panel.classList.toggle('closed')">mostrar/ocultar</button></h4>
+  <div class="body">
+    <p class="hint">Descartável. Tudo responde também ao Tab (foco por teclado). A captura do Map Areas é a real; as outras capas são placeholders, porque ainda não há mídia desses projetos.</p>
+
+    <div class="grp">
+      <h4>A · CTAs do hero e links do contato</h4>
+      <div class="options" data-group="cta">
+        <div class="option" data-v="atual"><strong>Como está hoje</strong><em>Gate 2: sublinhado parado; no contato, a cor muda para o acento.</em></div>
+        <div class="option" data-v="fill"><strong>Preenchimento sobe <span class="tag">backlog</span></strong><em>Um bloco de cor sobe de baixo e preenche o link; o texto inverte.</em></div>
+        <div class="option" data-v="pill"><strong>Pílula que se enche <span class="tag new">nova</span></strong><em>Os links viram botões com borda; a cor entra por baixo numa curva, como no dennissnellenberg.com.</em></div>
+        <div class="option" data-v="line"><strong>Sublinhado que corre <span class="tag new">nova</span></strong><em>O traço sai pela direita e volta pela esquerda, em vermelho. Mais discreta.</em></div>
+        <div class="option" data-v="roll"><strong>Texto que rola <span class="tag new">nova</span></strong><em>A palavra sobe e uma cópia em vermelho entra por baixo.</em></div>
+      </div>
+      <h4 style="margin-top:14px">Cor do preenchimento</h4>
+      <div class="options" data-group="fillcolor">
+        <div class="option" data-v="accent"><strong>Vermelho (acento)</strong></div>
+        <div class="option" data-v="ink"><strong>Tinta (quase preto)</strong></div>
+      </div>
+      <div class="options" data-toggle="magnet" style="margin-top:8px">
+        <div class="option" data-v="on"><strong>+ Magnético <span class="tag new">nova</span></strong><em>O link é puxado alguns pixels na direção do cursor. Combina com qualquer uma acima.</em></div>
+      </div>
+    </div>
+
+    <div class="grp">
+      <h4>B · Lista de trabalhos</h4>
+      <div class="options" data-group="list">
+        <div class="option" data-v="atual"><strong>Sem prévia</strong><em>Só o título sublinha (como hoje), ou só a reação tipográfica se ligada abaixo.</em></div>
+        <div class="option" data-v="cursor"><strong>Prévia segue o cursor <span class="tag">backlog · fase 5</span></strong><em>Uma janela com a captura acompanha o mouse, com um círculo "Ver"; ao trocar de linha a imagem desliza para a próxima.</em></div>
+        <div class="option" data-v="dock"><strong>Janela fixa ao lado <span class="tag new">nova</span></strong><em>A lista ocupa a esquerda; à direita, uma janela parada mostra o projeto em foco. Não cobre nada.</em></div>
+        <div class="option" data-v="thumb"><strong>Miniatura em cada linha <span class="tag new">nova</span></strong><em>Sempre visível, sem depender de hover: funciona igual no celular. Cresce um pouco no hover.</em></div>
+      </div>
+      <div class="options" data-toggle="typo" style="margin-top:8px">
+        <div class="option" data-v="on"><strong>+ Reação tipográfica <span class="tag">backlog</span></strong><em>O título recua e as outras linhas esmaecem. Combina com qualquer opção acima.</em></div>
+      </div>
+    </div>
+
+    <div class="grp">
+      <h4>C · Prévias nos links de ação <span class="tag new">novas</span></h4>
+      <div class="options" data-toggle="ctapeek">
+        <div class="option" data-v="on"><strong>"Trabalhos selecionados" mostra as capas</strong><em>No hover do CTA, uma tira com as capas dos projetos aparece acima dele.</em></div>
+      </div>
+      <div class="options" data-toggle="linkpeek">
+        <div class="option" data-v="on"><strong>GitHub e LinkedIn mostram o destino</strong><em>Um cartão diz para onde o link leva antes do clique. Sem dados inventados: só endereço e o que há lá.</em></div>
+      </div>
+    </div>
+
+    <div class="grp">
+      <h4>Simular</h4>
+      <div class="options" data-toggle="reduce">
+        <div class="option" data-v="on"><strong>Reduced motion</strong><em>Os estados mudam na hora, sem movimento; a prévia não segue o cursor.</em></div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<script>
+  const projects = [
+    { idx: '01', type: 'Verificado', title: 'Map Areas', year: '2025–2026', stack: 'PHP · PostgreSQL/PostGIS · Leaflet · proj4', summary: 'Desenhe e gerencie áreas poligonais em um mapa interativo. Salve áreas, limpe o mapa e adicione polígonos por coordenadas em Lat/Lng, UTM ou GMS.', img: '../../../public/images/projects/map-areas-800.webp' },
+    { idx: '02', type: 'Estudo conceitual', title: 'Token Killer', year: '2026', stack: 'Rust · Tokio', summary: 'Um proxy de linha de comando que comprime a saída das ferramentas antes de ela chegar ao modelo.' },
+    { idx: '03', type: 'Estudo conceitual', title: 'Atlas Ledger', year: '2025', stack: 'Go · PostgreSQL', summary: 'Primitivas de partidas dobradas sobre um log de eventos append-only que dá para auditar na mão.' },
+    { idx: '04', type: 'Estudo conceitual', title: 'Field Notes', year: '2024', stack: 'TypeScript · CRDT', summary: 'Captura offline-first que reconcilia edições conflitantes sem ida e volta ao servidor.' },
+  ];
+  const cover = (p) => p.img
+    ? `<img class="cover" src="${p.img}" alt="">`
+    : `<div class="ph"><span>${p.type} · sem captura</span><b>${p.title}</b></div>`;
+
+  const list = document.getElementById('list');
+  list.innerHTML = projects.map((p, i) => `
+    <li class="slip" data-i="${i}">
+      <p class="meta"><span class="idx">${p.idx}</span><span class="type">${p.type}</span></p>
+      <h3><a href="#work">${p.title}</a></h3>
+      <p class="summary">${p.summary}</p>
+      <p class="stack">${p.stack}</p>
+      <p class="year">${p.year}</p>
+      <div class="thumb" aria-hidden="true">${cover(p)}</div>
+    </li>`).join('');
+  const reels = document.querySelectorAll('.float .reel, .dock .reel');
+  reels.forEach((r) => { r.innerHTML = projects.map((p) => `<div>${cover(p)}</div>`).join(''); });
+  document.querySelector('.peek.strip').innerHTML = projects.map((p, i) => `<div style="--r:${[-4, 2, -1, 3][i]}deg">${cover(p)}</div>`).join('');
+
+  // links: cópia para o "texto que rola" e o traço do "sublinhado que corre"
+  document.querySelectorAll('.cta').forEach((a) => {
+    const t = a.textContent;
+    a.innerHTML = `<span class="roll"><span>${t}</span><span aria-hidden="true">${t}</span></span><span class="line" aria-hidden="true"></span>`;
+  });
+
+  // painel
+  const body = document.body;
+  function send(choice, text) { if (window.brainstorm) window.brainstorm.send({ type: 'click', choice, text }); }
+  document.querySelectorAll('[data-group]').forEach((g) => {
+    const key = g.dataset.group;
+    g.querySelectorAll('.option').forEach((o) => {
+      if (body.dataset[key] === o.dataset.v) o.classList.add('selected');
+      o.onclick = () => {
+        g.querySelectorAll('.option').forEach((x) => x.classList.remove('selected'));
+        o.classList.add('selected');
+        body.dataset[key] = o.dataset.v;
+        send(`${key}-${o.dataset.v}`, o.querySelector('strong').textContent);
+      };
+    });
+  });
+  document.querySelectorAll('[data-toggle]').forEach((g) => {
+    const key = g.dataset.toggle;
+    const o = g.querySelector('.option');
+    if (key in body.dataset) o.classList.add('selected');
+    o.onclick = () => {
+      const on = !(key in body.dataset);
+      if (on) body.dataset[key] = ''; else delete body.dataset[key];
+      o.classList.toggle('selected', on);
+      send(`${key}-${on ? 'on' : 'off'}`, o.querySelector('strong').textContent);
+    };
+  });
+
+  // lista: qual projeto está em foco (hover ou teclado)
+  const float = document.querySelector('.float');
+  const dockReel = document.querySelector('.dock .reel');
+  const floatReel = document.querySelector('.float .reel');
+  const idle = document.querySelector('.dock .idle');
+  let current = -1;
+  function show(i) {
+    current = i;
+    float.classList.toggle('on', i >= 0);
+    if (i >= 0) {
+      floatReel.style.transform = dockReel.style.transform = `translateY(${-100 * i}%)`;
+      idle.style.display = 'none';
+    }
+  }
+  list.querySelectorAll('.slip').forEach((li) => {
+    const i = Number(li.dataset.i);
+    li.addEventListener('mouseenter', () => show(i));
+    li.addEventListener('focusin', () => {
+      show(i);
+      // no teclado a prévia não tem cursor: encosta ao lado do título
+      const r = li.querySelector('h3 a').getBoundingClientRect();
+      target.x = r.right + 40; target.y = r.top + r.height / 2;
+    });
+  });
+  list.addEventListener('mouseleave', () => show(-1));
+  list.addEventListener('focusout', (e) => { if (!list.contains(e.relatedTarget)) show(-1); });
+
+  const target = { x: innerWidth / 2, y: innerHeight / 2 };
+  const pos = { ...target };
+  addEventListener('mousemove', (e) => { target.x = e.clientX; target.y = e.clientY; });
+
+  // magnético
+  document.querySelectorAll('.cta').forEach((a) => {
+    a.addEventListener('mousemove', (e) => {
+      if (!('magnet' in body.dataset) || 'reduce' in body.dataset) return;
+      const r = a.getBoundingClientRect();
+      const dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2);
+      a.classList.add('magnet-on');
+      a.style.transform = `translate(${dx * 0.25}px, ${dy * 0.35}px)`;
+    });
+    a.addEventListener('mouseleave', () => { a.style.transform = ''; });
+  });
+
+  (function loop() {
+    const k = 'reduce' in body.dataset ? 1 : 0.14;
+    pos.x += (target.x - pos.x) * k; pos.y += (target.y - pos.y) * k;
+    float.style.transform = `translate(${pos.x - 160}px, ${pos.y - 120}px)`;
+    requestAnimationFrame(loop);
+  })();
+</script>
+</body>
+</html>
