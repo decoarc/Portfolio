@@ -9,7 +9,7 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,
   reporter: [['list']],
-  expect: { toHaveScreenshot: { maxDiffPixelRatio: 0 } },
+  expect: { toHaveScreenshot: { maxDiffPixelRatio: 0, threshold: 0 } },
   use: {
     baseURL,
     trace: 'on-first-retry',
