@@ -91,3 +91,17 @@ em `docs/gate-1/` permanecem como registro.
   stack, links).
 - **Folha:** o respiro da `Sheet` é definido por `--sheet-pad-*`, nunca
   sobreposto com `padding`, para não depender da ordem das folhas de estilo.
+
+## D-Motion — Tecnologia da Fase 3
+
+- **Status:** decidida na Fase 3 (2026-10-26)
+- **Decisão:** Lenis 1.3.26 para o scroll suave, mais funções próprias
+  (`src/motion/opening.ts`) que escrevem custom properties lidas pelo CSS, e uma
+  transição CSS para a entrada do nome. Sem GSAP, sem WebGL.
+- **Motivo:** os efeitos aprovados são funções simples da posição do scroll e
+  uma transição; GSAP não traria nada que justifique o peso. `docs/SPEC.md` §9
+  só aceita GSAP se um efeito aprovado provar que CSS não alcança.
+- **Alternativas descartadas:** GSAP ScrollTrigger (peso sem ganho para estes
+  efeitos); CSS `animation-timeline: scroll()` (suporte desigual no Safari na
+  data).
+- Ficha de cada efeito: `docs/MOTION_SPEC.md`

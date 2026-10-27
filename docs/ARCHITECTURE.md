@@ -1,6 +1,6 @@
 # Arquitetura
 
-Estado após a Fase 2 (fundação). Stack: React 19, Vite 8, TypeScript estrito,
+Estado após a Fase 3 (motion da abertura da home). Stack: React 19, Vite 8, TypeScript estrito,
 React Router 8, CSS Modules com custom properties. Hospedagem: Cloudflare Pages
 (`public/_redirects` faz o fallback de SPA). Sem backend, sem CMS.
 
@@ -8,7 +8,7 @@ React Router 8, CSS Modules com custom properties. Hospedagem: Cloudflare Pages
 
 ```text
 src/
-  main.tsx              entrada; importa as fontes e os estilos globais
+  main.tsx              entrada; importa fontes e estilos, inicia o scroll suave
   app/                  roteamento e casca de página
     routes.tsx          dois subtrees: /pt (PT) e / (EN)
     LocaleLayout.tsx    provê o locale (LocaleContext), masthead e rodapé
@@ -23,10 +23,15 @@ src/
     Hero/ Release/ Work/ Approach/ About/ Interests/ Contact/
   content/              camada de conteúdo (ver abaixo)
   lib/                  locale.ts (caminhos e troca de idioma), mock.ts
+  motion/               movimento (ver docs/MOTION_SPEC.md)
+    opening.ts          valores aprovados e as contas de um frame da abertura
+    Opening.tsx         envolve Hero e Release; escreve as --opening-*, conduz a entrada
+    smoothScroll.ts     instância única do Lenis; rolar para alvo e para o topo
+    reducedMotion.ts    prefersReducedMotion()
   styles/               tokens.css, global.css
   test/setup.ts         setup do Vitest
 e2e/                    Playwright (projetos chromium e capture)
-scripts/                trava de mock e teste de motion
+scripts/                trava de mock e guarda de motion
 docs/                   spec, decisões, backlog, dossiês dos gates
 ```
 
@@ -43,7 +48,11 @@ docs/                   spec, decisões, backlog, dossiês dos gates
   entra, e os números seguintes se ajustam.
 - Componentes não contêm string voltada ao usuário. Rótulos acessíveis também
   vêm do conteúdo.
-- Nenhum `animation` nem `transition` (motion é a Fase 3).
+- Motion: só `Hero.module.css` declara `transition`, e só sob
+  `[data-entrance='run']`. O movimento por scroll vem das custom properties
+  `--opening-*`, que o `Opening` escreve e Hero e Release leem com padrões
+  neutros — as seções continuam sem importar uma à outra. Guardas:
+  `scripts/motion-guard.test.ts` e `e2e/motion.spec.ts`.
 
 ## Camada de conteúdo
 
@@ -112,9 +121,10 @@ Cloudflare Pages, cuja imagem padrão pode ser mais antiga que esse piso.
   `src/test/setup.ts` guarda os stubs de `window` com
   `typeof window !== 'undefined'` para que testes `// @vitest-environment node`
   rodem.
-- `scripts/no-motion.test.ts` varre `src/**/*.css` atrás de `animation` e
-  `transition`.
+- `scripts/motion-guard.test.ts` varre `src/**/*.css` atrás de `animation` e
+  `transition` fora da regra de entrada do Hero.
 - Playwright: a11y (axe), CTAs na primeira dobra, responsividade, teclado,
-  jornada, roteamento por locale e motion. O e2e de motion confere
+  jornada, roteamento por locale, motion, abertura da home e scroll suave. O
+  e2e de motion confere
   `getAnimations()` **e** as durações computadas de `transition`/`animation`,
   porque `getAnimations()` sozinho não vê transições ociosas.

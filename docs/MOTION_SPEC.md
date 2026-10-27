@@ -1,261 +1,106 @@
-# Motion Specification
+# Motion
+
+- **Direção:** Editorial Rolodex (`docs/DESIGN_DECISIONS.md`)
+- **Estado:** Fase 3 — abertura da home e scroll suave implementados,
+  aguardando o Gate 3 (`docs/gate-3/README.md`)
+- **Design aprovado:** `docs/superpowers/specs/2026-10-26-fase-3-motion-design.md`
+- **Referência visual:** `docs/fase-3/prototipo/desktop.html` e
+  `docs/fase-3/prototipo/mobile.html` — a função `frame()` de cada um é o
+  comportamento aprovado
+
+O movimento expressa hierarquia e continuidade. Nunca esconde conteúdo, prende
+o foco ou substitui o desenho da informação.
+
+## Regras globais
+
+Valem para todo efeito, este e os próximos. Vêm de `docs/SPEC.md` §5.
+
+- **Reduced motion** (`prefers-reduced-motion: reduce`): sem scroll suave, sem
+  entrada, sem afastamento, escala, sombra ou curva. O site fica idêntico ao do
+  Gate 2.
+- **Sem JS:** nenhum conteúdo nasce escondido ou fora do lugar no CSS. Estado
+  escondido só existe sob um atributo que o script aplica quando vai animar.
+- **Navegação nunca espera animação:** links funcionam em `t = 0`; troca de
+  idioma e abertura de case study não aguardam nada.
+- **Teclado:** foco num elemento coberto por movimento o traz de volta à vista.
+- **Desempenho:** só `transform` e `opacity` animam, mais a altura do
+  pseudo-elemento da curva. Um laço de `requestAnimationFrame` só (o do Lenis);
+  nenhum estado React por frame.
+- **Exceção ao §5.3 da SPEC:** scroll suave e o hero preso sob a folha foram
+  autorizados pelo dono em 2026-10-26.
+
+### Onde o motion vive no código
+
+- `src/motion/opening.ts` — valores aprovados e as contas de um frame.
+- `src/motion/Opening.tsx` — envolve Hero e Release na home; escreve as
+  `--opening-*` e conduz a entrada por `data-entrance`.
+- `src/motion/smoothScroll.ts` — a instância única do Lenis.
+- Guardas: `scripts/motion-guard.test.ts` (só `Hero.module.css` declara
+  transição, e só sob `[data-entrance='run']`) e `e2e/motion.spec.ts` (com
+  reduce, zero animação; sem reduce, só elementos com `data-motion` têm
+  duração).
+
+## Fichas
+
+### Entrada do nome
+
+| | |
+|---|---|
+| Objetivo | Momento autoral na chegada: o nome se apresenta antes de tudo |
+| Elemento | As duas palavras do `h1` do hero ("André", "Arcodaci"), cada uma numa linha que corta o que passa da sua altura (a fenda) |
+| Gatilho | Carregar a home com a página no topo e sem hash; começa depois de `document.fonts.ready` |
+| Estado inicial | `translateY(105%)` — abaixo da fenda (`data-entrance="pending"`) |
+| Estado final | No lugar (`data-entrance="done"`) |
+| Duração e easing | 1,1 s, `cubic-bezier(0.2, 0.7, 0, 1)`; a segunda linha atrasa 120 ms |
+| Reduced motion | Sem entrada: o nome aparece no lugar no primeiro frame |
+| Sem JS | O atributo não existe; o nome está no lugar |
+| Página aberta rolada | Deep link (`/#work`), recarregar no meio: sem entrada |
+| Evidência | `docs/gate-3/` |
+
+### Afastamento do nome
+
+| | |
+|---|---|
+| Objetivo | O primeiro gesto de scroll separa o nome, abrindo a página |
+| Elemento | "André" vai para a esquerda, "Arcodaci" para a direita; o bloco de baixo do hero (função, statement, CTAs, localização) sobe e apaga |
+| Gatilho | Scroll, nos dois sentidos; `p = clamp(scrollY / innerHeight, 0, 1)` |
+| Estado inicial | `p = 0`: tudo no lugar |
+| Estado final | `p = 1`: palavras a `easeOutCubic(p) × 25 vw` (≥ 768 px) ou `× 40 vw` (< 768 px); bloco de baixo `p × 6 vh` acima, opacidade `1 − 1,4p` (mínimo 0) |
+| Duração e easing | Acompanha o scroll; o Lenis suaviza (`lerp 0.09`) |
+| Reduced motion | Nada se move |
+| Sem JS | As propriedades não são escritas; padrões neutros |
+| Evidência | `docs/gate-3/` |
+
+### Folha com borda curva
+
+| | |
+|---|---|
+| Objetivo | A virada de página: o índice sobe por cima do hero (D-Release) |
+| Elemento | O Release (folha `--surface`) sobe no fluxo; o hero fica preso no topo, encolhe e escurece; em volta dele aparece `--ink` |
+| Gatilho | Scroll, nos dois sentidos |
+| Estado inicial | Borda reta, hero em `scale(1)`, sem sombra |
+| Estado final | Curva `sin(π·p) × 14 vh` (≥ 768 px) ou `× 7 vh` (< 768 px): zero no começo e no fim, máxima no meio; hero até `scale(0.94)`; sombra de `--ink` transparente → 55 %, até opacidade 0,9 |
+| Duração e easing | Acompanha o scroll |
+| Reduced motion | Sem curva, escala nem sombra. O hero continua preso e a folha sobe por cima — é o próprio scroll, não animação |
+| Sem JS | Igual ao reduced motion |
+| Limitação aceita | A folha cobre o nome antes do afastamento terminar (ver `docs/BACKLOG.md`) |
+| Evidência | `docs/gate-3/` |
+
+### Scroll suave
+
+| | |
+|---|---|
+| Objetivo | Continuidade: o scroll da roda e do trackpad desliza em vez de saltar |
+| Elemento | A página inteira (Lenis 1.3.26, `lerp 0.09`, `anchors: true`) |
+| Gatilho | Roda do mouse, trackpad, links de âncora |
+| Estado inicial / final | — |
+| Duração e easing | Interpolação do Lenis; âncoras com a duração padrão dele |
+| Toque | Nativo (padrão do Lenis) |
+| Reduced motion | Lenis não é iniciado; scroll nativo e salto direto para âncoras |
+| Sem JS | Scroll nativo |
+| Navegação | O `ScrollManager` rola por `scrollToTarget`/`scrollToTop` e remede a página a cada navegação (o Lenis só remede sozinho com 250 ms de atraso) |
+| Evidência | `e2e/smooth-scroll.spec.ts` |
 
-**Status:** Planning — bound to locked **Ledger × Datum × Cut** hybrid  
-**Principle:** Motion expresses hierarchy and continuity. It never conceals content, traps focus, or replaces information design.  
-**Sequencing:** Elaborate motion **after** static first-viewport approval and static homepage approval (`IMPLEMENTATION_PLAN.md` Gates B/C). Controlled prototypes may explore variants only inside an approved static composition.
+## Próximos efeitos
 
----
-
-## 1. Goals
-
-1. Make the first visit feel art-directed within the first second **without** delaying readable identity.  
-2. Connect homepage → case study with a continuous sense of place.  
-3. Reward exploration (hover/focus on projects) without requiring it.  
-4. Remain excellent when motion is reduced or unavailable.
-
----
-
-## 2. Global rules
-
-| Rule | Requirement |
-|------|-------------|
-| Reduced motion | If `prefers-reduced-motion: reduce`, skip transforms/parallax/staggers; use instant state or ≤150ms fades only |
-| Content availability | Name, role, primary CTA, and project titles must be in the DOM and readable immediately (no `opacity: 0` without a non-motion pathway) |
-| No scroll-jacking | Native scrolling only in v1; no wheel capture, no Lenis unless later approved |
-| No animation-gated navigation | Links work at `t=0` |
-| Keyboard | Focus styles are not motion-dependent; hover-only revelations must have `:focus-visible` equivalents |
-| Layout stability | Animate `transform`/`opacity` preferentially; reserve space for media; avoid animating `width/height/top/left` except trivial cases |
-| Performance | Cancel timelines on unmount; avoid per-frame React state for scroll (use GSAP/ScrollTrigger or CSS) |
-| Mobile | Shorter distances, fewer simultaneous animations, no multi-layer parallax |
-
----
-
-## 3. Motion tokens (to implement in M1)
-
-Conceptual tokens (exact values tunable):
-
-| Token | Proposed default | Reduced |
-|-------|------------------|---------|
-| `--motion-fast` | 150ms | 0–100ms or off |
-| `--motion-medium` | 320ms | off |
-| `--motion-slow` | 600ms | off |
-| `--ease-out-expressive` | cubic-bezier(0.16, 1, 0.3, 1) | n/a |
-| `--ease-ink` | cubic-bezier(0.22, 1, 0.36, 1) | n/a |
-| Stagger step | 60–90ms | 0 |
-
----
-
-## 4. Sequence inventory
-
-### 4.1 Hero — professional identity (priority: P0)
-
-**Intent:** Announce name and role with typographic confidence.
-
-| Beat | Normal | Reduced |
-|------|--------|---------|
-| 0ms | Identity text visible (static CSS), CTA clickable | Same |
-| 0–700ms | Optional line-mask or fade-up of title lines (stagger ≤90ms) | No movement; full opacity |
-| Parallel | Hero media opacity 0→1 or subtle ken-burns **max 2%** scale | Static image |
-
-**Acceptance**
-
-- With JS disabled or GSAP failed to load: hero still complete via CSS  
-- LCP element is not delayed by waiting for a timeline `onComplete`  
-
-### 4.2 Section entrance reveals (P1)
-
-**Targets:** Work, About, Contact headings and primary blocks.
-
-| Normal | Reduced |
-|--------|---------|
-| `from` opacity 0 + `y: 24–40px` → rest; ScrollTrigger `start: "top 85%"`, `once: true` | Elements at rest styles always |
-
-**Anti-patterns**
-
-- Chained reveals that take >1s of scroll attention  
-- Blur-up on large text (expensive, muddy)  
-
-### 4.3 Selected projects — preview interaction (P0)
-
-**Desktop**
-
-- Default: typographic row + muted preview  
-- `:hover` / `:focus-visible` within row: preview becomes vivid; optional horizontal shift ≤12px; underline/accent ink  
-
-**Mobile**
-
-- No hover dependency; preview always visible at reduced size OR tap opens case study directly  
-
-**Acceptance**
-
-- Entire row is one link (or clear primary link) with accessible name  
-- Motion is cancelable mid-hover without stuck states  
-
-### 4.4 About / expertise (P2)
-
-- Prefer static layout + light entrance  
-- **Do not** port the prototype’s continuous 3D skills autoplay carousel  
-- If a portrait interaction ships: CSS mask reveal is OK on pointer devices; on coarse pointers, show final composite or toggle with a button (labeled)  
-
-### 4.5 Page transitions — home ↔ case study (P1)
-
-**Normal (recommended v1)**
-
-- Exit: home content fades/translates lightly (≤250ms)  
-- Enter: case study title continues from list title position **if inexpensive**; otherwise shared fade + title appear  
-- Use React Router + a thin transition wrapper; abort on rapid navigation  
-
-**Reduced**
-
-- Instant swap or 100ms fade  
-
-**Out of scope v1**
-
-- Full FLIP shared element engineering across all assets  
-- WebGL route curtains  
-
-### 4.6 Contact / closing (P2)
-
-- Quiet entrance; optional accent rule draw (SVG stroke) once  
-- No looping attention-grabbers  
-
-### 4.7 Scroll progress (P3 — optional)
-
-- Thin progress indicator OK if contrast-safe and not redundant with browser UI  
-- Must not flash or animate noisily  
-
----
-
-## 5. Scroll storytelling
-
-Allowed:
-
-- One-time section reveals  
-- Mild scrubbed opacity on hero media (≤ range that still keeps type readable)  
-
-Not allowed in v1:
-
-- Forced snap sections  
-- Multi-scene pin storytelling that traps users  
-- Scroll-linked animations that update React state every frame  
-
----
-
-## 6. Library usage policy
-
-| Tool | When |
-|------|------|
-| CSS transitions | Hover, focus, color, small transforms |
-| CSS `@keyframes` | Simple loops only if essential (prefer none) |
-| GSAP | Hero orchestration, scroll reveals, route transition timelines |
-| ScrollTrigger | Section once-reveals; optional hero scrub |
-| Lenis | **Default off** |
-| WebGL/Three | **Default off** |
-
-GSAP load strategy (M3 decision point):
-
-1. Prefer static CSS hero, enhance with GSAP after idle/`requestIdleCallback` **or**  
-2. Sync import if bundle cost remains acceptable after measurement  
-
-Choose based on M5 measurements, not aesthetics alone.
-
----
-
-## 7. Accessibility specifics
-
-- Honor `prefers-reduced-motion` at runtime and when preference changes (`matchMedia` listener).  
-- Do not use `animation` on elements that cause vestibular issues with large travel distances.  
-- Pause any future autoplay on `document.hidden`.  
-- Ensure focus order ignores decorative motion layers (`aria-hidden="true"` on pure decoration).  
-- Live regions are not for animation status.
-
----
-
-## 8. Performance checklist (motion)
-
-- [ ] No continuous `requestAnimationFrame` loops without user benefit  
-- [ ] Canvas/WebGL absent in v1  
-- [ ] Timelines cleaned up on route change  
-- [ ] Image decode not blocked behind animation  
-- [ ] Mobile: disable scrubbed parallax if INP/jank observed  
-
----
-
-## 9. Mapping to locked hybrid
-
-| Layer | Motion flavor | Where applied |
-|-------|---------------|---------------|
-| Ledger (default) | Soft expressive eases, typographic masks, restrained hover | Hero entrance, section reveals |
-| Datum | Short geometric snaps; optional hairline/meta emphasis — no HUD loops | Project row meta; focus states |
-| Cut (rationed) | Harder cuts/wipes; light↔dark field transitions; selected route transition | One major band flip; home→case study experiment |
-
-Do not run Cut-level wipes on every scroll reveal. Reduced-motion always collapses Cut to instant or ≤150ms fade.
-
----
-
-## 10. Controlled motion prototyping (M3)
-
-After Gates B/C (static composition approved), run **time-boxed experiments** before locking production motion. Each experiment records: hypothesis, variant A/B notes, a11y/perf check, keep/kill decision.
-
-### Experiment set (required)
-
-| ID | Experiment | Success looks like | Hard constraints |
-|----|------------|--------------------|------------------|
-| MP-1 | **Hero typography entrance** | Identity feels art-directed within ~700ms; still readable at t=0 | No content gated; reduced-motion = static |
-| MP-2 | **Project preview interactions** | Hover/focus rewards exploration; mobile has non-hover path | Keyboard parity; no stuck hover state |
-| MP-3 | **Homepage → case-study transition** | Continuity without theatre; interruptible on rapid nav | SPA route must already have host fallback plan; reduced-motion = fade/instant |
-| MP-4 | **Light/dark section transitions** | Cut-style band change feels intentional, not flashbang | Contrast remains AA; no scroll-jack; optional once-per-section |
-
-### Prototype protocol
-
-1. Implement behind a local flag or isolated branch section if needed — do not polish dead ends into the design system.  
-2. Verify `prefers-reduced-motion` path for every experiment.  
-3. Keep **native scrolling** (no Lenis) unless a later explicit exception is approved.  
-4. Prefer CSS for MP-2; use GSAP when timelines for MP-1/MP-3/MP-4 clearly need it.  
-5. Kill variants that hurt INP, CLS, or originality (generic fade-stagger spam).  
-6. Only **kept** variants become the M3 production motion set.
-
-### Exit criteria for prototyping
-
-- [x] Each of MP-1…MP-4 has a keep/kill note  
-- [x] Production motion set documented (update this file’s §4 if timings change)  
-- [x] Bundle impact of GSAP noted if introduced  
-
-### M3 production decisions (2026-10-22)
-
-Authorization mapped experiments to homepage motion (case-study route transition deferred to M4 / Gate D).
-
-| ID | Authorization scope | Decision | Notes |
-|----|---------------------|----------|-------|
-| MP-1 | Hero typography | **Keep** (adjusted) | Transform-only settle (no opacity fade) so t=0 matches Gate C; stagger on name/copy/plate; `--motion-slow` / `--motion-stagger` (70ms); reduced = static |
-| MP-2 | Project interactions | **Keep** | CSS `scale(1.02)` on media + meta accent border; `:hover` and `:focus-within` parity; no cursor-follow |
-| MP-3 | Section transitions (Work / About / Contact) | **Keep** | `MotionReveal` + `IntersectionObserver` once; opacity + 1.25rem Y; Contact Cut rule `scaleX` draw; 1200ms fallback reveal |
-| MP-4 | Navigation continuity | **Keep** | `scroll-padding-top` for sticky header; nav underline + `aria-current` via scroll spy; native smooth scroll (off when reduced) |
-| Spec MP-3 (home→case study) | — | **Defer** | No case-study routes yet; do not implement route theatre before Gate D |
-| Spec MP-4 (light/dark band) | — | **Keep (static+reveal)** | Contact Cut band already approved; motion is reveal + hairline draw only |
-
-**Dependencies:** none added (no GSAP / Lenis / WebGL). CSS + small React hooks only.
-
----
-
-## 11. Acceptance criteria (motion milestone M3)
-
-1. Gates B/C already passed (static composition approved).  
-2. Identity readable with reduced motion OS setting on.  
-3. No scroll library capturing wheel by default.  
-4. Project interactions keyboard-equivalent.  
-5. Route transitions interruptible.  
-6. Light/dark section transition (if kept) preserves contrast and does not trap scroll.  
-7. Manual check: no major layout shifts attributable to motion.  
-8. Documented before/after notes for any GSAP bundle impact.  
-9. MP-1…MP-4 prototyping notes complete.
-
----
-
-## 12. Open motion decisions
-
-1. Native scroll remains default (**recommended locked** unless André requests Lenis trial).  
-2. Hero media: static plate vs ≤2% drift?  
-3. Route transitions: fade-only vs title continuity vs Cut wipe (decide via MP-3).  
-4. Portrait reveal interaction: ship or defer?  
-5. Which single homepage band uses the Cut light/dark flip (Work vs Closing)?
+Ver `docs/BACKLOG.md`, seções "Interação e motion".

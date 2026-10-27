@@ -119,6 +119,7 @@ Conceitos candidatos:
 - Usar preferencialmente `transform` e `opacity`; evitar animação contínua de `top`, `left`, `width`, `height` e propriedades que forcem layout.
 - Não aplicar listeners de scroll que executem cálculos caros em cada evento; preferir APIs nativas ou pipeline com `requestAnimationFrame` e limpeza correta.
 - Sem scroll hijacking, smooth scrolling forçado ou seções presas por padrão.
+  Exceção autorizada pelo dono em 2026-10-26: scroll suave (Lenis, desligado em reduced motion) e o hero preso sob a folha do índice — ver `docs/superpowers/specs/2026-10-26-fase-3-motion-design.md`.
 - `prefers-reduced-motion: reduce`: remover parallax, efeitos ambientais e transições espaciais; manter estados compreensíveis e feedback essencial.
 - Em touch/mobile, eliminar dependência de hover e reduzir camadas de profundidade.
 - Uma animação que cause atrasos de interação, enjoo, sobreposição ou perda de informação deve ser removida ou simplificada.
