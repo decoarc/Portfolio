@@ -68,6 +68,47 @@ test('botão voltar do navegador: home e foco em #main', async ({ page }) => {
     .toBe('main')
 })
 
+/** Espera a rolagem parar (o Lenis interpola por alguns frames) e a devolve. */
+function settledScroll(page: Page): Promise<number> {
+  return page.evaluate(
+    () =>
+      new Promise<number>((resolve) => {
+        let last = -1
+        let still = 0
+        const tick = () => {
+          if (window.scrollY === last) still += 1
+          else still = 0
+          last = window.scrollY
+          if (still >= 10) resolve(Math.round(last))
+          else requestAnimationFrame(tick)
+        }
+        requestAnimationFrame(tick)
+      }),
+  )
+}
+
+// O router repete a View Transition no voltar entre páginas que já viajaram,
+// e a troca de página fica para dentro dela: a restauração nativa do
+// navegador acontece antes, ainda sobre o case (mais curto), e corta a
+// posição. Vale apertar na hora e depois da viagem.
+for (const wait of [0, 1200]) {
+  test(`botão voltar do navegador devolve a home na posição de antes (${wait} ms)`, async ({
+    page,
+  }) => {
+    await page.goto('/')
+    const link = page.getByRole('link', { name: /Token Killer/ })
+    await link.scrollIntoViewIfNeeded()
+    const before = await settledScroll(page)
+    expect(before).toBeGreaterThan(0)
+    await link.click()
+    await expect(page).toHaveURL(/\/work\/token-killer$/)
+    if (wait) await page.waitForTimeout(wait)
+    await page.goBack()
+    await expect(page).toHaveURL(/\/$/)
+    await expect.poll(() => settledScroll(page)).toBe(before)
+  })
+}
+
 test('trocar o idioma num case study preserva o projeto', async ({ page }) => {
   await page.goto('/work/token-killer')
   await page.getByRole('link', { name: en.shell.localeSwitch }).click()

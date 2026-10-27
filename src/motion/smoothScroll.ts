@@ -62,6 +62,11 @@ export function scrollToTarget(
 }
 
 export function scrollToTop(): void {
-  if (lenis) lenis.scrollTo(0, { immediate: true })
-  else window.scrollTo(0, 0)
+  scrollToY(0)
+}
+
+/** Vai direto a uma posição, sem deslize (restaurar o voltar do navegador). */
+export function scrollToY(y: number): void {
+  if (lenis) lenis.scrollTo(y, { immediate: true })
+  else window.scrollTo(0, y)
 }

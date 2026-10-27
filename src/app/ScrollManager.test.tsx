@@ -1,14 +1,20 @@
 import { act, fireEvent, render, screen } from '@testing-library/react'
 import { createMemoryRouter, RouterProvider } from 'react-router'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { scrollToTarget, scrollToTop } from '@/motion/smoothScroll.ts'
+import {
+  scrollToTarget,
+  scrollToTop,
+  scrollToY,
+} from '@/motion/smoothScroll.ts'
 import { INSTANT_SCROLL } from './navigationState.ts'
 import { ScrollManager } from './ScrollManager.tsx'
+import { rememberScroll } from './scrollMemory.ts'
 
 vi.mock('@/motion/smoothScroll.ts', () => ({
   refreshSmoothScroll: vi.fn(),
   scrollToTarget: vi.fn(),
   scrollToTop: vi.fn(),
+  scrollToY: vi.fn(),
 }))
 
 function renderAt(url: string) {
@@ -155,5 +161,18 @@ describe('ScrollManager', () => {
     await act(() => router.navigate(-1))
     expect(document.activeElement?.id).toBe('main')
     expect(scrollToTop).not.toHaveBeenCalled()
+  })
+
+  it('POP volta à posição gravada pelo router antes de a página trocar', async () => {
+    const router = renderAt('/')
+    const stop = rememberScroll(router)
+    const scrollY = vi.spyOn(window, 'scrollY', 'get').mockReturnValue(840)
+    await act(() => router.navigate('/work/atlas'))
+    // O case é mais curto: a posição de agora já não é a da home.
+    scrollY.mockReturnValue(0)
+    await act(() => router.navigate(-1))
+    expect(scrollToY).toHaveBeenCalledWith(840)
+    scrollY.mockRestore()
+    stop()
   })
 })

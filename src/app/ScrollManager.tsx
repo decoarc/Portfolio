@@ -4,8 +4,10 @@ import {
   refreshSmoothScroll,
   scrollToTarget,
   scrollToTop,
+  scrollToY,
 } from '@/motion/smoothScroll.ts'
 import { wantsInstantScroll } from './navigationState.ts'
+import { savedScroll } from './scrollMemory.ts'
 
 /**
  * Gerencia scroll e foco a cada navegação. A rolagem passa pelo scroll suave
@@ -67,10 +69,14 @@ export function ScrollManager() {
       focusTarget.focus({ preventScroll: true })
       return
     }
-    // Voltar/avançar deixa o navegador restaurar a posição; o foco vai para
-    // `#main`, porque o elemento focado na página anterior saiu do DOM. Na
-    // primeira carga não há página anterior: o foco fica onde o navegador o põe.
+    // Voltar/avançar volta à posição gravada pelo router antes de sair da
+    // página (`scrollMemory`); sem gravação (primeira carga, recarregar), fica
+    // a do navegador. O foco vai para `#main`, porque o elemento focado na
+    // página anterior saiu do DOM. Na primeira carga não há página anterior:
+    // o foco fica onde o navegador o põe.
     if (navigationType === 'POP') {
+      const saved = savedScroll[key]
+      if (saved !== undefined) scrollToY(saved)
       if (changedPage)
         document.getElementById('main')?.focus({ preventScroll: true })
       return
