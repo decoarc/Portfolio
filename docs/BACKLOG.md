@@ -1,9 +1,49 @@
 # Backlog
 
 Itens adiados deliberadamente, com o motivo e o momento certo de pegá-los.
-Item sem momento definido vira item esquecido.
+Item sem momento definido vira item esquecido. As ideias recusadas ficam no
+fim, para não voltarem ao tema sem querer.
 
-## Interação e motion — Fase 5 (com conteúdo real)
+A Fase 3 terminou em 2026-10-27 com a segunda leva (hover nos links de ação,
+reação da lista de trabalhos, texto que acende com o scroll e título que viaja
+da ficha ao case study; ver `docs/MOTION_SPEC.md`). O que foi calibrado sobre
+o texto mock é revisto na Fase 5.
+
+## Fase 4 — Acabamento
+
+Este backlog guarda só o que foi adiado; o escopo da fase está na §3 de
+`docs/superpowers/specs/2026-10-26-portfolio-visual-redesign-design.md`.
+
+### Metadados por idioma
+
+Hoje só `<title>` e `lang` mudam com o locale (Fase 2). Faltam `hreflang`,
+`description` e Open Graph por idioma. O mecanismo entra na Fase 4; os textos
+de `description` e Open Graph são revistos na Fase 5, com o conteúdo real.
+
+### Reduced motion ligado no meio da sessão
+
+Se o visitante ligar `prefers-reduced-motion` depois de uma viagem do título,
+voltar/avançar no navegador ainda mostra o fade padrão de 250 ms da View
+Transition (o CSS que o desliga só vale sob `no-preference`). Raro e curto.
+Ver a ficha "Título que viaja" em `docs/MOTION_SPEC.md`.
+
+- **Quando:** na auditoria de acessibilidade da Fase 4 (movido para cá em
+  2026-10-27; antes estava sem momento).
+
+## Fase 5 — Conteúdo real e publicação
+
+O conteúdo mock fica até o fim e só é trocado quando o repositório for
+publicado (decisão do dono, 2026-10-27). Hoje são 12 itens `mock: true`: três
+projetos (Atlas Ledger, Field Notes, Token Killer) e os três princípios da
+Abordagem, cada um em pt e en.
+
+### `pnpm validate` falha por desenho enquanto houver mock
+
+`validate` encadeia `build`, e `build` roda a trava de mock
+(`scripts/assert-no-mock.ts`) antes de `tsc -b`. Enquanto algum item tiver
+`mock: true`, `validate` sai com 1 — é o critério 8 da spec funcionando. O
+critério 9 (`validate` verde) fecha na Fase 5, com conteúdo real no lugar dos
+mocks.
 
 ### Miniaturas com mídia real
 
@@ -18,41 +58,6 @@ escuro "sem captura", aprovado pelo dono até a Fase 5.
   decorativa (`alt=""`) e sem depender de hover.
 - **Registrar em:** as fichas "Miniatura da ficha" e "Prévias dos links de ação"
   de `docs/MOTION_SPEC.md`, se o desenho mudar.
-- **Recusado:** a prévia que segue o cursor com um círculo "View"
-  (dennissnellenberg.com) foi vista no protótipo e não entrou.
-
-## Interação e motion — Fase 3, segunda leva
-
-A Fase 3 começou só com a abertura da home (nome se afastando e folha do índice
-subindo com borda curva). Os efeitos abaixo vieram do mesmo levantamento de
-referências (yasingenc.net e dennissnellenberg.com, 2026-10-26) e ficaram para
-depois por decisão do dono. Momento (decidido em 2026-10-27): logo depois do
-Gate 3, antes da Fase 4, ainda sobre o conteúdo mock. O que for calibrado no
-texto mock (texto que acende, lista reagindo ao mouse) é revisto na Fase 5.
-Todos seguem as regras de `docs/MOTION_SPEC.md` (reduced-motion, teclado,
-fallback sem JS) e reaproveitam o scroll suave já instalado.
-
-Feitos em 2026-10-27: hover nos links de ação, reação da lista de trabalhos e
-texto que acende com o scroll (`docs/MOTION_SPEC.md`). Também em 2026-10-27, o
-título que viaja da ficha ao case study e volta (no lugar da cortina antes
-prevista), que termina a segunda leva. Os dois ajustes
-pequenos da abertura (parar de reescrever com a folha no topo; `ScrollManager`
-como único dono da rolagem até âncoras) foram feitos em 2026-10-27.
-
-### A folha cobre o nome no meio do afastamento
-
-Na abertura aprovada, a folha do índice sobe ao mesmo tempo que o nome se
-afasta e o cobre antes de o movimento terminar. O dono notou e escolheu manter
-assim por ora. Já foram testadas e recusadas duas alternativas (protótipo v5):
-segurar o hero até o nome terminar e só então subir a folha, e manter o nome por
-cima da folha até ela chegar ao topo. Se voltar ao tema, partir de outra ideia.
-
-### Reduced motion ligado no meio da sessão
-
-Se o visitante ligar `prefers-reduced-motion` depois de uma viagem do título,
-voltar/avançar no navegador ainda mostra o fade padrão de 250 ms da View
-Transition (o CSS que o desliga só vale sob `no-preference`). Raro e curto;
-adiado. Ver a ficha "Título que viaja" em `docs/MOTION_SPEC.md`.
 
 ### Endurecimentos do título que viaja
 
@@ -72,9 +77,8 @@ Quatro pontos frágeis, hoje sem efeito visível, deixados de fora do review fin
 - **Fazer:** os quatro ajustes acima, cada um com seu teste.
 - **Por quê:** nenhum aparece com o conteúdo mock; todos podem aparecer com a
   mudança de conteúdo ou de links.
-- **Quando:** Fase 5, com o conteúdo real.
 
-## Ferramental — depois da implementação visual
+## Ferramental — ao atualizar o rtk
 
 ### O wrapper `rtk` reporta sucesso falso
 
@@ -151,25 +155,29 @@ estava relatado; o comentário para o #2809 está redigido e aguarda o
 **Quando revisitar:** ao atualizar o rtk, se #2809 e #2878 estiverem
 fechados, testar de novo com sonda de erro antes de remover as exclusões.
 
-## Acabamento — Fase 4
+## Decidido e recusado
 
-### Metadados por idioma
+Não são pendências: registram decisões do dono para que o tema não volte sem
+uma ideia nova.
 
-Hoje só `<title>` e `lang` mudam com o locale (Fase 2). Faltam `hreflang`,
-`description` e Open Graph por idioma. O mecanismo entra na Fase 4; os textos
-de `description` e Open Graph são revistos na Fase 5, com o conteúdo real.
+### A folha cobre o nome no meio do afastamento
 
-## Conteúdo real e publicação — Fase 5
+Na abertura aprovada, a folha do índice sobe ao mesmo tempo que o nome se
+afasta e o cobre antes de o movimento terminar. O dono notou e escolheu manter
+assim por ora. Já foram testadas e recusadas duas alternativas (protótipo v5):
+segurar o hero até o nome terminar e só então subir a folha, e manter o nome por
+cima da folha até ela chegar ao topo. Se voltar ao tema, partir de outra ideia.
 
-O conteúdo mock fica até o fim e só é trocado quando o repositório for
-publicado (decisão do dono, 2026-10-27). Hoje são 12 itens `mock: true`: três
-projetos (Atlas Ledger, Field Notes, Token Killer) e os três princípios da
-Abordagem, cada um em pt e en.
+### Cursor de nanquim e gotas
 
-### `pnpm validate` falha por desenho enquanto houver mock
+Ideia do dono, vista em protótipo em 2026-10-27 e descartada por ele no mesmo
+dia: cursor em forma de bolha de nanquim com brilho de esfera (virando mão e
+barra de texto em tinta, com estado de carregamento próprio) e gotas que caíam
+de tempos em tempos, deixando uma mancha que sumia depois de uns 5 s. Não
+entrou nenhuma das duas partes. Se voltar ao tema, partir de outra ideia.
 
-`validate` encadeia `build`, e `build` roda a trava de mock
-(`scripts/assert-no-mock.ts`) antes de `tsc -b`. Enquanto algum item tiver
-`mock: true`, `validate` sai com 1 — é o critério 8 da spec funcionando. O
-critério 9 (`validate` verde) fecha na Fase 5, com conteúdo real no lugar dos
-mocks.
+### Prévia que segue o cursor
+
+A prévia com um círculo "View" que acompanha o cursor sobre a lista de
+trabalhos (dennissnellenberg.com) foi vista no protótipo da segunda leva da
+Fase 3 e não entrou.
