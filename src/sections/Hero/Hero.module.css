@@ -13,13 +13,20 @@
   border-bottom: 2px solid var(--ink);
   /* Abertura da home: as `--opening-*` são escritas pelo `Opening`
      (src/motion/) a cada scroll; os padrões são o estado estático. */
-  /* Preso no topo dentro do `Opening`, que termina junto com o Release: a
-     folha sobe por cima e depois o hero sai com ela. */
-  position: sticky;
-  top: 0;
-  z-index: 0;
+  position: relative;
   overflow-x: clip;
   transform: scale(var(--opening-hero-scale, 1));
+}
+
+/* Preso no topo só quando o `Opening` está ativo (`data-opening`; nunca sem JS
+   nem com reduced motion, em que o hero fica no fluxo como no Gate 2). O
+   `Opening` termina junto com o Release: a folha sobe por cima e depois o hero
+   sai com ela. `--opening-sticky-top` é negativo quando o hero não cabe na
+   janela, para ele rolar até o fim antes de parar. */
+[data-opening] .hero {
+  position: sticky;
+  top: var(--opening-sticky-top, 0px);
+  z-index: 0;
 }
 
 /* Sombra da folha que sobe por cima. Escondida em repouso: uma camada

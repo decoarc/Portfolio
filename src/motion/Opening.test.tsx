@@ -79,6 +79,16 @@ describe('Opening', () => {
     expect(root(container)).toHaveAttribute('data-shade')
   })
 
+  it('se o navegador restaura a posição antes da entrada, ela não roda', async () => {
+    setWindow(0)
+    const { container } = renderOpening()
+    expect(root(container)).toHaveAttribute('data-entrance', 'pending')
+    setWindow(300)
+    await waitFor(() =>
+      expect(root(container)).not.toHaveAttribute('data-entrance'),
+    )
+  })
+
   it('deep link com hash: sem entrada, mesmo antes de rolar', () => {
     setWindow(0)
     window.history.replaceState(null, '', '/#work')
@@ -101,11 +111,13 @@ describe('Opening', () => {
     expect(root(container)).not.toHaveAttribute('data-shade')
   })
 
-  it('foco no hero com a página rolada volta ao topo', () => {
+  // O caso do teclado depende de layout real e de :focus-visible: está em
+  // e2e/opening.spec.ts (Shift+Tab, tela baixa).
+  it('foco que não é de teclado (clique) não mexe no scroll', () => {
     setWindow(900)
     renderOpening()
     fireEvent.focusIn(screen.getByRole('link', { name: 'Get in touch' }))
-    expect(scrollToTop).toHaveBeenCalledTimes(1)
+    expect(scrollToTop).not.toHaveBeenCalled()
   })
 
   it('foco no índice não mexe no scroll', () => {

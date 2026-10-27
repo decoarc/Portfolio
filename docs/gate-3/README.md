@@ -59,8 +59,8 @@ Geradas por `npx playwright test --project=capture e2e/gate-3.capture.ts`, em
 
 - `p0`, `p50`, `p100`: depois da entrada, com a página rolada 0, meia e uma
   altura de tela.
-- `reduce-p50`: com reduced motion, meia tela rolada — hero parado, folha
-  subindo por cima, sem curva, escala nem sombra.
+- `reduce-p50`: com reduced motion, meia tela rolada — o hero no fluxo
+  normal, rolando como no Gate 2; sem curva, escala nem sombra.
 
 `pnpm capture` também regrava `docs/gate-2/`; desde esta fase aquelas capturas
 usam reduced motion, que é o site do Gate 2.

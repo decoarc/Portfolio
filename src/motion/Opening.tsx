@@ -22,6 +22,21 @@ export function Opening({ children }: { children: ReactNode }) {
   useLayoutEffect(() => {
     const root = ref.current
     if (!root || prefersReducedMotion()) return
+    const hero = root.firstElementChild as HTMLElement | null
+    const sheet = hero?.nextElementSibling ?? null
+    // Liga o hero preso (CSS). Sem isto — sem JS, reduced motion — o hero fica
+    // no fluxo normal, como no Gate 2.
+    root.setAttribute('data-opening', '')
+
+    // Hero mais alto que a janela (celular deitado, zoom): prende com `top`
+    // negativo, para ele rolar até o fim antes de parar.
+    const measure = () => {
+      const overflow = hero ? window.innerHeight - hero.offsetHeight : 0
+      root.style.setProperty(
+        '--opening-sticky-top',
+        `${Math.min(0, overflow)}px`,
+      )
+    }
 
     const write = () => {
       const frame = openingFrame(
@@ -42,14 +57,20 @@ export function Opening({ children }: { children: ReactNode }) {
       root.style.setProperty('--opening-curve', round(frame.curveVh))
       root.toggleAttribute('data-shade', frame.shadeOpacity > 0)
     }
-    write()
+    const onResize = () => {
+      measure()
+      write()
+    }
+    onResize()
     const stopScroll = onScroll(write)
-    window.addEventListener('resize', write)
+    window.addEventListener('resize', onResize)
 
     // Entrada só para quem chega no topo; antes da primeira pintura, para o
     // nome não piscar no lugar. Com hash a página ainda está em 0 aqui (o
-    // ScrollManager rola depois), mas vai abrir rolada. Começa depois das fontes, para não revelar a
-    // fonte de fallback, e com dois frames para o estado escondido ser pintado.
+    // ScrollManager rola depois), mas vai abrir rolada. Começa depois das
+    // fontes, para não revelar a fonte de fallback, e com dois frames para o
+    // estado escondido ser pintado. Se nesse meio-tempo o navegador restaurou
+    // a posição (voltar), não há entrada: o nome aparece no lugar.
     let cancelled = false
     let timeout = 0
     const finish = () => {
@@ -58,15 +79,20 @@ export function Opening({ children }: { children: ReactNode }) {
     if (window.scrollY === 0 && !window.location.hash) {
       root.dataset.entrance = 'pending'
       const fontsReady = document.fonts?.ready ?? Promise.resolve()
-      void fontsReady.then(() =>
+      void fontsReady.then(() => {
+        if (!cancelled) measure()
         requestAnimationFrame(() =>
           requestAnimationFrame(() => {
             if (cancelled) return
+            if (window.scrollY > 0) {
+              root.removeAttribute('data-entrance')
+              return
+            }
             root.dataset.entrance = 'run'
             timeout = window.setTimeout(finish, ENTRANCE_TIMEOUT_MS)
           }),
-        ),
-      )
+        )
+      })
     }
     const onTransitionEnd = (event: TransitionEvent) => {
       const words = root.querySelectorAll('[data-motion="entrance"]')
@@ -74,10 +100,23 @@ export function Opening({ children }: { children: ReactNode }) {
     }
     root.addEventListener('transitionend', onTransitionEnd)
 
-    // Foco por teclado num elemento do hero coberto pela folha: volta ao topo.
-    const hero = root.firstElementChild
-    const onFocusIn = () => {
-      if (window.scrollY > 0) scrollToTop()
+    // Foco por teclado num elemento do hero coberto pela folha ou fora da
+    // janela: volta ao topo e traz o elemento à vista. Só teclado: um clique
+    // também foca o link, e mover a página entre mousedown e mouseup
+    // engoliria o clique.
+    const onFocusIn = (event: FocusEvent) => {
+      const target = event.target
+      if (!(target instanceof HTMLElement) || !target.matches(':focus-visible'))
+        return
+      const box = target.getBoundingClientRect()
+      const visibleBottom = Math.min(
+        window.innerHeight,
+        sheet?.getBoundingClientRect().top ?? Infinity,
+      )
+      if (box.top >= 0 && box.bottom <= visibleBottom) return
+      scrollToTop()
+      write()
+      target.scrollIntoView({ block: 'nearest' })
     }
     hero?.addEventListener('focusin', onFocusIn)
 
@@ -85,11 +124,12 @@ export function Opening({ children }: { children: ReactNode }) {
       cancelled = true
       window.clearTimeout(timeout)
       stopScroll()
-      window.removeEventListener('resize', write)
+      window.removeEventListener('resize', onResize)
       root.removeEventListener('transitionend', onTransitionEnd)
       hero?.removeEventListener('focusin', onFocusIn)
       root.removeAttribute('data-entrance')
       root.removeAttribute('data-shade')
+      root.removeAttribute('data-opening')
       root.removeAttribute('style')
     }
   }, [])

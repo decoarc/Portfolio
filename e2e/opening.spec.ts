@@ -147,7 +147,100 @@ test.describe('abertura da home', () => {
       )
       .toBe(true)
   })
+
+  test('clicar no CTA com a página um pouco rolada navega', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 1440, height: 900 })
+    await page.goto('/')
+    await expect(page.locator('[data-entrance]')).toHaveAttribute(
+      'data-entrance',
+      'done',
+    )
+    await page.mouse.move(700, 450)
+    await page.mouse.wheel(0, 150)
+    await settle(page)
+    await page
+      .getByRole('region', { name: site.person.name })
+      .getByRole('link', { name: site.hero.ctaPrimary })
+      .click()
+    await expect.poll(() => new URL(page.url()).hash).toBe('#work')
+  })
+
+  test('voltar do navegador para a home rolada não repete a entrada', async ({
+    page,
+  }) => {
+    await page.goto('/')
+    await expect(page.locator('[data-entrance]')).toHaveAttribute(
+      'data-entrance',
+      'done',
+    )
+    await page.mouse.move(700, 400)
+    await page.mouse.wheel(0, 300)
+    await settle(page)
+    await page.getByRole('link', { name: /Token Killer/ }).click()
+    await expect(page).toHaveURL(/\/work\/token-killer$/)
+    await page.goBack()
+    await expect.poll(() => settle(page)).toBeGreaterThan(0)
+    expect(await page.locator('[data-entrance]').count()).toBe(0)
+  })
 })
+
+/** Tela baixa: celular deitado, ou zoom de 200 % num notebook de 1280 × 720. */
+for (const reducedMotion of ['no-preference', 'reduce'] as const) {
+  test.describe(`tela baixa · ${reducedMotion}`, () => {
+    test.use({ reducedMotion, viewport: { width: 640, height: 360 } })
+
+    test('o mouse alcança os CTAs rolando', async ({ page }) => {
+      await page.goto('/')
+      const cta = page
+        .getByRole('region', { name: site.person.name })
+        .getByRole('link', { name: site.hero.ctaSecondary })
+      let seen = false
+      for (let y = 0; y <= 1200 && !seen; y += 40) {
+        await page.evaluate((y) => window.scrollTo(0, y), y)
+        await settle(page)
+        seen = await cta.evaluate((el) => {
+          const box = el.getBoundingClientRect()
+          const hit = document.elementFromPoint(
+            box.left + box.width / 2,
+            box.top + box.height / 2,
+          )
+          return hit !== null && el.contains(hit)
+        })
+      }
+      expect(seen).toBe(true)
+    })
+
+    test('Tab até o CTA o traz à vista', async ({ page }) => {
+      await page.goto('/')
+      await page.evaluate(() => document.fonts.ready.then(() => true))
+      for (let i = 0; i < 12; i++) {
+        await page.keyboard.press('Tab')
+        const label = await page.evaluate(
+          () => document.activeElement?.textContent,
+        )
+        if (label === site.hero.ctaSecondary) break
+      }
+      const cta = page
+        .getByRole('region', { name: site.person.name })
+        .getByRole('link', { name: site.hero.ctaSecondary })
+      await expect(cta).toBeFocused()
+      await expect
+        .poll(() =>
+          cta.evaluate((el) => {
+            const box = el.getBoundingClientRect()
+            const hit = document.elementFromPoint(
+              box.left + box.width / 2,
+              box.top + box.height / 2,
+            )
+            return hit !== null && el.contains(hit)
+          }),
+        )
+        .toBe(true)
+    })
+  })
+}
 
 test.describe('abertura com reduced motion', () => {
   test.use({ reducedMotion: 'reduce' })
@@ -159,5 +252,36 @@ test.describe('abertura com reduced motion', () => {
       .evaluateAll((words) => words.map((w) => getComputedStyle(w).transform))
     expect(transforms).toEqual(['none', 'none'])
     expect(await page.locator('[data-entrance]').count()).toBe(0)
+  })
+
+  test('Shift+Tab do índice para o CTA do hero o deixa à vista', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 1440, height: 900 })
+    await page.goto('/')
+    await page.evaluate(() => window.scrollTo(0, 900))
+    await settle(page)
+    await page
+      .getByRole('navigation', { name: site.release.label })
+      .getByRole('link')
+      .first()
+      .focus()
+    await page.keyboard.press('Shift+Tab')
+    const cta = page
+      .getByRole('region', { name: site.person.name })
+      .getByRole('link', { name: site.hero.ctaSecondary })
+    await expect(cta).toBeFocused()
+    await expect
+      .poll(() =>
+        cta.evaluate((el) => {
+          const box = el.getBoundingClientRect()
+          const hit = document.elementFromPoint(
+            box.left + box.width / 2,
+            box.top + box.height / 2,
+          )
+          return hit !== null && el.contains(hit)
+        }),
+      )
+      .toBe(true)
   })
 })

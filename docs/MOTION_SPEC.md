@@ -22,7 +22,9 @@ Valem para todo efeito, este e os próximos. Vêm de `docs/SPEC.md` §5.
   escondido só existe sob um atributo que o script aplica quando vai animar.
 - **Navegação nunca espera animação:** links funcionam em `t = 0`; troca de
   idioma e abertura de case study não aguardam nada.
-- **Teclado:** foco num elemento coberto por movimento o traz de volta à vista.
+- **Teclado:** foco por teclado num elemento coberto por movimento o traz de
+  volta à vista. Só teclado (`:focus-visible`): um clique também foca, e mover
+  a página entre mousedown e mouseup engoliria o clique.
 - **Desempenho:** só `transform` e `opacity` animam, mais a altura do
   pseudo-elemento da curva. Um laço de `requestAnimationFrame` só (o do Lenis);
   nenhum estado React por frame.
@@ -76,12 +78,12 @@ Valem para todo efeito, este e os próximos. Vêm de `docs/SPEC.md` §5.
 | | |
 |---|---|
 | Objetivo | A virada de página: o índice sobe por cima do hero (D-Release) |
-| Elemento | O Release (folha `--surface`) sobe no fluxo; o hero fica preso no topo, encolhe e escurece; em volta dele aparece `--ink` |
+| Elemento | O Release (folha `--surface`) sobe no fluxo; o hero fica preso no topo (`[data-opening]`; com `top` negativo se não couber na janela, para rolar até o fim antes de parar), encolhe e escurece; em volta dele aparece `--ink` |
 | Gatilho | Scroll, nos dois sentidos |
 | Estado inicial | Borda reta, hero em `scale(1)`, sem sombra |
 | Estado final | Curva `sin(π·p) × 14 vh` (≥ 768 px) ou `× 7 vh` (< 768 px): zero no começo e no fim, máxima no meio; hero até `scale(0.94)`; sombra de `--ink` transparente → 55 %, até opacidade 0,9 |
 | Duração e easing | Acompanha o scroll |
-| Reduced motion | Sem curva, escala nem sombra. O hero continua preso e a folha sobe por cima — é o próprio scroll, não animação |
+| Reduced motion | Sem curva, escala nem sombra, e o hero no fluxo normal, como no Gate 2 (preso, um Shift+Tab deixaria o foco sob a folha) |
 | Sem JS | Igual ao reduced motion |
 | Limitação aceita | A folha cobre o nome antes do afastamento terminar (ver `docs/BACKLOG.md`) |
 | Evidência | `docs/gate-3/` |
