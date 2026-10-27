@@ -52,8 +52,12 @@ export function refreshSmoothScroll(): void {
   lenis?.resize()
 }
 
-export function scrollToTarget(target: HTMLElement): void {
-  if (lenis) lenis.scrollTo(target)
+/** `immediate` pula o deslize do Lenis; sem Lenis a rolagem já é instantânea. */
+export function scrollToTarget(
+  target: HTMLElement,
+  options: { immediate?: boolean } = {},
+): void {
+  if (lenis) lenis.scrollTo(target, { immediate: options.immediate })
   else target.scrollIntoView({ block: 'start' })
 }
 

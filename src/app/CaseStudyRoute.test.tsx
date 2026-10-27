@@ -85,7 +85,7 @@ describe('case study', () => {
     ).toBeTruthy()
   })
 
-  it('/pt/work/map-areas: título e seções em PT, volta para /pt#work', async () => {
+  it('/pt/work/map-areas: título e seções em PT, volta para a ficha em /pt', async () => {
     const { site } = contentByLocale.pt
     const project = projectOf('pt', 'map-areas')
     renderAt('/pt/work/map-areas')
@@ -101,16 +101,41 @@ describe('case study', () => {
     expect(screen.getByText(project.summary)).toBeVisible()
     expect(
       screen.getByRole('link', { name: site.caseStudy.backToWork }),
-    ).toHaveAttribute('href', '/pt#work')
+    ).toHaveAttribute('href', '/pt#work-map-areas')
   })
 
-  it('/work/token-killer: volta para /#work', async () => {
+  it('/work/token-killer: volta para a ficha do projeto', async () => {
     renderAt('/work/token-killer')
     expect(
       await screen.findByRole('link', {
         name: contentByLocale.en.site.caseStudy.backToWork,
       }),
-    ).toHaveAttribute('href', '/#work')
+    ).toHaveAttribute('href', '/#work-token-killer')
+  })
+
+  it('/work/map-areas (preview): volta para a ficha do projeto', async () => {
+    renderAt('/work/map-areas')
+    expect(
+      await screen.findByRole('link', {
+        name: contentByLocale.en.site.caseStudy.backToWork,
+      }),
+    ).toHaveAttribute('href', '/#work-map-areas')
+  })
+
+  it('/pt/work/token-killer: volta para a ficha em /pt', async () => {
+    renderAt('/pt/work/token-killer')
+    expect(
+      await screen.findByRole('link', {
+        name: contentByLocale.pt.site.caseStudy.backToWork,
+      }),
+    ).toHaveAttribute('href', '/pt#work-token-killer')
+  })
+
+  it('o h1 recebe o foco ao abrir a página', async () => {
+    renderAt('/work/token-killer')
+    const title = await screen.findByRole('heading', { level: 1 })
+    expect(title).toHaveAttribute('tabindex', '-1')
+    expect(title).toHaveAttribute('data-route-focus')
   })
 
   it.each(['/work/Token-Killer', '/work/..%2F'])('%s dá 404', async (url) => {

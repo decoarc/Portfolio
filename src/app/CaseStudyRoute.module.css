@@ -59,6 +59,11 @@
   overflow-wrap: break-word;
 }
 
+/* Recebe o foco ao abrir a página; mesma regra do `main:focus`. */
+.title:focus {
+  outline: none;
+}
+
 /* Aviso de preview e de estudo conceitual: frase inteira, sem caixa alta,
    marcada pelo filete do acento. */
 .notice {

@@ -1,4 +1,5 @@
 import { Link } from 'react-router'
+import { workAnchor } from '../../content/publication.ts'
 import type { Project, SiteContent } from '../../content/types.ts'
 import { ExternalLink } from '../ExternalLink/ExternalLink.tsx'
 import { ProjectThumb } from '../ProjectThumb/ProjectThumb.tsx'
@@ -34,7 +35,11 @@ export function ProjectSlip({
   return (
     // `data-motion` marca quem tem transição e serve de gancho para a reação
     // da lista (Work.module.css), sem compor classes entre módulos.
-    <li className={styles.slip} data-motion="slip">
+    <li
+      id={workAnchor(project.slug)}
+      className={styles.slip}
+      data-motion="slip"
+    >
       <p className={styles.meta}>
         <span className={styles.index}>{String(index).padStart(2, '0')}</span>
         {/* O tipo já entra no nome do título; aqui fica só o rótulo visual. */}
@@ -43,9 +48,13 @@ export function ProjectSlip({
         </span>
       </p>
       {/* A reação mexe no título, não no link: o Map Areas não tem link. */}
-      <h3 className={styles.title} data-motion="slip-title">
+      <h3
+        className={styles.title}
+        data-motion="slip-title"
+        {...(href === null && { 'data-anchor-focus': true, tabIndex: -1 })}
+      >
         {href ? (
-          <Link to={href} className={styles.titleLink}>
+          <Link to={href} className={styles.titleLink} data-anchor-focus>
             {typeName}
             {project.title}
           </Link>

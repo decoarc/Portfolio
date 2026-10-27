@@ -1,9 +1,14 @@
 import { Link, useParams } from 'react-router'
 import { ExternalLink } from '../components/ExternalLink/ExternalLink.tsx'
 import { Sheet } from '../components/Sheet/Sheet.tsx'
-import { caseStudyAccess, findProject } from '../content/publication.ts'
+import {
+  caseStudyAccess,
+  findProject,
+  workAnchor,
+} from '../content/publication.ts'
 import { localePath } from '../lib/locale.ts'
 import styles from './CaseStudyRoute.module.css'
+import { INSTANT_SCROLL } from './navigationState.ts'
 import { useContent, useLocale } from './LocaleContext.ts'
 import { NotFoundRoute } from './NotFoundRoute.tsx'
 
@@ -25,7 +30,11 @@ export function CaseStudyRoute() {
   return (
     <Sheet tone="sheet" labelledBy={HEADING_ID} className={styles.page}>
       <title>{`${project.title}${site.meta.titleSuffix}`}</title>
-      <Link to={localePath(locale, '/#work')} className={styles.back}>
+      <Link
+        to={localePath(locale, `/#${workAnchor(project.slug)}`)}
+        state={INSTANT_SCROLL}
+        className={styles.back}
+      >
         {copy.backToWork}
       </Link>
 
@@ -34,7 +43,12 @@ export function CaseStudyRoute() {
           <p className={styles.notice}>{copy.previewNotice}</p>
         )}
         <p className={styles.type}>{site.projectType[project.type]}</p>
-        <h1 id={HEADING_ID} className={styles.title}>
+        <h1
+          id={HEADING_ID}
+          className={styles.title}
+          tabIndex={-1}
+          data-route-focus
+        >
           {project.title}
         </h1>
         {project.type === 'concept' && (

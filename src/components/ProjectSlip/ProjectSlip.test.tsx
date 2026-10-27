@@ -65,6 +65,33 @@ describe('ProjectSlip', () => {
     expect(screen.getByText(labels.preview)).toBeVisible()
   })
 
+  it('com href: o <li> tem o id da âncora e o link do título recebe o foco', () => {
+    const item = project()
+    const { container } = renderSlip(
+      <ProjectSlip
+        project={item}
+        index={1}
+        href="/work/exemplo"
+        labels={labels}
+      />,
+    )
+    expect(container.querySelector('li')).toHaveAttribute('id', 'work-exemplo')
+    expect(
+      screen.getByRole('link', { name: new RegExp(item.title) }),
+    ).toHaveAttribute('data-anchor-focus')
+  })
+
+  it('sem href: o <h3> recebe o foco da âncora', () => {
+    const item = project({ status: 'preview' })
+    const { container } = renderSlip(
+      <ProjectSlip project={item} index={1} href={null} labels={labels} />,
+    )
+    expect(container.querySelector('li')).toHaveAttribute('id', 'work-exemplo')
+    const heading = screen.getByRole('heading', { level: 3 })
+    expect(heading).toHaveAttribute('data-anchor-focus')
+    expect(heading).toHaveAttribute('tabindex', '-1')
+  })
+
   it('concept mostra o rótulo de estudo conceitual', () => {
     const item = project({ type: 'concept' })
     const conceptLabels = { ...labels, type: siteEn.projectType.concept }

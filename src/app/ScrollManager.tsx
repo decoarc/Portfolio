@@ -1,10 +1,11 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { useLocation, useNavigate, useNavigationType } from 'react-router'
 import {
   refreshSmoothScroll,
   scrollToTarget,
   scrollToTop,
 } from '@/motion/smoothScroll.ts'
+import { wantsInstantScroll } from './navigationState.ts'
 
 /**
  * Gerencia scroll e foco a cada navegação. A rolagem passa pelo scroll suave
@@ -12,9 +13,10 @@ import {
  * links `#hash` viram navegação do router, sem o salto nativo do navegador.
  */
 export function ScrollManager() {
-  const { pathname, hash, key } = useLocation()
+  const { pathname, hash, key, state } = useLocation()
   const navigationType = useNavigationType()
   const navigate = useNavigate()
+  const previousPathname = useRef<string | null>(null)
 
   useEffect(() => {
     const onClick = (event: MouseEvent) => {
@@ -42,6 +44,9 @@ export function ScrollManager() {
   // `key` muda a cada navegação: clicar de novo no mesmo hash rola de novo.
   useEffect(() => {
     refreshSmoothScroll()
+    const changedPage =
+      previousPathname.current !== null && previousPathname.current !== pathname
+    previousPathname.current = pathname
     if (hash) {
       let id = hash.slice(1)
       try {
@@ -51,17 +56,31 @@ export function ScrollManager() {
       }
       const target = document.getElementById(id)
       if (!target) return
-      if (!target.hasAttribute('tabindex'))
+      scrollToTarget(target, { immediate: wantsInstantScroll(state) })
+      // O foco vai para quem a âncora marca (o link do título da ficha); sem
+      // marca, ou com várias (um contêiner como `#main`), o próprio alvo, que
+      // então precisa de tabindex.
+      const marked = target.querySelectorAll<HTMLElement>('[data-anchor-focus]')
+      const focusTarget = marked.length === 1 ? marked[0] : target
+      if (focusTarget === target && !target.hasAttribute('tabindex'))
         target.setAttribute('tabindex', '-1')
-      scrollToTarget(target)
-      target.focus({ preventScroll: true })
+      focusTarget.focus({ preventScroll: true })
       return
     }
-    // Voltar/avançar deixa o navegador restaurar a posição.
-    if (navigationType === 'POP') return
+    // Voltar/avançar deixa o navegador restaurar a posição; o foco vai para
+    // `#main`, porque o elemento focado na página anterior saiu do DOM. Na
+    // primeira carga não há página anterior: o foco fica onde o navegador o põe.
+    if (navigationType === 'POP') {
+      if (changedPage)
+        document.getElementById('main')?.focus({ preventScroll: true })
+      return
+    }
     scrollToTop()
-    document.getElementById('main')?.focus({ preventScroll: true })
-  }, [pathname, hash, key, navigationType])
+    const routeFocus = document.querySelector<HTMLElement>('[data-route-focus]')
+    ;(routeFocus ?? document.getElementById('main'))?.focus({
+      preventScroll: true,
+    })
+  }, [pathname, hash, key, state, navigationType])
 
   return null
 }

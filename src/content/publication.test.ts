@@ -5,6 +5,7 @@ import {
   findProject,
   isValidSlug,
   listProjects,
+  workAnchor,
 } from './publication.ts'
 import type { Project } from './types.ts'
 
@@ -23,6 +24,12 @@ function project(overrides: Partial<Project> = {}): Project {
     ...overrides,
   }
 }
+
+describe('workAnchor', () => {
+  it('é o id da ficha na lista de trabalhos', () => {
+    expect(workAnchor('token-killer')).toBe('work-token-killer')
+  })
+})
 
 describe('isValidSlug', () => {
   it('aceita kebab-case e recusa o resto', () => {
