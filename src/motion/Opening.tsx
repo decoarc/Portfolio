@@ -38,11 +38,14 @@ export function Opening({ children }: { children: ReactNode }) {
       )
     }
 
+    // Último progresso escrito: com a folha no topo (1) ou de volta ao início
+    // (0) o scroll segue disparando, mas não há nada novo a escrever.
+    let written = -1
     const write = () => {
-      const frame = openingFrame(
-        openingProgress(window.scrollY, window.innerHeight),
-        window.innerWidth,
-      )
+      const progress = openingProgress(window.scrollY, window.innerHeight)
+      if (progress === written) return
+      written = progress
+      const frame = openingFrame(progress, window.innerWidth)
       root.style.setProperty('--opening-drift', round(frame.driftVw))
       root.style.setProperty(
         '--opening-bottom-shift',
@@ -59,6 +62,8 @@ export function Opening({ children }: { children: ReactNode }) {
     }
     const onResize = () => {
       measure()
+      // A largura muda os valores (celular × desktop) mesmo no mesmo progresso.
+      written = -1
       write()
     }
     onResize()

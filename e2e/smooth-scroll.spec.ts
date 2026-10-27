@@ -48,6 +48,25 @@ test.describe('sem preferência de movimento', () => {
     expect(y).toBeLessThan(500)
   })
 
+  test('link de âncora rola suave, sem salto, e termina na seção', async ({
+    page,
+  }) => {
+    await page.goto('/')
+    await page
+      .getByRole('region', { name: en.person.name })
+      .getByRole('link', { name: en.hero.ctaSecondary })
+      .click()
+    // Logo depois do clique a página ainda está a caminho: um salto nativo já
+    // estaria no destino.
+    const early = await page.evaluate(() => window.scrollY)
+    const final = await settledScrollY(page)
+    expect(final).toBeGreaterThan(0)
+    expect(early).toBeLessThan(final)
+    await expect(page).toHaveURL(/#contact$/)
+    await expect(page.locator('#contact')).toBeInViewport()
+    await expect(page.locator('#contact')).toBeFocused()
+  })
+
   test('o case study abre no topo mesmo com a home rolada', async ({
     page,
   }) => {
