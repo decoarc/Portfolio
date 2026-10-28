@@ -3,7 +3,7 @@
  * e reexporta o que `scripts/prerender.ts` precisa para montar cada página.
  * Não importa `main.tsx`: rolagem suave e afins são só do cliente.
  */
-import '@fontsource-variable/fraunces/full.css'
+import './styles/fonts.css'
 import '@fontsource-variable/instrument-sans'
 import '@fontsource-variable/geist-mono'
 import './styles/tokens.css'

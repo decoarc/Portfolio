@@ -133,14 +133,16 @@ test.describe('prefers-reduced-motion: no-preference', () => {
   })
 })
 
-test('a Fraunces completa foi carregada', async ({ page }) => {
+test('a Fraunces latin própria (wght, opsz e WONK) foi carregada', async ({
+  page,
+}) => {
   await page.goto('/')
   await page.evaluate(() => document.fonts.ready.then(() => true))
   const names = await page.evaluate(() =>
     performance.getEntriesByType('resource').map((entry) => entry.name),
   )
   expect(
-    names.some((name) => name.includes('fraunces-latin-full-normal')),
+    names.some((name) => name.endsWith('/fonts/fraunces-latin.woff2')),
     names.join('\n'),
   ).toBe(true)
 })

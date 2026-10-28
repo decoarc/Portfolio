@@ -83,3 +83,38 @@ prerender o `<img>` só era descoberto depois do JS; agora está no HTML.
 | `map-areas.webp` (case) | 103,2 kB | 103,2 kB | 103,2 kB |
 
 A Fraunces latin é o maior arquivo depois do JS e é pedida em todas as rotas.
+
+## Mudança 1: Fraunces latin instanciada — entra
+
+Pesos e cortes medidos (todo elemento e pseudo-elemento com família Fraunces,
+`GATE_ROUTES`, três viewports, com e sem reduced motion): `font-weight` só
+600; `font-variation-settings` `"SOFT" 0, "WONK" 1, "opsz" 144`,
+`"WONK" 1, "opsz" 72`, `"opsz" 48` e `normal` (opsz automático pelo
+tamanho). `SOFT` sempre 0. Detalhe em `scripts/fonts/README.md`.
+
+| Variante do latin | Tamanho | vs. fontsource (121 016 B) | Regressão visual (`threshold: 0`) |
+| --- | --- | --- | --- |
+| fontsource `full` (antes) | 121 016 B | — | baseline |
+| `SOFT` 0, `wght` fixo em 600 (pedido no plano) | 34 688 B | −71,3% | **falha**: 24 de 24 capturas, 16 a 215 px diferentes |
+| `SOFT` 0, `wght` 600 com UPM escalado para 16000 | 45 752 B | −62,2% | **falha**: 24 de 24 capturas |
+| `SOFT` 0, `wght` restrito a 600–900 | 61 124 B | −49,5% | **falha**: 24 de 24 capturas |
+| **`SOFT` 0, `wght` inteiro (adotada)** | **66 964 B** | **−44,7%** | **passa**: 252 de 252 no `pnpm test:e2e` |
+
+O padrão do eixo `wght` no arquivo é 900. Fixar ou restringir o `wght`
+recalcula os deltas e os arredonda para unidades inteiras, o que muda o
+antialias dos títulos. `SOFT` 0 é o padrão do eixo: fixá-lo só descarta
+deltas. Critério (≥ 30% menor e sem diferença visual) cumprido pela variante
+adotada; o `wght` fica inteiro, ao contrário do que o plano previa.
+
+No fio: 121,3 kB → 67,3 kB (−54,0 kB) em todas as rotas.
+
+Medida depois da mudança (preview da Fase 4, sem gzip; mediana de 3):
+
+| Rota | LCP | CLS | Transferência |
+| --- | --- | --- | --- |
+| `/` 390×844 | 756 ms (756/756/780) | 0,0002 | 586,0 kB |
+| `/pt` 1440×900 | 748 ms (756/748/744) | 0,0001 | 586,4 kB |
+| `/pt/work/map-areas` 1440×900 | 2344 ms (2356/2344/2316) | 0,0002 | 643,7 kB |
+
+O LCP não muda (diferenças de ±8 ms, dentro do ruído entre rodadas): o
+elemento LCP das homes é um parágrafo em Instrument Sans e o do case é a capa.

@@ -1,4 +1,4 @@
-import '@fontsource-variable/fraunces/full.css'
+import './styles/fonts.css'
 import '@fontsource-variable/instrument-sans'
 import '@fontsource-variable/geist-mono'
 import './styles/tokens.css'
