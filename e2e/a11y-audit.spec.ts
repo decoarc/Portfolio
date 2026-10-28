@@ -180,7 +180,7 @@ test.describe('alto contraste do Windows (forced-colors: active)', () => {
   test.use({ viewport: { width: 1440, height: 900 } })
 
   /**
-   * Linha de `side` (`outline` ou `border-top`) de um elemento ou
+   * Linha de `side` (`outline`, `border-top`, `border-bottom`…) de um elemento ou
    * pseudo-elemento: visível e de cor diferente do fundo da página.
    */
   function line(page: Page, selector: string, side: string, pseudo?: string) {
@@ -252,25 +252,33 @@ test.describe('alto contraste do Windows (forced-colors: active)', () => {
     expect(await line(page, '#tools li', 'border-top')).toBe('ok')
   })
 
-  test('a borda da folha aparece enquanto ela sobe sobre o hero', async ({
+  test('a borda curva do Sobre aparece enquanto ele revela o Contato', async ({
     page,
   }) => {
-    await page.mouse.wheel(0, 450)
+    // Base do Sobre a meia altura do Contato: a curva no máximo.
+    const distance = await page.evaluate(() => {
+      const about = document.getElementById('about')!
+      const contact = document.getElementById('contact')!
+      return (
+        about.getBoundingClientRect().bottom -
+        window.innerHeight +
+        contact.offsetHeight / 2
+      )
+    })
+    await page.mouse.move(700, 450)
+    for (let done = 0; done < distance; done += 400)
+      await page.mouse.wheel(0, Math.min(400, distance - done))
     await expect
       .poll(() =>
         page.evaluate(() =>
           parseFloat(
-            getComputedStyle(
-              document.querySelector('main section:has(> nav)')!,
-              '::before',
-            ).height,
+            getComputedStyle(document.getElementById('about')!, '::after')
+              .height,
           ),
         ),
       )
       .toBeGreaterThan(40)
-    expect(
-      await line(page, 'main section:has(> nav)', 'border-top', '::before'),
-    ).toBe('ok')
+    expect(await line(page, '#about', 'border-bottom', '::after')).toBe('ok')
   })
 })
 
