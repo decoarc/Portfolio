@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { openingFrame, openingProgress } from './opening.ts'
+import { fadeOpacity, openingFrame, openingProgress } from './opening.ts'
 
 describe('openingProgress', () => {
   it('é a fração da altura da janela já rolada, entre 0 e 1', () => {
@@ -31,5 +31,23 @@ describe('openingFrame', () => {
 
   it('afastamento segue easeOutCubic', () => {
     expect(openingFrame(0.5, 1440).driftVw).toBeCloseTo(25 * (1 - 0.5 ** 3))
+  })
+})
+
+describe('fadeOpacity', () => {
+  it('cai linearmente até sumir no alvo', () => {
+    expect(fadeOpacity(0, 13)).toBe(1)
+    expect(fadeOpacity(6.5, 13)).toBe(0.5)
+    expect(fadeOpacity(13, 13)).toBe(0)
+    expect(fadeOpacity(25, 13)).toBe(0)
+  })
+
+  it('alvo já alcançado no lugar: some no primeiro movimento', () => {
+    expect(fadeOpacity(0, -2)).toBe(1)
+    expect(fadeOpacity(0.1, -2)).toBe(0)
+  })
+
+  it('sem palavra medida, não some', () => {
+    expect(fadeOpacity(25, Infinity)).toBe(1)
   })
 })
