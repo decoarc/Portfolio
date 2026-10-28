@@ -224,6 +224,9 @@ assim por ora. Já foram testadas e recusadas duas alternativas (protótipo v5):
 segurar o hero até o nome terminar e só então subir a folha, e manter o nome por
 cima da folha até ela chegar ao topo. Se voltar ao tema, partir de outra ideia.
 
+Resolvido em 2026-10-28 por outro caminho: o dono tirou o hero preso (ele rola
+no fluxo e só o nome se afasta), e a folha deixou de cobri-lo.
+
 ### Cursor de nanquim e gotas
 
 Ideia do dono, vista em protótipo em 2026-10-27 e descartada por ele no mesmo

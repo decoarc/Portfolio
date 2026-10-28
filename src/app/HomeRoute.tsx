@@ -1,6 +1,7 @@
 import { CoverStrip } from '../components/CoverStrip/index.ts'
 import type { HomeSectionId } from '../content/types.ts'
 import { Opening } from '../motion/Opening.tsx'
+import { Reveal } from '../motion/Reveal.tsx'
 import { About } from '../sections/About/index.ts'
 import { Approach } from '../sections/Approach/index.ts'
 import { Contact } from '../sections/Contact/index.ts'
@@ -58,13 +59,14 @@ export function HomeRoute() {
       {sections.includes('interests') && (
         <Interests index={numberOf('interests')} copy={site.interests} />
       )}
-      <About index={numberOf('about')} copy={site.about} />
-
-      <Contact
-        index={numberOf('contact')}
-        copy={site.contact}
-        externalHint={site.links.externalHint}
-      />
+      <Reveal>
+        <About index={numberOf('about')} copy={site.about} />
+        <Contact
+          index={numberOf('contact')}
+          copy={site.contact}
+          externalHint={site.links.externalHint}
+        />
+      </Reveal>
     </>
   )
 }

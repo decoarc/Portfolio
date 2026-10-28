@@ -1,5 +1,5 @@
 /* Contracapa: volta ao `--bg` da capa, aberta pelo mesmo filete de 2px que
-   fecha o hero. */
+   fecha o hero. Sai de baixo do Sobre (ver `Reveal`). */
 
 .contact {
   /* Piso do respiro inferior: o cartão aberto (12px abaixo do link, até
@@ -9,6 +9,33 @@
      9,25rem (148px) deixa folga. Acima do piso vale o padrão das folhas. */
   --sheet-pad-block-end: max(clamp(48px, 10vh, 112px), 9.25rem);
   border-top: 2px solid var(--ink);
+  position: relative;
+}
+
+/* Fim da home: preso no pé da janela enquanto o Sobre sobe e o revela
+   (`data-reveal`, marcado pelo `Reveal`, src/motion/; nunca sem JS, com
+   reduced motion ou se o Contato não couber na janela). */
+[data-reveal] .contact {
+  position: sticky;
+  bottom: 0;
+  z-index: 0;
+}
+
+/* Sombra do Contato ainda coberto, que clareia conforme aparece. Escondida em
+   repouso: uma camada transparente sobre o texto já impede o axe de medir o
+   contraste. O `Reveal` marca `data-reveal-shade` enquanto há sombra. */
+.contact::after {
+  visibility: hidden;
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: rgb(22 19 15 / 0.55);
+  opacity: var(--reveal-shade, 0);
+}
+
+[data-reveal-shade] .contact::after {
+  visibility: visible;
 }
 
 .lead {

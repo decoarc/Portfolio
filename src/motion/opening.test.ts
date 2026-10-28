@@ -18,15 +18,8 @@ describe('openingProgress', () => {
 })
 
 describe('openingFrame', () => {
-  it('no topo, tudo no estado estático', () => {
-    expect(openingFrame(0, 1440)).toEqual({
-      driftVw: 0,
-      bottomShiftVh: 0,
-      bottomOpacity: 1,
-      heroScale: 1,
-      shadeOpacity: 0,
-      curveVh: 0,
-    })
+  it('no topo, o nome no lugar', () => {
+    expect(openingFrame(0, 1440)).toEqual({ driftVw: 0 })
   })
 
   it('afastamento de 25 vw a partir de 768 px e 40 vw abaixo', () => {
@@ -38,20 +31,5 @@ describe('openingFrame', () => {
 
   it('afastamento segue easeOutCubic', () => {
     expect(openingFrame(0.5, 1440).driftVw).toBeCloseTo(25 * (1 - 0.5 ** 3))
-  })
-
-  it('curva máxima no meio do caminho e zero no fim', () => {
-    expect(openingFrame(0.5, 1440).curveVh).toBeCloseTo(14)
-    expect(openingFrame(0.5, 390).curveVh).toBeCloseTo(7)
-    expect(openingFrame(1, 1440).curveVh).toBeCloseTo(0)
-  })
-
-  it('no fim, hero encolhido, sombreado e bloco de baixo apagado', () => {
-    expect(openingFrame(1, 1440)).toMatchObject({
-      heroScale: 0.94,
-      shadeOpacity: 0.9,
-      bottomShiftVh: 6,
-      bottomOpacity: 0,
-    })
   })
 })

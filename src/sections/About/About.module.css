@@ -24,3 +24,27 @@
   max-width: 60ch;
   color: var(--ink-muted);
 }
+
+/* Fim da home: o Sobre sobe por cima do Contato, preso por baixo
+   (`data-reveal`, marcado pelo `Reveal`, src/motion/; nunca sem JS nem com
+   reduced motion). A borda de baixo se curva para baixo com o filete de 2px:
+   a altura vem de `--reveal-curve` (vh), 0 no começo e no fim. `content-box`:
+   em repouso a caixa é só o filete, sobre o filete do Contato. */
+[data-reveal] .about {
+  position: relative;
+  z-index: 1;
+}
+
+[data-reveal] .about::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  box-sizing: content-box;
+  height: calc(var(--reveal-curve, 0) * 1vh);
+  background: var(--surface);
+  border-bottom: 2px solid var(--ink);
+  border-radius: 0 0 50% 50% / 0 0 100% 100%;
+  pointer-events: none;
+}

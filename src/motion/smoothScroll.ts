@@ -60,9 +60,24 @@ export function scrollToTarget(
   // A rolagem anda em pixels inteiros e o topo do alvo pode cair numa fração
   // (seções com altura fracionária acima dele). Arredondar para baixo deixa o
   // topo dentro da janela, em vez de 0,4 px acima dela.
-  const y = Math.floor(window.scrollY + target.getBoundingClientRect().top)
+  const y = Math.floor(window.scrollY + flowTop(target))
   if (lenis) lenis.scrollTo(y, { immediate: options.immediate })
   else window.scrollTo(0, y)
+}
+
+/**
+ * Topo do alvo na janela como se estivesse no fluxo. Preso (`sticky`, o
+ * Contato do `Reveal`), o retângulo diz onde ele aparece agora, não onde a
+ * página chega a ele.
+ */
+function flowTop(target: HTMLElement): number {
+  if (getComputedStyle(target).position !== 'sticky')
+    return target.getBoundingClientRect().top
+  const inline = target.style.position
+  target.style.position = 'static'
+  const top = target.getBoundingClientRect().top
+  target.style.position = inline
+  return top
 }
 
 export function scrollToTop(): void {

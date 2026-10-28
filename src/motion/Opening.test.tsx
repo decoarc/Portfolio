@@ -1,12 +1,11 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import { StrictMode } from 'react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { Opening } from './Opening.tsx'
-import { onScroll, scrollToTop } from './smoothScroll.ts'
+import { onScroll } from './smoothScroll.ts'
 
 vi.mock('./smoothScroll.ts', () => ({
   onScroll: vi.fn(() => () => undefined),
-  scrollToTop: vi.fn(),
 }))
 
 let reduce = false
@@ -47,7 +46,6 @@ afterEach(() => {
   reduce = false
   delete document.documentElement.dataset.entranceEarly
   setWindow(0)
-  vi.mocked(scrollToTop).mockClear()
 })
 
 describe('Opening', () => {
@@ -75,10 +73,6 @@ describe('Opening', () => {
     expect(
       Number(root(container).style.getPropertyValue('--opening-drift')),
     ).toBe(25)
-    expect(
-      Number(root(container).style.getPropertyValue('--opening-curve')),
-    ).toBe(0)
-    expect(root(container)).toHaveAttribute('data-shade')
   })
 
   it('se o navegador restaura a posição antes da entrada, ela não roda', async () => {
@@ -107,7 +101,7 @@ describe('Opening', () => {
     ).toBe(40)
   })
 
-  it('com a folha no topo, rolar mais não reescreve os valores', () => {
+  it('com o hero fora da janela, rolar mais não reescreve os valores', () => {
     setWindow(900, 1440, 900)
     const { container } = renderOpening()
     const listener = vi.mocked(onScroll).mock.calls.at(-1)![0]
@@ -118,21 +112,6 @@ describe('Opening', () => {
     setWindow(450, 1440, 900)
     listener()
     expect(spy).toHaveBeenCalled()
-  })
-
-  it('no topo não há sombra', () => {
-    setWindow(0)
-    const { container } = renderOpening()
-    expect(root(container)).not.toHaveAttribute('data-shade')
-  })
-
-  // O caso do teclado depende de layout real e de :focus-visible: está em
-  // e2e/opening.spec.ts (Shift+Tab, tela baixa).
-  it('foco que não é de teclado (clique) não mexe no scroll', () => {
-    setWindow(900)
-    renderOpening()
-    fireEvent.focusIn(screen.getByRole('link', { name: 'Get in touch' }))
-    expect(scrollToTop).not.toHaveBeenCalled()
   })
 
   describe('marca do script inline (data-entrance-early)', () => {
@@ -177,12 +156,5 @@ describe('Opening', () => {
       )
       expect(root(container)).not.toHaveAttribute('data-entrance')
     })
-  })
-
-  it('foco no índice não mexe no scroll', () => {
-    setWindow(900)
-    renderOpening()
-    fireEvent.focusIn(screen.getByText('índice'))
-    expect(scrollToTop).not.toHaveBeenCalled()
   })
 })
