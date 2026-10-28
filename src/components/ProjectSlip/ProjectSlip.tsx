@@ -40,6 +40,9 @@ export function ProjectSlip({
   // O nome de transição só vale na ficha envolvida (ida para o case dela ou
   // volta dele): o nome precisa ser único na página.
   const flying = useViewTransitionState(href ?? '') && href !== null
+  // A ficha mostra um link só, de preferência a demo; o case lista todos.
+  const slipLink =
+    project.links.find((link) => link.kind === 'live') ?? project.links[0]
   return (
     // `data-motion` marca quem tem transição e serve de gancho para a reação
     // da lista (Work.module.css), sem compor classes entre módulos.
@@ -55,7 +58,7 @@ export function ProjectSlip({
           {labels.type}
         </span>
       </p>
-      {/* A reação mexe no título, não no link: o Map Areas não tem link. */}
+      {/* A reação mexe no título, não no link: um case em preview não tem link. */}
       <h3
         className={styles.title}
         data-motion="slip-title"
@@ -88,15 +91,11 @@ export function ProjectSlip({
       </div>
       <p className={styles.stack}>
         <span>{project.stack.join(' · ')}</span>
-        {project.links.map((link) => (
-          <ExternalLink
-            key={link.href}
-            href={link.href}
-            hint={labels.links.externalHint}
-          >
-            {labels.links.labels[link.kind]}
+        {slipLink && (
+          <ExternalLink href={slipLink.href} hint={labels.links.externalHint}>
+            {labels.links.labels[slipLink.kind]}
           </ExternalLink>
-        ))}
+        )}
       </p>
       <p className={styles.year}>{project.year}</p>
       {/* Não é link: o título continua sendo o único alvo da ficha. */}

@@ -72,8 +72,8 @@ test.describe('sem preferência de movimento', () => {
   }) => {
     await page.goto('/#about')
     expect(await settledScrollY(page)).toBeGreaterThan(0)
-    await page.getByRole('link', { name: /Token Killer/ }).click()
-    await expect(page).toHaveURL(/\/work\/token-killer$/)
+    await page.getByRole('link', { name: /Local Email Client/ }).click()
+    await expect(page).toHaveURL(/\/work\/local-email-client$/)
     await expect.poll(() => settledScrollY(page)).toBe(0)
   })
 })

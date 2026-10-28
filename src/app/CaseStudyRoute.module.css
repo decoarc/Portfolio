@@ -116,6 +116,10 @@
 .fact dd {
   margin: 0;
 }
+/* Dois links empilhados precisam de folga para o alvo de 24 px (WCAG 2.5.8). */
+.linkItem + .linkItem {
+  margin-top: 8px;
+}
 
 /* Em linha, os itens da stack dividem a linha com um ponto médio só visual.
    `pre-wrap` guarda os espaços do separador e ainda deixa a linha quebrar

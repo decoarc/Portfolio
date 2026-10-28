@@ -27,7 +27,7 @@ function project(overrides: Partial<Project> = {}): Project {
 
 describe('workAnchor', () => {
   it('é o id da ficha na lista de trabalhos', () => {
-    expect(workAnchor('token-killer')).toBe('work-token-killer')
+    expect(workAnchor('local-email-client')).toBe('work-local-email-client')
   })
 })
 
@@ -79,8 +79,8 @@ describe('findProject', () => {
   })
 
   it('ignora a caixa do slug: o Pages serve /work/X do arquivo em minúsculas', () => {
-    const p = project({ slug: 'token-killer' })
-    expect(findProject([p], 'TOKEN-KILLER')).toBe(p)
-    expect(findProject([p], 'Token-Killer')).toBe(p)
+    const p = project({ slug: 'local-email-client' })
+    expect(findProject([p], 'LOCAL-EMAIL-CLIENT')).toBe(p)
+    expect(findProject([p], 'Local-Email-Client')).toBe(p)
   })
 })

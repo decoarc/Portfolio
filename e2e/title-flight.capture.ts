@@ -3,7 +3,7 @@ import { contentByLocale } from '../src/content/index.ts'
 import { freezeAt, release } from './title-flight.helpers.ts'
 
 const en = contentByLocale.en.site
-const SLUG = 'token-killer'
+const SLUG = 'local-email-client'
 
 /** Caminho ancorado no `testDir` do projeto (`e2e`), como em `hover.capture.ts`. */
 function outDir(testInfo: { project: { testDir: string } }) {

@@ -135,6 +135,34 @@ describe('ProjectSlip', () => {
     expect(link).toHaveAttribute('rel', 'noopener noreferrer')
   })
 
+  it('com demo e repositório, a ficha mostra só a demo', () => {
+    const item = project({
+      links: [
+        { kind: 'repo', href: 'https://github.com/exemplo' },
+        { kind: 'live', href: 'https://exemplo.dev/' },
+      ],
+    })
+    renderSlip(
+      <ProjectSlip project={item} index={1} href={null} labels={labels} />,
+    )
+    const links = screen.getAllByRole('link')
+    expect(links).toHaveLength(1)
+    expect(links[0]).toHaveAttribute('href', 'https://exemplo.dev/')
+  })
+
+  it('só com repositório, a ficha mostra o repositório', () => {
+    const item = project({
+      links: [{ kind: 'repo', href: 'https://github.com/exemplo' }],
+    })
+    renderSlip(
+      <ProjectSlip project={item} index={1} href={null} labels={labels} />,
+    )
+    expect(screen.getByRole('link')).toHaveAttribute(
+      'href',
+      'https://github.com/exemplo',
+    )
+  })
+
   it('mostra a stack separada por pontos médios', () => {
     renderSlip(
       <ProjectSlip

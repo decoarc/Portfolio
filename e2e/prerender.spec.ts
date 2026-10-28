@@ -75,16 +75,14 @@ test.describe('sem JS', () => {
     page,
   }) => {
     await page.goto('/pt')
-    // O Map Areas é `preview`: a ficha dele não tem link. O caminho da ficha
-    // ao case é o de um projeto publicado.
-    await page.getByRole('link', { name: /Token Killer/ }).click()
-    await expect(page).toHaveURL(/\/pt\/work\/token-killer$/)
+    await page.getByRole('link', { name: /Local Email Client/ }).click()
+    await expect(page).toHaveURL(/\/pt\/work\/local-email-client$/)
     await expect(
-      page.getByRole('heading', { level: 1, name: 'Token Killer' }),
+      page.getByRole('heading', { level: 1, name: 'Local Email Client' }),
     ).toBeVisible()
 
     await page.getByRole('link', { name: pt.shell.localeSwitch }).click()
-    await expect(page).toHaveURL(/\/work\/token-killer$/)
+    await expect(page).toHaveURL(/\/work\/local-email-client$/)
     await expect(page.locator('html')).toHaveAttribute('lang', 'en')
   })
 
@@ -157,12 +155,12 @@ test.describe('hidratação', () => {
   }
 })
 
-test('/work/TOKEN-KILLER (servido de work/token-killer.html) hidrata como o case', async ({
+test('/work/LOCAL-EMAIL-CLIENT (servido de work/local-email-client.html) hidrata como o case', async ({
   page,
 }) => {
-  await page.goto('/work/TOKEN-KILLER', { waitUntil: 'networkidle' })
+  await page.goto('/work/LOCAL-EMAIL-CLIENT', { waitUntil: 'networkidle' })
   await expect(
-    page.getByRole('heading', { level: 1, name: 'Token Killer' }),
+    page.getByRole('heading', { level: 1, name: 'Local Email Client' }),
   ).toBeVisible()
   await expect(
     page.getByRole('heading', { name: en.notFound.title }),

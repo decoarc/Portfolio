@@ -91,7 +91,7 @@ export function CaseStudyRoute() {
             <div className={styles.fact}>
               <dt>{copy.linksLabel}</dt>
               {project.links.map((link) => (
-                <dd key={link.href}>
+                <dd key={link.href} className={styles.linkItem}>
                   <ExternalLink href={link.href} hint={site.links.externalHint}>
                     {site.links.labels[link.kind]}
                   </ExternalLink>

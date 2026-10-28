@@ -144,7 +144,7 @@ test.describe('1.4.4 · texto a 200% em 320 px · PT', () => {
 })
 
 test.describe('1.4.4 · texto a 200% em 320 px · masthead', () => {
-  for (const route of ['/work/token-killer', '/nao-existe']) {
+  for (const route of ['/work/local-email-client', '/nao-existe']) {
     test(`cabe · ${route}`, async ({ page }) => {
       await open(page, route, 320, TEXT_200)
       expect(await textPastEdge(page, 'header')).toEqual([])
@@ -213,14 +213,16 @@ test.describe('alto contraste do Windows (forced-colors: active)', () => {
   })
 
   test('o foco de teclado aparece', async ({ page }) => {
-    await page.locator('#work-token-killer a[data-anchor-focus]').focus()
+    await page.locator('#work-local-email-client a[data-anchor-focus]').focus()
     await page.keyboard.press('Shift+Tab')
     await page.keyboard.press('Tab')
     expect(await line(page, ':focus-visible', 'outline')).toBe('ok')
   })
 
   test('os filetes da lista de trabalhos aparecem', async ({ page }) => {
-    expect(await line(page, '#work-token-killer', 'border-top')).toBe('ok')
+    expect(await line(page, '#work-local-email-client', 'border-top')).toBe(
+      'ok',
+    )
   })
 
   test('o placeholder "sem captura" tem moldura', async ({ page }) => {
@@ -228,7 +230,7 @@ test.describe('alto contraste do Windows (forced-colors: active)', () => {
     expect(
       await line(
         page,
-        '#work-token-killer [aria-hidden="true"]:has(> [data-motion="thumb"])',
+        '#work-local-email-client [aria-hidden="true"]:has(> [data-motion="thumb"])',
         'border-top',
       ),
     ).toBe('ok')
@@ -291,8 +293,8 @@ test.describe('reduced motion ligado no meio da sessão', () => {
     await expect(
       page.locator('[data-entrance]:not([data-entrance="done"])'),
     ).toHaveCount(0)
-    await page.locator('#work-token-killer a[data-anchor-focus]').click()
-    await expect(page).toHaveURL(/\/work\/token-killer$/)
+    await page.locator('#work-local-email-client a[data-anchor-focus]').click()
+    await expect(page).toHaveURL(/\/work\/local-email-client$/)
     await expect.poll(async () => (await flight(page)).length).toBe(0)
 
     await page.emulateMedia({ reducedMotion: 'reduce' })

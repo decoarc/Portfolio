@@ -48,7 +48,7 @@ for (const viewport of VIEWPORTS) {
         width: viewport.width,
         height: viewport.height,
       })
-      await page.goto(`${locale.prefix}/work/token-killer`)
+      await page.goto(`${locale.prefix}/work/local-email-client`)
       await page.evaluate(() => document.fonts.ready.then(() => true))
       const outDir = `${testInfo.project.testDir}/../docs/gate-2`
       await page.screenshot({

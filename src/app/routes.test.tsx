@@ -145,7 +145,7 @@ describe('head por rota na navegação', () => {
 
   it.each([
     ['/', 'André Arcodaci — Full Stack Developer'],
-    ['/work/token-killer', 'Token Killer — André Arcodaci'],
+    ['/work/local-email-client', 'Local Email Client — André Arcodaci'],
     ['/nada', 'Page not found — André Arcodaci'],
   ])('%s deixa um só <title> no documento', async (url, title) => {
     renderAt(url)
