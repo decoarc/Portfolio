@@ -32,4 +32,10 @@ export default tseslint.config(
       ],
     },
   },
+  {
+    // O módulo do servidor exporta funções e constantes de render, não
+    // componentes; Fast Refresh não se aplica a ele.
+    files: ['src/entry-server.tsx'],
+    rules: { 'react-refresh/only-export-components': 'off' },
+  },
 )
