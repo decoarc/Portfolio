@@ -69,6 +69,8 @@ describe('rotas por locale', () => {
         .getAllByRole('heading', { level: 2 })
         .map((heading) => heading.textContent),
     ).toEqual([
+      'Trajectory',
+      'Tools',
       'Personal projects',
       'Approach',
       'Interests',

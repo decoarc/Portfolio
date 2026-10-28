@@ -20,11 +20,17 @@
   border-left: 1px solid var(--rule);
 }
 
+/* Coluna `minmax(0, 1fr)` e quebra em qualquer ponto: com texto a 200% em
+   320px, "Desenvolvimento" e a linha de tecnologias não cabem na largura
+   que sobra ao lado do fio (WCAG 1.4.4, 1.4.10). Em tamanho normal nada
+   quebra no meio da palavra. */
 .job {
   position: relative;
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 4px;
   padding-bottom: 28px;
+  overflow-wrap: anywhere;
 }
 
 .job:last-child {

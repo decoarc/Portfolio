@@ -22,6 +22,13 @@ vi.mock('lenis', () => ({
 
 const originalMatchMedia = window.matchMedia
 
+/** Uma seção cujo topo está em `top` px do início do documento (scrollY 0). */
+function sectionAt(top: number) {
+  const target = document.createElement('section')
+  target.getBoundingClientRect = () => ({ top }) as DOMRect
+  return target
+}
+
 function setReducedMotion(reduce: boolean) {
   window.matchMedia = ((query: string) => ({
     ...originalMatchMedia(query),
@@ -67,34 +74,44 @@ describe('com Lenis', () => {
   it('scrollToTarget com immediate repassa a opção ao Lenis', () => {
     setReducedMotion(false)
     startSmoothScroll()
-    const target = document.createElement('section')
+    const target = sectionAt(100)
     scrollToTarget(target, { immediate: true })
     const instance = vi.mocked(Lenis).mock.instances[0] as unknown as {
       scrollTo: ReturnType<typeof vi.fn>
     }
-    expect(instance.scrollTo).toHaveBeenCalledWith(target, { immediate: true })
+    expect(instance.scrollTo).toHaveBeenCalledWith(100, { immediate: true })
   })
 
   it('scrollToTarget sem opção deixa o deslize ligado', () => {
     setReducedMotion(false)
     startSmoothScroll()
-    const target = document.createElement('section')
+    const target = sectionAt(100)
     scrollToTarget(target)
     const instance = vi.mocked(Lenis).mock.instances[0] as unknown as {
       scrollTo: ReturnType<typeof vi.fn>
     }
-    expect(instance.scrollTo).toHaveBeenCalledWith(target, {
+    expect(instance.scrollTo).toHaveBeenCalledWith(100, {
       immediate: undefined,
     })
+  })
+
+  it('scrollToTarget arredonda para baixo: o topo do alvo fica na janela', () => {
+    setReducedMotion(false)
+    startSmoothScroll()
+    scrollToTarget(sectionAt(2964.39), { immediate: true })
+    const instance = vi.mocked(Lenis).mock.instances[0] as unknown as {
+      scrollTo: ReturnType<typeof vi.fn>
+    }
+    expect(instance.scrollTo).toHaveBeenCalledWith(2964, { immediate: true })
   })
 })
 
 describe('sem Lenis', () => {
-  it('scrollToTarget salta para o alvo', () => {
-    const target = document.createElement('section')
-    target.scrollIntoView = vi.fn()
-    scrollToTarget(target)
-    expect(target.scrollIntoView).toHaveBeenCalledWith({ block: 'start' })
+  it('scrollToTarget salta para o alvo, arredondando para baixo', () => {
+    const scrollTo = vi.spyOn(window, 'scrollTo').mockImplementation(() => {})
+    scrollToTarget(sectionAt(2964.39))
+    expect(scrollTo).toHaveBeenCalledWith(0, 2964)
+    scrollTo.mockRestore()
   })
 
   it('scrollToTop salta para o topo', () => {

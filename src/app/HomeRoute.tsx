@@ -7,12 +7,17 @@ import { Contact } from '../sections/Contact/index.ts'
 import { Hero } from '../sections/Hero/index.ts'
 import { Interests } from '../sections/Interests/index.ts'
 import { Release } from '../sections/Release/index.ts'
+import { Tools } from '../sections/Tools/index.ts'
+import { Trajectory } from '../sections/Trajectory/index.ts'
 import { Work } from '../sections/Work/index.ts'
 import { homeSections } from './homeSections.ts'
 import { useContent, useLocale } from './LocaleContext.ts'
 import { useRouteHead } from './useRouteHead.ts'
 
-/** A home: frontispício, índice e as seções numeradas na ordem do índice. */
+/**
+ * A home: frontispício, índice e as seções numeradas na ordem do índice —
+ * trajetória e ferramentas primeiro, depois os projetos pessoais.
+ */
 export function HomeRoute() {
   const locale = useLocale()
   useRouteHead({ locale, page: 'home' })
@@ -38,6 +43,8 @@ export function HomeRoute() {
         />
         <Release copy={site.release} sections={sections} />
       </Opening>
+      <Trajectory index={numberOf('trajectory')} copy={site.trajectory} />
+      <Tools index={numberOf('tools')} copy={site.tools} />
       <Work
         index={numberOf('work')}
         copy={site.work}
