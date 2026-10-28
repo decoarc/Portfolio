@@ -118,3 +118,61 @@ Medida depois da mudança (preview da Fase 4, sem gzip; mediana de 3):
 
 O LCP não muda (diferenças de ±8 ms, dentro do ruído entre rodadas): o
 elemento LCP das homes é um parágrafo em Instrument Sans e o do case é a capa.
+
+## Mudança 2: preload das fontes — sai
+
+Teste: `<link rel="preload" as="font" type="font/woff2" crossorigin>` do latin
+da Fraunces (`/fonts/fraunces-latin.woff2`) e do latin da Instrument Sans
+(`/assets/instrument-sans-latin-wght-normal-<hash>.woff2`) no head das três
+páginas medidas, logo depois do `viewport`. Critério: o LCP mediano melhora em
+alguma rota sem piorar outra. Mediana de 3; "sem" é a Fraunces instanciada sem
+preload.
+
+| Rota | Sem preload | Fraunces + Instrument Sans | Só Instrument Sans | Sem preload, gzip | Fraunces + Instrument Sans, gzip |
+| --- | --- | --- | --- | --- | --- |
+| `/` 390×844 | 756 ms | 1200 ms (1280/1196/1200) | 912 ms (920/904/912) | 512 ms (500/512/784) | 664 ms (656/664/672) |
+| `/pt` 1440×900 | 748 ms | 1188 ms (1188/1192/1176) | 908 ms (916/908/900) | 504 ms (496/504/552) | 668 ms (676/656/668) |
+| `/pt/work/map-areas` 1440×900 | 2344 ms | 2388 ms (2388/2384/2400) | 2320 ms (2320/2320/2328) | 2232 ms (2228/2248/2232) | 2240 ms (2240/2228/2248) |
+
+O preload piora as homes nas duas condições: as fontes passam a disputar a
+banda de 180 kB/s com o CSS e o JS logo no começo, e o parágrafo LCP (que já
+pinta com `font-display: swap`) pinta mais tarde. No case, o ganho de 24 ms
+do preload só da Instrument Sans fica dentro do ruído e vem com +156 ms nas
+homes. Nenhuma variante cumpre o critério. O preload não entrou no
+`scripts/prerender.ts`: a medida foi feita injetando as tags no `dist/` de um
+build, que foi refeito em seguida.
+
+## Resultado final
+
+Estado final: prerender (Fase 4) + Fraunces latin instanciada, sem preload.
+Número de laboratório no preview local; não é Core Web Vitals de campo, e INP
+não foi medido. Mediana de 3.
+
+| Rota | Antes do prerender (`1320f8d`, gzip) | Linha de base da Fase 4 (gzip) | **Final (gzip)** | Linha de base (preview) | **Final (preview)** | CLS final | Orçamento |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| `/` 390×844 | 1156 ms | 500 ms | **512 ms** | 748 ms | **756 ms** | 0,0002 | ok |
+| `/pt` 1440×900 | 1164 ms | 492 ms | **504 ms** | 752 ms | **748 ms** | 0,0001 | ok |
+| `/pt/work/map-areas` 1440×900 | 2716 ms | 2308 ms | **2232 ms** | 2340 ms | **2344 ms** | 0,0002 | ok |
+
+Elementos LCP finais: o parágrafo de abertura (`p` “I build interfaces…” /
+“Construo interfaces…”) nas homes e a capa `img`
+`/images/projects/map-areas.webp` no case, os mesmos da linha de base.
+
+| Transferência | Linha de base (preview) | Final (preview) | Linha de base (gzip) | Final (gzip) |
+| --- | --- | --- | --- | --- |
+| `/` | 640,1 kB | 586,0 kB | 343,8 kB | 289,7 kB |
+| `/pt` | 640,4 kB | 586,4 kB | 343,9 kB | 289,9 kB |
+| `/pt/work/map-areas` | 697,8 kB | 643,7 kB | 408,4 kB | 354,3 kB |
+
+As três rotas ficam dentro do orçamento (LCP ≤ 2,5 s, CLS ≤ 0,1). O case é a
+rota mais perto do limite: 2344 ms no preview sem gzip (156 ms de folga) e
+2232 ms com gzip. O LCP dele é a capa de 103 kB disputando banda com o JS; se
+a capa real da Fase 5 for maior, é aí que o orçamento aperta. A divisão do JS
+por rota (design §8, item 3) não foi necessária.
+
+Nas homes, as diferenças de até ±12 ms entre a linha de base e o final são
+ruído entre rodadas: o LCP é texto em Instrument Sans, e a Fraunces não entra
+nele. No case com gzip, o LCP caiu 76 ms (2308 → 2232 ms, as três rodadas
+abaixo de todas as da linha de base): a capa disputa banda com 54 kB a menos
+de fonte. Sem gzip, o JS de 381 kB domina a banda e a queda não aparece
+(2340 → 2344 ms).
