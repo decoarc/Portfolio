@@ -24,8 +24,11 @@ body {
   outline-offset: 3px;
 }
 
-/* O alvo do skip link recebe foco programático; sem contorno nele. */
-main:focus {
+/* Alvos de foco programático (o `main` do skip link, a seção de uma âncora,
+   que o ScrollManager marca com tabindex -1): sem contorno. Envolvendo a
+   seção inteira, ele virava um filete vermelho nas divisas com as vizinhas. */
+main:focus,
+[tabindex='-1']:focus {
   outline: none;
 }
 
