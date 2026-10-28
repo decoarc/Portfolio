@@ -76,7 +76,7 @@ Conceitos candidatos:
 ## 4. Arquitetura da informação
 
 ### 4.1 Páginas mínimas
-- `/` — Home: apresentação, trabalhos selecionados, sobre, interesses (opcional), contato.
+- `/` — Home: apresentação, trabalhos selecionados, abordagem, interesses (opcional), sobre, contato.
 - `/work/[slug]` — Case study: contexto, problema, papel, solução, stack, decisões, evidências, resultados, links autorizados.
 - `/about` — Perfil, experiência, competências e trajetória; pode começar como seção da home e virar página posteriormente.
 - Página de erro 404 orientando retorno à home.
@@ -86,8 +86,8 @@ Conceitos candidatos:
 2. **Release:** passagem do hero para conteúdo, com continuidade visual sem scroll bloqueado.
 3. **Selected Work:** projetos com grande presença de mídia e interação de hover/focus.
 4. **Approach / Craft:** abordagem de engenharia, ferramentas e decisões ilustradas com evidências.
-5. **About:** apresentação humana e trajetória em formato curto.
-6. **Interests (opcional):** games, drawing, reading, traveling, mantendo o conteúdo profissional prioritário.
+5. **Interests (opcional):** games, drawing, reading, traveling, mantendo o conteúdo profissional prioritário.
+6. **About:** apresentação humana e trajetória em formato curto. Vem depois de Interests desde 2026-10-28 (decisão do dono).
 7. **Contact:** e-mail/link de contato, GitHub, LinkedIn e chamada objetiva.
 
 ### 4.3 Conteúdo e integridade
