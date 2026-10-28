@@ -48,10 +48,11 @@ export function HomeRoute() {
       {sections.includes('approach') && (
         <Approach index={numberOf('approach')} copy={site.approach} />
       )}
-      <About index={numberOf('about')} copy={site.about} />
       {sections.includes('interests') && (
         <Interests index={numberOf('interests')} copy={site.interests} />
       )}
+      <About index={numberOf('about')} copy={site.about} />
+
       <Contact
         index={numberOf('contact')}
         copy={site.contact}

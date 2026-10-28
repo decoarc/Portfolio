@@ -7,8 +7,8 @@ describe('homeSections', () => {
     expect(homeSections(siteEn)).toEqual([
       'work',
       'approach',
-      'about',
       'interests',
+      'about',
       'contact',
     ])
   })
@@ -22,8 +22,8 @@ describe('homeSections', () => {
     const site = { ...siteEn, approach: { ...siteEn.approach, items: [] } }
     expect(homeSections(site)).toEqual([
       'work',
-      'about',
       'interests',
+      'about',
       'contact',
     ])
   })

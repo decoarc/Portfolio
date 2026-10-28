@@ -116,7 +116,7 @@ em `docs/gate-1/` permanecem como registro.
   - O conteúdo dela ainda é mock; uma página nova teria de ser escrita e
     revista duas vezes.
   - Uma página separada quebra a leitura de cima para baixo que a abertura
-    constrói (nome, índice, trabalhos, abordagem, sobre, contato).
+    constrói (nome, índice, trabalhos, abordagem, interesses, sobre, contato).
   - Custa uma rota a mais em cada idioma: arquivo prerenderizado, head,
     testes e baseline visual.
 - **Se o dono promover:** vira rota `/about` e `/pt/about` (ou o nome em PT que
