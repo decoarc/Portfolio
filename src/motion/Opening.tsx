@@ -1,10 +1,9 @@
 import { useLayoutEffect, useRef, type ReactNode } from 'react'
-import styles from './Opening.module.css'
 import { openingFrame, openingProgress } from './opening.ts'
 import { prefersReducedMotion } from './reducedMotion.ts'
-import { onScroll, scrollToTop } from './smoothScroll.ts'
+import { onScroll } from './smoothScroll.ts'
 
-/** Arredonda para 3 casas: `sin(π)` não é zero exato. */
+/** Arredonda para 3 casas. */
 const round = (value: number) => String(Math.round(value * 1000) / 1000)
 
 /** Folga além da entrada (1,1 s + 120 ms) antes de dá-la por terminada. */
@@ -22,10 +21,10 @@ function takeEarlyMark(): string | undefined {
 }
 
 /**
- * A abertura da home: envolve o hero (primeiro filho, preso no topo) e a
- * folha do índice que sobe por cima. Escreve as `--opening-*` que Hero e
- * Release leem no CSS e conduz a entrada do nome por `data-entrance`. Com
- * reduced motion não faz nada: as seções ficam no estado estático.
+ * A abertura da home: envolve o hero e o índice, que rolam no fluxo. Escreve
+ * `--opening-drift` (o afastamento do nome, que o Hero lê no CSS) e conduz a
+ * entrada do nome por `data-entrance`. Com reduced motion não faz nada: o
+ * nome fica no lugar.
  */
 export function Opening({ children }: { children: ReactNode }) {
   const ref = useRef<HTMLDivElement>(null)
@@ -38,24 +37,10 @@ export function Opening({ children }: { children: ReactNode }) {
     if (earlyMark.current === null) earlyMark.current = takeEarlyMark()
     const root = ref.current
     if (!root || prefersReducedMotion()) return
-    const hero = root.firstElementChild as HTMLElement | null
-    const sheet = hero?.nextElementSibling ?? null
-    // Liga o hero preso (CSS). Sem isto — sem JS, reduced motion — o hero fica
-    // no fluxo normal, como no Gate 2.
     root.setAttribute('data-opening', '')
 
-    // Hero mais alto que a janela (celular deitado, zoom): prende com `top`
-    // negativo, para ele rolar até o fim antes de parar.
-    const measure = () => {
-      const overflow = hero ? window.innerHeight - hero.offsetHeight : 0
-      root.style.setProperty(
-        '--opening-sticky-top',
-        `${Math.min(0, overflow)}px`,
-      )
-    }
-
-    // Último progresso escrito: com a folha no topo (1) ou de volta ao início
-    // (0) o scroll segue disparando, mas não há nada novo a escrever.
+    // Último progresso escrito: com o hero fora da janela (1) ou de volta ao
+    // início (0) o scroll segue disparando, mas não há nada novo a escrever.
     let written = -1
     const write = () => {
       const progress = openingProgress(window.scrollY, window.innerHeight)
@@ -63,21 +48,8 @@ export function Opening({ children }: { children: ReactNode }) {
       written = progress
       const frame = openingFrame(progress, window.innerWidth)
       root.style.setProperty('--opening-drift', round(frame.driftVw))
-      root.style.setProperty(
-        '--opening-bottom-shift',
-        round(frame.bottomShiftVh),
-      )
-      root.style.setProperty(
-        '--opening-bottom-opacity',
-        round(frame.bottomOpacity),
-      )
-      root.style.setProperty('--opening-hero-scale', round(frame.heroScale))
-      root.style.setProperty('--opening-shade', round(frame.shadeOpacity))
-      root.style.setProperty('--opening-curve', round(frame.curveVh))
-      root.toggleAttribute('data-shade', frame.shadeOpacity > 0)
     }
     const onResize = () => {
-      measure()
       // A largura muda os valores (celular × desktop) mesmo no mesmo progresso.
       written = -1
       write()
@@ -108,7 +80,6 @@ export function Opening({ children }: { children: ReactNode }) {
       root.dataset.entrance = 'pending'
       const fontsReady = document.fonts?.ready ?? Promise.resolve()
       void fontsReady.then(() => {
-        if (!cancelled) measure()
         requestAnimationFrame(() =>
           requestAnimationFrame(() => {
             if (cancelled) return
@@ -128,43 +99,17 @@ export function Opening({ children }: { children: ReactNode }) {
     }
     root.addEventListener('transitionend', onTransitionEnd)
 
-    // Foco por teclado num elemento do hero coberto pela folha ou fora da
-    // janela: volta ao topo e traz o elemento à vista. Só teclado: um clique
-    // também foca o link, e mover a página entre mousedown e mouseup
-    // engoliria o clique.
-    const onFocusIn = (event: FocusEvent) => {
-      const target = event.target
-      if (!(target instanceof HTMLElement) || !target.matches(':focus-visible'))
-        return
-      const box = target.getBoundingClientRect()
-      const visibleBottom = Math.min(
-        window.innerHeight,
-        sheet?.getBoundingClientRect().top ?? Infinity,
-      )
-      if (box.top >= 0 && box.bottom <= visibleBottom) return
-      scrollToTop()
-      write()
-      target.scrollIntoView({ block: 'nearest' })
-    }
-    hero?.addEventListener('focusin', onFocusIn)
-
     return () => {
       cancelled = true
       window.clearTimeout(timeout)
       stopScroll()
       window.removeEventListener('resize', onResize)
       root.removeEventListener('transitionend', onTransitionEnd)
-      hero?.removeEventListener('focusin', onFocusIn)
       root.removeAttribute('data-entrance')
-      root.removeAttribute('data-shade')
       root.removeAttribute('data-opening')
       root.removeAttribute('style')
     }
   }, [])
 
-  return (
-    <div ref={ref} className={styles.opening}>
-      {children}
-    </div>
-  )
+  return <div ref={ref}>{children}</div>
 }

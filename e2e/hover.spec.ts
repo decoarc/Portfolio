@@ -244,27 +244,6 @@ test.describe('links de ação · sem reduce', () => {
     await cta.focus()
     expect(await translation(cta)).toEqual({ x: 0, y: 0 })
   })
-
-  test('abertura e magnético não se sobrescrevem', async ({ page }) => {
-    await open(page)
-    // 10 % e não 30 %: o Release sobe junto com o scroll e, a 30 % de
-    // `innerHeight`, já cobre os CTAs em toda faixa (o mouse não os alcança).
-    await page.evaluate(() => window.scrollTo(0, window.innerHeight * 0.1))
-    const cta = primaryCta(page)
-    // wrapper do ActionLink > bloco `.actions` do hero.
-    const actions = cta.locator('xpath=../..')
-    await expect
-      .poll(async () => (await translation(actions)).y)
-      .toBeLessThan(0)
-    await pullToCorner(page, cta)
-    await expect
-      .poll(async () => {
-        const t = await translation(cta)
-        return t.x > 0 && t.y > 0
-      })
-      .toBe(true)
-    expect((await translation(actions)).y).toBeLessThan(0)
-  })
 })
 
 test.describe('links de ação · reduce', () => {

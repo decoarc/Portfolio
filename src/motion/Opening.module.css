@@ -1,6 +1,0 @@
-/* O que aparece em volta do hero quando ele encolhe sob a folha: tinta, como
-   no protótipo aprovado (docs/fase-3/prototipo/). Em repouso o hero cobre
-   tudo e o fundo não aparece. */
-.opening {
-  background: var(--ink);
-}
