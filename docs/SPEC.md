@@ -76,7 +76,7 @@ Conceitos candidatos:
 ## 4. Arquitetura da informação
 
 ### 4.1 Páginas mínimas
-- `/` — Home: apresentação, trabalhos selecionados, abordagem, interesses (opcional), sobre, contato.
+- `/` — Home: apresentação, trajetória, ferramentas, projetos pessoais, abordagem, interesses (opcional), sobre, contato.
 - `/work/[slug]` — Case study: contexto, problema, papel, solução, stack, decisões, evidências, resultados, links autorizados.
 - `/about` — Perfil, experiência, competências e trajetória; pode começar como seção da home e virar página posteriormente.
 - Página de erro 404 orientando retorno à home.
@@ -84,11 +84,16 @@ Conceitos candidatos:
 ### 4.2 Homepage: sequência proposta
 1. **Arrival / Hero:** tipografia forte, proposta profissional clara, composição autoral, CTA para projetos.
 2. **Release:** passagem do hero para conteúdo, com continuidade visual sem scroll bloqueado.
-3. **Selected Work:** projetos com grande presença de mídia e interação de hover/focus.
-4. **Approach / Craft:** abordagem de engenharia, ferramentas e decisões ilustradas com evidências.
-5. **Interests (opcional):** games, drawing, reading, traveling, mantendo o conteúdo profissional prioritário.
-6. **About:** apresentação humana e trajetória em formato curto. Vem depois de Interests desde 2026-10-28 (decisão do dono).
-7. **Contact:** e-mail/link de contato, GitHub, LinkedIn e chamada objetiva.
+3. **Trajectory:** experiência profissional em linha do tempo e formação resumida.
+4. **Tools:** ferramentas em cinco grupos, sem nível de proficiência.
+5. **Personal projects** (antes "Selected Work"): projetos com grande presença de mídia e interação de hover/focus.
+6. **Approach / Craft:** abordagem de engenharia e decisões ilustradas com evidências.
+7. **Interests (opcional):** games, drawing, reading, traveling, mantendo o conteúdo profissional prioritário.
+8. **About:** apresentação humana em formato curto. Vem depois de Interests desde 2026-10-28 (decisão do dono).
+9. **Contact:** e-mail/link de contato, GitHub, LinkedIn e chamada objetiva.
+
+Trajetória, ferramentas e o renome para projetos pessoais: decisão do dono em
+2026-10-28 (`docs/superpowers/specs/2026-10-28-trajetoria-ferramentas-design.md`).
 
 ### 4.3 Conteúdo e integridade
 - Projeto principal real pode ter destaque maior; outros itens podem ser publicados como **Concept study / Estudo conceitual**, nunca apresentados como trabalhos entregues.

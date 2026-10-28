@@ -151,3 +151,21 @@ em `docs/gate-1/` permanecem como registro.
   as baselines (ver o Gate 4). Medidas: `docs/gate-4/PERFORMANCE.md`.
 - **Preload das fontes:** testado e recusado; piorou o LCP das homes em +156 a
   +444 ms.
+
+## D-Trajetória — Trajetória, ferramentas e projetos pessoais
+
+- **Status:** decidida pelo dono em 2026-10-28
+- **Design:** `docs/superpowers/specs/2026-10-28-trajetoria-ferramentas-design.md`
+- **Ordem da home:** 01 Trajetória → 02 Ferramentas → 03 Projetos pessoais →
+  04 Abordagem → 05 Interesses → 06 Sobre → 07 Contato.
+- **Trajetória:** experiência em linha do tempo (fio de 1px em `--rule`,
+  marcador do cargo atual em `--accent`) e formação separada abaixo, em
+  linhas entre filetes como a lista de trabalhos. Mescla de duas propostas do
+  brainstorm; as rejeitadas foram "só fichas" e "duas colunas".
+- **Ferramentas:** rótulo mono por grupo e ferramentas em etiquetas de borda
+  fina. Rejeitadas: linhas de índice e colunas. Sem nível de proficiência.
+- **Projetos pessoais:** a lista de trabalhos renomeada; `#work` e
+  `/work/:slug` ficam, para não quebrar links compartilhados.
+- **About:** continua no lugar e perde a lista "Working with", que estaria
+  repetida na seção Ferramentas. A ideia de levar o About para o hero foi
+  considerada e descartada pelo dono no mesmo dia.
