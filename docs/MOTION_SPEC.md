@@ -112,8 +112,9 @@ Valem para todo efeito, este e os próximos. Vêm de `docs/SPEC.md` §5.
 | Gatilho | Scroll, nos dois sentidos; `p = clamp(scrollY / innerHeight, 0, 1)` |
 | Estado inicial | `p = 0`: tudo no lugar |
 | Estado final | `p = 1`: palavras a `easeOutCubic(p) × 25 vw` (≥ 768 px) ou `× 40 vw` (< 768 px) |
+| Fade | O nome some enquanto se afasta (desde 2026-10-28): as duas palavras com a mesma opacidade, que chega a 0 quando 35% da largura de "André" já passou da borda esquerda (`OPENING.fadePastEdge`). Linear no afastamento; a distância é medida pelo `Opening` ao montar, ao redimensionar e com as fontes carregadas, e escrita em `--opening-fade` |
 | Duração e easing | Acompanha o scroll; o Lenis suaviza (`lerp 0.09`) |
-| Reduced motion | Nada se move |
+| Reduced motion | Nada se move nem some |
 | Sem JS | As propriedades não são escritas; padrões neutros |
 | Evidência | `docs/gate-3/` |
 

@@ -79,12 +79,16 @@
   transition-delay: 120ms;
 }
 
+/* O nome some enquanto "André" sai pela borda; "Arcodaci" acompanha
+   (`--opening-fade`, escrita pelo `Opening`). */
 .drift[data-drift='-1'] {
   transform: translateX(calc(var(--opening-drift, 0) * -1vw));
+  opacity: var(--opening-fade, 1);
 }
 
 .drift[data-drift='1'] {
   transform: translateX(calc(var(--opening-drift, 0) * 1vw));
+  opacity: var(--opening-fade, 1);
 }
 
 .role,
