@@ -6,7 +6,7 @@ const desktop = VIEWPORTS.find((v) => v.name === 'desktop')!
 
 test.use({ viewport: { width: desktop.width, height: desktop.height } })
 
-/** Ficha da lista de trabalhos, na ordem da home (1 = Token Killer, publicada). */
+/** Ficha da lista de trabalhos, na ordem da home (1 = Local Email Client, publicada). */
 function slip(page: Page, index: number) {
   return page.locator('#work ol > li').nth(index)
 }
@@ -37,9 +37,7 @@ test.describe('reação da lista · sem reduce', () => {
   }) => {
     await open(page)
     await slip(page, 1).hover()
-    await expect
-      .poll(() => opacities(page))
-      .toEqual(['0.35', '1', '0.35', '0.35'])
+    await expect.poll(() => opacities(page)).toEqual(['0.35', '1'])
     expect(await titleTransform(page, 1)).not.toBe('none')
   })
 
@@ -54,16 +52,14 @@ test.describe('reação da lista · sem reduce', () => {
     const external = slip(page, 0).locator('a[target="_blank"]').first()
     await external.click()
     await page.mouse.move(0, 0)
-    await expect.poll(() => opacities(page)).toEqual(['1', '1', '1', '1'])
+    await expect.poll(() => opacities(page)).toEqual(['1', '1'])
     expect(await titleTransform(page, 1)).toBe('none')
   })
 
   test('foco por teclado numa ficha faz o mesmo', async ({ page }) => {
     await open(page)
     await slip(page, 1).locator('h3 a').focus()
-    await expect
-      .poll(() => opacities(page))
-      .toEqual(['0.35', '1', '0.35', '0.35'])
+    await expect.poll(() => opacities(page)).toEqual(['0.35', '1'])
     expect(await titleTransform(page, 1)).not.toBe('none')
   })
 })
@@ -75,7 +71,7 @@ test.describe('reação da lista · reduce', () => {
     await open(page)
     await slip(page, 1).hover()
     // Sem poll: sem transição, o estado final já vale na primeira leitura.
-    expect(await opacities(page)).toEqual(['0.35', '1', '0.35', '0.35'])
+    expect(await opacities(page)).toEqual(['0.35', '1'])
     expect(await titleTransform(page, 1)).not.toBe('none')
   })
 })
@@ -402,7 +398,7 @@ test.describe('toque · sem hover', () => {
   test('tap numa ficha não esmaece as outras', async ({ page }) => {
     await open(page)
     await slip(page, 1).locator('p').nth(1).tap()
-    expect(await opacities(page)).toEqual(['1', '1', '1', '1'])
+    expect(await opacities(page)).toEqual(['1', '1'])
   })
 
   test('tap num link externo da ficha não esmaece as outras', async ({
@@ -412,7 +408,7 @@ test.describe('toque · sem hover', () => {
     context.on('page', (popup) => void popup.close())
     await open(page)
     await slip(page, 0).locator('a[target="_blank"]').first().tap()
-    await expect.poll(() => opacities(page)).toEqual(['1', '1', '1', '1'])
+    await expect.poll(() => opacities(page)).toEqual(['1', '1'])
   })
 
   test('tap no CTA primário navega e não deixa a tira', async ({ page }) => {
@@ -466,7 +462,8 @@ test.describe('miniatura sem captura', () => {
         await page.goto(route.path)
         await page.evaluate(() => document.fonts.ready.then(() => true))
         const lines = await noCaptureLines(page, site.work.noCapture)
-        expect(lines.length).toBeGreaterThan(0)
+        // Todos os projetos de hoje têm captura (BACKLOG, Fase 5).
+        test.skip(lines.length === 0, 'nenhuma ficha sem captura')
         expect(
           lines.every((count) => count === 1),
           String(lines),

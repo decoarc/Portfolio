@@ -2,7 +2,7 @@
 export const GATE_ROUTES = [
   '/',
   '/pt',
-  '/work/token-killer',
+  '/work/local-email-client',
   '/pt/work/map-areas',
   '/nao-existe',
   '/pt/nao-existe',

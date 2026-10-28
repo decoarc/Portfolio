@@ -2,15 +2,15 @@ import type { Project } from '../../types.ts'
 
 /**
  * Map Areas — conteúdo do Gate E (decisões do dono, 2026-10-22), portado do
- * site anterior. Fica em `preview` até aprovação explícita de publicação.
- * Sem link de repositório: o repo é privado até resolver credenciais no
- * upstream (docs/gate-e/UPSTREAM_BACKLOG.md).
+ * site anterior. Publicado com aprovação do dono (2026-10-28).
+ * Link de repositório por decisão do dono (2026-10-28); a senha literal do
+ * upstream é corrigida antes do deploy (docs/BACKLOG.md, Fase 5).
  */
 export const mapAreas: Project = {
   slug: 'map-areas',
   title: 'Map Areas',
   type: 'verified',
-  status: 'preview',
+  status: 'published',
   summary:
     'Draw and manage polygon areas on an interactive map. Save areas, clear the canvas, and add polygons by coordinates in Lat/Lng, UTM, or GMS format.',
   role: 'Solo developer',
@@ -27,7 +27,7 @@ export const mapAreas: Project = {
     {
       heading: 'Problem and motivation',
       paragraphs: [
-        'Map Areas is a personal project I built to learn and apply foundational GIS concepts—capturing polygons on a map, persisting them in a spatial database, measuring area and perimeter, and converting coordinates between Lat/Lng, UTM, and GMS—without depending on a full desktop GIS suite.',
+        'Map Areas began as a study for my work in the property registry sector: I built it to learn and apply foundational GIS concepts—capturing polygons on a map, persisting them in a spatial database, measuring area and perimeter, and converting coordinates between Lat/Lng, UTM, and GMS—without depending on a full desktop GIS suite.',
       ],
     },
     {
@@ -66,5 +66,8 @@ export const mapAreas: Project = {
       ],
     },
   ],
-  links: [{ kind: 'live', href: 'https://geo-areas-php.onrender.com/' }],
+  links: [
+    { kind: 'live', href: 'https://geo-areas-php.onrender.com/' },
+    { kind: 'repo', href: 'https://github.com/decoarc/geo-areas-php' },
+  ],
 }

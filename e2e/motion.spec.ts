@@ -1,7 +1,7 @@
 import { expect, test, type Page } from '@playwright/test'
 import { contentByLocale } from '../src/content/index.ts'
 
-const PAGES = ['/', '/work/token-killer'] as const
+const PAGES = ['/', '/work/local-email-client'] as const
 
 async function visit(page: Page, path: string) {
   await page.goto(path)
@@ -109,8 +109,10 @@ test.describe('prefers-reduced-motion: no-preference', () => {
     ).toBe(true)
   })
 
-  test('só a abertura tem motion · /work/token-killer', async ({ page }) => {
-    await exercise(page, '/work/token-killer')
+  test('só a abertura tem motion · /work/local-email-client', async ({
+    page,
+  }) => {
+    await exercise(page, '/work/local-email-client')
     expect(await firstTimed(page, true)).toBeNull()
     expect(await firstTimed(page, false)).toBeNull()
     expect(await page.evaluate(() => document.getAnimations().length)).toBe(0)

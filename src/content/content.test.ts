@@ -103,13 +103,12 @@ describe('projetos', () => {
     }
   })
 
-  it('map-areas não linka repositório', () => {
+  it('map-areas linka a demo e o repositório', () => {
     for (const locale of locales) {
       const mapAreas = contentByLocale[locale].projects.find(
         (project) => project.slug === 'map-areas',
       )
-      expect(mapAreas).toBeDefined()
-      expect(mapAreas?.links.some((link) => link.kind === 'repo')).toBe(false)
+      expect(mapAreas?.links.map((link) => link.kind)).toEqual(['live', 'repo'])
     }
   })
 })

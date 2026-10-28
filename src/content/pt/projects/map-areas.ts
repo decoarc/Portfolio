@@ -2,13 +2,13 @@ import type { Project } from '../../types.ts'
 
 /**
  * Map Areas — tradução fiel de `en/projects/map-areas.ts`, sem afirmação nova.
- * Mesmo status (`preview`) e mesma ausência de link de repositório.
+ * Mesmo status (`published`) e mesmos links.
  */
 export const mapAreas: Project = {
   slug: 'map-areas',
   title: 'Map Areas',
   type: 'verified',
-  status: 'preview',
+  status: 'published',
   summary:
     'Desenhe e gerencie áreas poligonais em um mapa interativo. Salve áreas, limpe o mapa e adicione polígonos por coordenadas em Lat/Lng, UTM ou GMS.',
   role: 'Desenvolvedor solo',
@@ -25,7 +25,7 @@ export const mapAreas: Project = {
     {
       heading: 'Problema e motivação',
       paragraphs: [
-        'Map Areas é um projeto pessoal que construí para aprender e aplicar conceitos básicos de GIS — capturar polígonos em um mapa, persisti-los em um banco de dados espacial, medir área e perímetro e converter coordenadas entre Lat/Lng, UTM e GMS — sem depender de um pacote GIS desktop completo.',
+        'Map Areas nasceu como um estudo para o meu trabalho no setor de registro de imóveis: construí o projeto para aprender e aplicar conceitos básicos de GIS — capturar polígonos em um mapa, persisti-los em um banco de dados espacial, medir área e perímetro e converter coordenadas entre Lat/Lng, UTM e GMS — sem depender de um pacote GIS desktop completo.',
       ],
     },
     {
@@ -64,5 +64,8 @@ export const mapAreas: Project = {
       ],
     },
   ],
-  links: [{ kind: 'live', href: 'https://geo-areas-php.onrender.com/' }],
+  links: [
+    { kind: 'live', href: 'https://geo-areas-php.onrender.com/' },
+    { kind: 'repo', href: 'https://github.com/decoarc/geo-areas-php' },
+  ],
 }

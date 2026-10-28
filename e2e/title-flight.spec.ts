@@ -14,10 +14,10 @@ const desktop = VIEWPORTS.find((v) => v.name === 'desktop')!
 
 test.use({ viewport: { width: desktop.width, height: desktop.height } })
 
-const SLUG = 'token-killer'
-const TITLE = 'Token Killer'
+const SLUG = 'local-email-client'
+const TITLE = 'Local Email Client'
 
-/** Link do título na ficha do Token Killer. */
+/** Link do título na ficha do Local Email Client. */
 function slipLink(page: Page) {
   return page.locator(`#work-${SLUG} a[data-anchor-focus]`)
 }
@@ -214,7 +214,9 @@ test.describe('título que viaja · sem reduce', () => {
       }
       return null
     }, SLUG)
-    expect(neighbour).not.toBeNull()
+    // O pouso põe a ficha no topo: só a de baixo fica à vista. Com o case na
+    // última ficha não há vizinha, e o cenário não existe (BACKLOG, Fase 5).
+    test.skip(neighbour === null, 'sem ficha abaixo da que tem case')
     const { index, x, y } = neighbour!
 
     // Segunda ida e volta, com o cursor parado sobre a vizinha.
@@ -310,11 +312,17 @@ test.describe('título que viaja · case em preview', () => {
   test.use({ reducedMotion: 'no-preference' })
 
   test('case em preview: volta direta, sem viagem', async ({ page }) => {
-    await open(page, '/work/map-areas')
+    const preview = contentByLocale.en.projects.find(
+      (project) => project.status === 'preview',
+    )
+    // Todos os projetos de hoje estão publicados (BACKLOG, Fase 5).
+    test.skip(!preview, 'nenhum projeto em preview')
+    const slug = preview!.slug
+    await open(page, `/work/${slug}`)
     await backLink(page).click()
     expect(await maxFlightAround(page)).toBe(0)
-    await expect(page.locator('#work-map-areas')).toBeInViewport()
-    await expect(page.locator('#work-map-areas h3')).toBeFocused()
+    await expect(page.locator(`#work-${slug}`)).toBeInViewport()
+    await expect(page.locator(`#work-${slug} h3`)).toBeFocused()
   })
 })
 

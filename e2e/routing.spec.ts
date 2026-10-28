@@ -23,13 +23,13 @@ test('recarregar /pt mantém o português', async ({ page }) => {
   await expect(page.locator('html')).toHaveAttribute('lang', 'pt-BR')
 })
 
-test('/pt/work/token-killer direto e recarregado fica em português', async ({
+test('/pt/work/local-email-client direto e recarregado fica em português', async ({
   page,
 }) => {
-  await page.goto('/pt/work/token-killer')
+  await page.goto('/pt/work/local-email-client')
   await page.reload()
   await expect(
-    page.getByRole('heading', { level: 1, name: 'Token Killer' }),
+    page.getByRole('heading', { level: 1, name: 'Local Email Client' }),
   ).toBeVisible()
   await expect(page.locator('html')).toHaveAttribute('lang', 'pt-BR')
 })

@@ -21,8 +21,8 @@ Achados menores de `docs/gate-4/A11Y_AUDIT.md`, sem falha de critério AA:
 
 - **"sem captura" cortado na miniatura com texto a 200%** (até 334 px em
   320). A miniatura é decorativa (`aria-hidden`) e repete o tipo e o título da
-  ficha. **Por quê adiado:** some com as capturas reais. **Quando:** Fase 5,
-  com as capturas.
+  ficha. **Por quê adiado:** some com as capturas reais. **Resolvido** em
+  2026-10-28: nenhuma ficha usa mais o placeholder.
 - **Alto contraste: o traço dos CTAs e dos canais e o círculo do monograma do
   cartão somem.** O link segue identificado por `LinkText` e pelo foco; o
   monograma é decorativo. **Fazer, se quiser:** `border-bottom` em
@@ -40,10 +40,54 @@ Regra de deploy: publicar só um `dist/` gerado por `pnpm build` com
 `VITE_SITE_ORIGIN` definida; nunca um `dist/` que sobrou do e2e (o webServer do
 Playwright roda `build:preview` e deixa canonicals e OG em localhost).
 
-O conteúdo mock fica até o fim e só é trocado quando o repositório for
-publicado (decisão do dono, 2026-10-27). Hoje são 12 itens `mock: true`: três
-projetos (Atlas Ledger, Field Notes, Token Killer) e os três princípios da
-Abordagem, cada um em pt e en.
+Os mocks saíram em 2026-10-28: a Abordagem e o hero têm texto do dono, e os
+três projetos inventados deram lugar ao Local Email Client (LEC, verificado,
+publicado). A lista tem dois projetos: Map Areas e LEC. Nenhum item
+`mock: true` restou.
+
+### Cobertura que dependia dos projetos mock
+
+Sem projeto conceitual, sem projeto sem links e, desde que o Map Areas foi
+publicado (2026-10-28), sem projeto em preview, quatro caminhos perderam
+cobertura com conteúdo real:
+
+- **Aviso de conceito no case** (`conceptNotice`) e **ficha técnica sem a
+  linha de links vazia**: o `CaseStudyRoute.test.tsx` só os exercitava pelo
+  Token Killer.
+- **Case em preview**: o aviso `previewNotice` acima do título (unitário,
+  removido) e a volta sem viagem com foco no `h3` (`e2e/title-flight.spec.ts`,
+  que se pula sem projeto em preview).
+- **Título que viaja, volta com o cursor parado sobre outra ficha**
+  (`e2e/title-flight.spec.ts`): o pouso põe a ficha no topo, e a única vizinha
+  à vista seria a de baixo. Com o LEC na última posição o teste se pula.
+- **Fazer:** cobrir conceito, links vazios e preview com conteúdo injetado
+  (`vi.mock` do `content/index.ts`) se esses casos não voltarem no conteúdo.
+  O do título que viaja volta sozinho quando entrar uma ficha depois do LEC.
+- **Quando:** ao adicionar o próximo projeto.
+
+### Senha no `geo-areas-php` — trava do deploy
+
+O Map Areas linka `github.com/decoarc/geo-areas-php` desde 2026-10-28, por
+decisão do dono, que corrige o upstream antes de publicar o portfólio. Hoje o
+repo é público e ainda tem a mesma senha literal no `docker-compose.yml` e no
+`README.md` (conferido sem expor o valor): o item 1 de
+`docs/gate-e/UPSTREAM_BACKLOG.md` segue aberto.
+
+- **Fazer (no upstream):** trocar a senha por variável, girar o valor onde ele
+  tiver sido reusado (no Render, por exemplo) e avaliar o histórico. Os itens
+  2 e 3 do mesmo backlog (endpoints de escrita, descrição do GitHub) valem a
+  revisão na mesma passada.
+- **Quando:** antes do primeiro deploy do portfólio. Não publicar o site com
+  o item 1 aberto.
+
+### Teste intermitente: Shift+Tab da abertura
+
+`e2e/opening.spec.ts` › "Shift+Tab do índice para o CTA do hero traz o CTA à
+vista" falhou no `HEAD` `004d028` (antes da troca de conteúdo) e em duas de
+três rodadas depois, e passou na rodada final.
+
+- **Fazer:** investigar com `superpowers:systematic-debugging`.
+- **Quando:** antes de fechar a Fase 5.
 
 ### Textos de `description` e Open Graph
 
@@ -89,19 +133,17 @@ orçamento de 2,5 s). O LCP é a capa de 103 kB disputando banda com o JS.
 critério 9 (`validate` verde; o `build` de produção roda por último, depois do e2e) fecha na Fase 5, com conteúdo real no lugar dos
 mocks.
 
-### Miniaturas com mídia real
+### Miniaturas com mídia real (feito, 2026-10-28)
 
-As fichas da lista de trabalhos já têm miniatura (segunda leva da Fase 3). Hoje
-só o Map Areas tem imagem (`cover`); os outros projetos usam o placeholder
-escuro "sem captura", aprovado pelo dono até a Fase 5.
+Os dois projetos têm captura. A do LEC vem de
+`Local_Email_Client (LEC)/docs/screenshots/caixa-de-entrada.png` (um JPEG de
+1024×609, perfil de exemplo, sem dados reais): a capa guarda a proporção
+original, sem ampliar; a miniatura 800×600 é um recorte 4:3 ancorado à
+esquerda, para manter a árvore de pastas. O 4:3 da miniatura ficou.
 
-- **Fazer:** trocar os placeholders por capturas autorizadas, junto da troca dos
-  mocks (decisão do dono, 2026-10-27). Cada projeto passa a ter a própria fonte
-  (`thumbSrc`) e o tamanho e o formato da mídia real podem rever o 4:3.
-- **Restrições que já valem:** `docs/SPEC.md` §5.2 e §6; a imagem continua
-  decorativa (`alt=""`) e sem depender de hover.
-- **Registrar em:** as fichas "Miniatura da ficha" e "Prévias dos links de ação"
-  de `docs/MOTION_SPEC.md`, se o desenho mudar.
+O placeholder "sem captura" saiu do site, mas segue no `ProjectThumb` e no
+teste dele; o teste de quebra de linha em `e2e/hover.spec.ts` se pula enquanto
+nenhuma ficha estiver sem captura.
 
 ### Endurecimentos do título que viaja
 

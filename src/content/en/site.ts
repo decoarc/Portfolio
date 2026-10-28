@@ -29,7 +29,7 @@ export const siteEn: SiteContent = {
   },
   hero: {
     statement:
-      'I build interfaces, APIs and automation — systems you can run, read and reason about.',
+      'I build software driven by curiosity, shaped by engineering, and refined through iteration.',
     ctaPrimary: 'Personal projects',
     ctaSecondary: 'Get in touch',
     metaLeft: 'BR · Remote',
@@ -129,22 +129,18 @@ export const siteEn: SiteContent = {
   approach: {
     label: 'Approach',
     intro: 'How I tend to work, whatever the stack.',
-    // Sem copy real de abordagem ainda: os três itens são mock.
     items: [
       {
-        title: 'Read the system first',
-        body: 'Before changing anything, I trace how data enters, where it is stored and who depends on it. Most surprises live in the seams.',
-        mock: true,
+        title: 'Look beneath the surface',
+        body: 'I like to understand how things work beneath the surface. Whether exploring an existing system or starting something new, I look at its structure, dependencies, and the reasoning behind its design.',
       },
       {
-        title: 'Small, checkable steps',
-        body: 'I prefer changes that can be reviewed in one sitting and confirmed by a test or a command over large rewrites that are hard to follow.',
-        mock: true,
+        title: 'Iterate in focused steps',
+        body: 'I approach development as an iterative process. I prefer testing ideas, making focused changes, and learning from the results rather than committing to complex solutions too early.',
       },
       {
-        title: 'Write down the decision',
-        body: 'Trade-offs go into a short note next to the code, so the next person knows why it is this way and what would justify changing it.',
-        mock: true,
+        title: 'Weigh the trade-offs',
+        body: 'Every technical decision involves trade-offs. I value clear reasoning, maintainable code, and documenting important choices so that solutions remain understandable and can evolve over time.',
       },
     ],
   },

@@ -26,7 +26,7 @@ export const sitePt: SiteContent = {
   },
   hero: {
     statement:
-      'Construo interfaces, APIs e automação — sistemas que você consegue rodar, ler e entender.',
+      'Construo software movido pela curiosidade, moldado pela engenharia e refinado pela iteração.',
     ctaPrimary: 'Projetos pessoais',
     ctaSecondary: 'Entrar em contato',
     metaLeft: 'BR · Remoto',
@@ -126,22 +126,18 @@ export const sitePt: SiteContent = {
   approach: {
     label: 'Abordagem',
     intro: 'Como costumo trabalhar, seja qual for a stack.',
-    // Sem copy real de abordagem ainda: os três itens são mock.
     items: [
       {
-        title: 'Ler o sistema primeiro',
-        body: 'Antes de mudar qualquer coisa, sigo por onde os dados entram, onde ficam guardados e quem depende deles. A maioria das surpresas mora nas junções.',
-        mock: true,
+        title: 'Olhar abaixo da superfície',
+        body: 'Gosto de entender como as coisas funcionam por baixo da superfície. Seja explorando um sistema existente ou começando algo novo, observo sua estrutura, suas dependências e o raciocínio por trás do seu design.',
       },
       {
-        title: 'Passos pequenos e verificáveis',
-        body: 'Prefiro mudanças que dá para revisar de uma vez e confirmar com um teste ou um comando a reescritas grandes, difíceis de acompanhar.',
-        mock: true,
+        title: 'Iterar em passos focados',
+        body: 'Encaro o desenvolvimento como um processo iterativo. Prefiro testar ideias, fazer mudanças focadas e aprender com os resultados a me comprometer cedo demais com soluções complexas.',
       },
       {
-        title: 'Registrar a decisão',
-        body: 'Os trade-offs vão para uma nota curta ao lado do código, para que a próxima pessoa saiba por que está assim e o que justificaria mudar.',
-        mock: true,
+        title: 'Pesar os trade-offs',
+        body: 'Toda decisão técnica envolve trade-offs. Valorizo raciocínio claro, código sustentável e o registro das escolhas importantes, para que as soluções continuem compreensíveis e possam evoluir com o tempo.',
       },
     ],
   },

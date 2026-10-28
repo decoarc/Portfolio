@@ -6,10 +6,10 @@ const pt = contentByLocale.pt.site
 
 async function openCaseAndGoBack(page: Page) {
   await page.goto('/')
-  await page.getByRole('link', { name: /Token Killer/ }).click()
-  await expect(page).toHaveURL(/\/work\/token-killer$/)
+  await page.getByRole('link', { name: /Local Email Client/ }).click()
+  await expect(page).toHaveURL(/\/work\/local-email-client$/)
   await expect(
-    page.getByRole('heading', { level: 1, name: 'Token Killer' }),
+    page.getByRole('heading', { level: 1, name: 'Local Email Client' }),
   ).toBeVisible()
   await expect
     .poll(() => page.evaluate(() => document.activeElement?.tagName))
@@ -21,8 +21,8 @@ async function openCaseAndGoBack(page: Page) {
       const url = new URL(page.url())
       return `${url.pathname}${url.hash}`
     })
-    .toBe('/#work-token-killer')
-  await expect(page.locator('#work-token-killer')).toBeInViewport({
+    .toBe('/#work-local-email-client')
+  await expect(page.locator('#work-local-email-client')).toBeInViewport({
     ratio: 1,
   })
   await expect
@@ -37,7 +37,7 @@ async function openCaseAndGoBack(page: Page) {
     )
     .toMatchObject({
       anchorFocus: true,
-      text: expect.stringContaining('Token Killer'),
+      text: expect.stringContaining('Local Email Client'),
     })
 }
 
@@ -54,8 +54,8 @@ test('no celular, a volta deixa a ficha em viewport', async ({ page }) => {
 
 test('botão voltar do navegador: home e foco em #main', async ({ page }) => {
   await page.goto('/')
-  await page.getByRole('link', { name: /Token Killer/ }).click()
-  await expect(page).toHaveURL(/\/work\/token-killer$/)
+  await page.getByRole('link', { name: /Local Email Client/ }).click()
+  await expect(page).toHaveURL(/\/work\/local-email-client$/)
   await page.goBack()
   await expect
     .poll(() => {
@@ -96,12 +96,12 @@ for (const wait of [0, 1200]) {
     page,
   }) => {
     await page.goto('/')
-    const link = page.getByRole('link', { name: /Token Killer/ })
+    const link = page.getByRole('link', { name: /Local Email Client/ })
     await link.scrollIntoViewIfNeeded()
     const before = await settledScroll(page)
     expect(before).toBeGreaterThan(0)
     await link.click()
-    await expect(page).toHaveURL(/\/work\/token-killer$/)
+    await expect(page).toHaveURL(/\/work\/local-email-client$/)
     if (wait) await page.waitForTimeout(wait)
     await page.goBack()
     await expect(page).toHaveURL(/\/$/)
@@ -110,18 +110,18 @@ for (const wait of [0, 1200]) {
 }
 
 test('trocar o idioma num case study preserva o projeto', async ({ page }) => {
-  await page.goto('/work/token-killer')
+  await page.goto('/work/local-email-client')
   await page.getByRole('link', { name: en.shell.localeSwitch }).click()
-  await expect(page).toHaveURL(/\/pt\/work\/token-killer$/)
+  await expect(page).toHaveURL(/\/pt\/work\/local-email-client$/)
   await expect(page.locator('html')).toHaveAttribute('lang', 'pt-BR')
   await expect(
-    page.getByRole('heading', { level: 1, name: 'Token Killer' }),
+    page.getByRole('heading', { level: 1, name: 'Local Email Client' }),
   ).toBeVisible()
 
   await page.getByRole('link', { name: pt.shell.localeSwitch }).click()
   await expect
     .poll(() => new URL(page.url()).pathname)
-    .toBe('/work/token-killer')
+    .toBe('/work/local-email-client')
   await expect(page.locator('html')).toHaveAttribute('lang', 'en')
 })
 

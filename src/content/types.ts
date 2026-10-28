@@ -20,7 +20,7 @@ export interface ProjectCover {
   alt: string
   width: number
   height: number
-  /** Miniatura 800×600, mesma proporção 4:3 da capa. */
+  /** Miniatura 800×600 (4:3); a capa guarda a proporção da captura. */
   thumbSrc?: string
 }
 /** Ao menos um de `paragraphs`/`items` é não vazio. */
