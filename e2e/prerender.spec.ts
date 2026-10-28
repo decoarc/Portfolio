@@ -193,11 +193,36 @@ test.describe('CSP', () => {
   }
 
   test('a home executa o script inline do head sob a CSP', async ({ page }) => {
-    await page.goto('/', { waitUntil: 'commit' })
-    await expect(page.locator('html')).toHaveAttribute(
-      'data-entrance-early',
-      /pending|expired/,
-    )
+    // Gravador instalado antes de qualquer script: o `Opening` tira a marca
+    // logo depois da hidratação, então sondar depois do `goto` corre contra ele.
+    await page.addInitScript(() => {
+      const w = window as unknown as { __early: (string | null)[] }
+      w.__early = []
+      new MutationObserver((records) => {
+        for (const r of records) {
+          w.__early.push(
+            (r.target as Element).getAttribute('data-entrance-early'),
+          )
+        }
+      }).observe(document, {
+        subtree: true,
+        attributes: true,
+        attributeFilter: ['data-entrance-early'],
+      })
+      document.addEventListener('securitypolicyviolation', (event) => {
+        ;(window as unknown as { __csp: string[] }).__csp ??= []
+        ;(window as unknown as { __csp: string[] }).__csp.push(
+          `${event.violatedDirective} ${event.blockedURI}`,
+        )
+      })
+    })
+    await page.goto('/', { waitUntil: 'networkidle' })
+    const { early, csp } = await page.evaluate(() => ({
+      early: (window as unknown as { __early: (string | null)[] }).__early,
+      csp: (window as unknown as { __csp?: string[] }).__csp ?? [],
+    }))
+    expect(early).toContain('pending')
+    expect(csp).toEqual([])
   })
 })
 
