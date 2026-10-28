@@ -18,6 +18,15 @@ const PARTS = [
 ] as const
 
 async function settle(page: Page) {
+  // Hidratou de verdade: o React marca os nós do #root (o masthead) com `__reactFiber$`.
+  // Sem isso a espera de fontes e de entrada passa sobre o HTML estático.
+  await page.waitForFunction(() => {
+    const node = document.querySelector('#root header')
+    return (
+      node !== null &&
+      Object.keys(node).some((key) => key.startsWith('__reactFiber$'))
+    )
+  })
   await page.evaluate(() => document.fonts.ready.then(() => true))
   // Sem entrada nem texto que acende: a captura é do estado final.
   await expect(page.locator('[data-entrance]')).toHaveCount(0)
