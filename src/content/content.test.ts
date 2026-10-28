@@ -119,3 +119,47 @@ describe('getContent', () => {
     expect(getContent('pt').site.person.role).toBe('Desenvolvedor Full Stack')
   })
 })
+
+describe('trajetória e ferramentas', () => {
+  it.each(locales)(
+    '%s: exatamente uma experiência atual, com início ISO',
+    (locale) => {
+      const { experience } = getContent(locale).site.trajectory
+      expect(experience.filter((item) => item.current)).toHaveLength(1)
+      for (const item of experience) expect(item.start).toMatch(/^\d{4}-\d{2}$/)
+    },
+  )
+
+  it('as ferramentas são as mesmas nos dois idiomas, sem SQL nem Neon', () => {
+    const items = (locale: Locale) =>
+      getContent(locale).site.tools.groups.map((group) => group.items)
+    expect(items('pt')).toEqual(items('en'))
+    expect(items('en')).toEqual([
+      [
+        'JavaScript',
+        'TypeScript',
+        'React',
+        'Next.js',
+        'Tailwind CSS',
+        'Material UI',
+        'Vite',
+      ],
+      ['Node.js', 'Express', 'Python', 'PHP', 'REST APIs'],
+      ['MySQL', 'PostgreSQL', 'SQLite', 'MongoDB'],
+      ['GCP', 'Azure', 'Docker', 'Git'],
+      ['Rust', 'Tauri', 'C++', 'C#'],
+    ])
+  })
+
+  it('nenhum item da trajetória ou das ferramentas é mock', () => {
+    for (const locale of locales) {
+      const { trajectory, tools } = getContent(locale).site
+      expect(JSON.stringify({ trajectory, tools })).not.toContain('"mock"')
+    }
+  })
+
+  it('projetos pessoais no lugar de trabalhos selecionados', () => {
+    expect(getContent('pt').site.work.label).toBe('Projetos pessoais')
+    expect(getContent('en').site.work.label).toBe('Personal projects')
+  })
+})

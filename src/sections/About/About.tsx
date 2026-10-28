@@ -12,7 +12,7 @@ interface AboutProps {
 
 const HEADING_ID = 'about-heading'
 
-/** Sobre: medida curta, lead (que acende com o scroll) e corpo, e a stack numa linha mono. */
+/** Sobre: medida curta, lead (que acende com o scroll) e corpo. As ferramentas ficam na seção Ferramentas. */
 export function About({ index, copy }: AboutProps) {
   return (
     <Sheet
@@ -25,10 +25,6 @@ export function About({ index, copy }: AboutProps) {
       <div className={styles.text}>
         <LitText className={styles.lead} text={copy.lead} />
         <p className={styles.body}>{copy.body}</p>
-        <p className={styles.stack}>
-          <span className={styles.stackLabel}>{copy.stackLabel}</span>
-          <span>{copy.stack.join(' · ')}</span>
-        </p>
       </div>
     </Sheet>
   )

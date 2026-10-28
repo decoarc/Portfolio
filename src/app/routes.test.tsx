@@ -68,7 +68,13 @@ describe('rotas por locale', () => {
       screen
         .getAllByRole('heading', { level: 2 })
         .map((heading) => heading.textContent),
-    ).toEqual(['Selected work', 'Approach', 'Interests', 'About', 'Contact'])
+    ).toEqual([
+      'Personal projects',
+      'Approach',
+      'Interests',
+      'About',
+      'Contact',
+    ])
   })
 
   it('/ numera índice e cabeçalhos de seção com os mesmos números', async () => {

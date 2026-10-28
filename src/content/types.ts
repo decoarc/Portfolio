@@ -3,7 +3,13 @@ export type ProjectType = 'verified' | 'concept'
 export type ProjectStatus = 'draft' | 'preview' | 'published'
 export type ProjectLinkKind = 'live' | 'repo'
 export type HomeSectionId =
-  'work' | 'approach' | 'about' | 'interests' | 'contact'
+  | 'trajectory'
+  | 'tools'
+  | 'work'
+  | 'approach'
+  | 'about'
+  | 'interests'
+  | 'contact'
 
 export interface ProjectLink {
   kind: ProjectLinkKind
@@ -39,6 +45,31 @@ export interface Project {
   cover?: ProjectCover
   sections: CaseSection[]
   links: ProjectLink[]
+}
+
+/** Um cargo na linha do tempo da Trajetória. */
+export interface ExperienceItem {
+  /** Texto do período como o visitante lê: 'Out 2025 — hoje'. */
+  period: string
+  /** Mês de início em ISO, para `<time dateTime>`: '2025-10'. */
+  start: string
+  /** Cargo atual: o marcador destacado e o "hoje"/"present" no período. */
+  current: boolean
+  mode: string
+  role: string
+  company: string
+  contract: string
+  summary: string
+  tech: string[]
+}
+export interface EducationItem {
+  period: string
+  course: string
+  institution: string
+}
+export interface ToolGroup {
+  name: string
+  items: string[]
 }
 
 export interface ApproachItem {
@@ -78,15 +109,18 @@ export interface SiteContent {
   release: { label: string; entries: Record<HomeSectionId, string> }
   projectType: Record<ProjectType, string>
   links: { labels: Record<ProjectLinkKind, string>; externalHint: string }
+  trajectory: {
+    label: string
+    intro: string
+    experienceLabel: string
+    educationLabel: string
+    experience: ExperienceItem[]
+    education: EducationItem[]
+  }
+  tools: { label: string; groups: ToolGroup[] }
   work: { label: string; intro: string; previewNote: string; noCapture: string }
   approach: { label: string; intro: string; items: ApproachItem[] }
-  about: {
-    label: string
-    lead: string
-    body: string
-    stackLabel: string
-    stack: string[]
-  }
+  about: { label: string; lead: string; body: string }
   interests: { label: string; items: string[] }
   contact: { label: string; lead: string; channels: ContactChannel[] }
   caseStudy: {

@@ -4,7 +4,8 @@ import type { SiteContent } from '../types.ts'
  * Copy do site em inglês.
  * Hero, `work` e `projectType` vêm da Fase 0;
  * `about`, contato, 404 e rótulos do case study vêm do site anterior (main).
- * Sem e-mail (não há e-mail verificado), sem empregador, métrica ou prêmio.
+ * Sem e-mail (não há e-mail verificado), sem métrica ou prêmio. A trajetória
+ * (empregador, formação) usa os dados que o dono passou em 2026-10-28.
  */
 export const siteEn: SiteContent = {
   meta: {
@@ -29,7 +30,7 @@ export const siteEn: SiteContent = {
   hero: {
     statement:
       'I build interfaces, APIs and automation — systems you can run, read and reason about.',
-    ctaPrimary: 'Selected work',
+    ctaPrimary: 'Personal projects',
     ctaSecondary: 'Get in touch',
     metaLeft: 'BR · Remote',
     metaRight: 'Portfolio 2026',
@@ -37,7 +38,9 @@ export const siteEn: SiteContent = {
   release: {
     label: 'Contents',
     entries: {
-      work: 'Selected work',
+      trajectory: 'Trajectory',
+      tools: 'Tools',
+      work: 'Personal projects',
       approach: 'Approach',
       about: 'About',
       interests: 'Interests',
@@ -52,8 +55,72 @@ export const siteEn: SiteContent = {
     labels: { live: 'Live demo', repo: 'Repository' },
     externalHint: 'opens in a new tab',
   },
+  // Dados do LinkedIn e da lista de ferramentas do dono (2026-10-28).
+  trajectory: {
+    label: 'Trajectory',
+    intro: 'From mechanical engineering to software development.',
+    experienceLabel: 'Experience',
+    educationLabel: 'Education',
+    experience: [
+      {
+        period: 'Oct 2025 — present',
+        start: '2025-10',
+        current: true,
+        mode: 'Remote',
+        role: 'Software Developer',
+        company: 'Witek',
+        contract: 'Full-time',
+        summary:
+          'Full stack development for the real estate and property registry sector, nationwide: new features, improvements, fixes and optimization of critical services used by notary offices.',
+        tech: ['PHP', 'JavaScript', 'MySQL', 'Git', 'Docker', 'Scrum', 'Azure'],
+      },
+    ],
+    education: [
+      {
+        period: '2023 — 2024',
+        course:
+          'Postgraduate specialization, Reliability Engineering and Asset Management',
+        institution: 'PUC Minas',
+      },
+      {
+        period: '2015 — 2022',
+        course: "Bachelor's degree in Mechanical Engineering",
+        institution: 'Universidade Salvador',
+      },
+    ],
+  },
+  tools: {
+    label: 'Tools',
+    groups: [
+      {
+        name: 'Frontend',
+        items: [
+          'JavaScript',
+          'TypeScript',
+          'React',
+          'Next.js',
+          'Tailwind CSS',
+          'Material UI',
+          'Vite',
+        ],
+      },
+      {
+        name: 'Backend',
+        items: ['Node.js', 'Express', 'Python', 'PHP', 'REST APIs'],
+      },
+      {
+        name: 'Databases',
+        items: ['MySQL', 'PostgreSQL', 'SQLite', 'MongoDB'],
+      },
+      {
+        name: 'Cloud, DevOps & Delivery',
+        items: ['GCP', 'Azure', 'Docker', 'Git'],
+      },
+      { name: 'Desktop & Systems', items: ['Rust', 'Tauri', 'C++', 'C#'] },
+    ],
+  },
   work: {
-    label: 'Selected work',
+    label: 'Personal projects',
     intro:
       'Each entry is honest about what it is: verified work, or a concept study.',
     previewNote: 'Case study soon',
@@ -85,17 +152,6 @@ export const siteEn: SiteContent = {
     label: 'About',
     lead: 'I’m a full stack developer based in Brazil, building software where interfaces meet data and automation.',
     body: 'I care about clear systems: APIs you can trust, UIs that stay understandable, and tooling that helps developers move with confidence. Interests span web stacks, architecture, desktop apps, graphics programming, and local AI–assisted developer tools — always grounded in real delivery, not résumé theater.',
-    stackLabel: 'Working with',
-    stack: [
-      'PHP',
-      'JavaScript',
-      'TypeScript',
-      'React',
-      'REST APIs',
-      'MySQL',
-      'Git',
-      'Docker',
-    ],
   },
   interests: {
     label: 'Interests',
@@ -123,7 +179,7 @@ export const siteEn: SiteContent = {
     ],
   },
   caseStudy: {
-    backToWork: 'Back to selected work',
+    backToWork: 'Back to personal projects',
     roleLabel: 'Role',
     yearLabel: 'Period',
     stackLabel: 'Stack',
