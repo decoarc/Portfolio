@@ -34,6 +34,69 @@ Achados menores de `docs/gate-4/A11Y_AUDIT.md`, sem falha de critério AA:
   parágrafo "01" na ficha). **Quando:** confirmar com o NVDA do Gate 4; se
   incomodar, `aria-hidden` no número.
 
+## Antes da Fase 5 — Trajetória, ferramentas e About no hero
+
+Ideias do dono (2026-10-28), para entrar depois do Gate 4 e antes da troca de
+conteúdo. As três mexem na composição aprovada da home, então passam por
+desenho e protótipo antes de código, como na Fase 3. A abertura (Gate 3) e o
+primeiro viewport (critério 2 da spec mãe) são as restrições principais.
+
+### Seção "Trajetória"
+
+Escolaridade resumida e experiência profissional como dev, em ordem de tempo.
+
+- **Decidir no desenho:**
+  - O formato: linha do tempo, lista por período ou fichas como as dos
+    trabalhos.
+  - O lugar na sequência da home e no índice (`homeSections`, números de
+    seção).
+  - Quanto detalhe cada item leva: período, papel, lugar e uma linha do que
+    fez.
+- **Atenção:** o conteúdo atual evita citar empregador, métrica e prêmio, porque
+  não havia dado verificado (comentário em `src/content/en/site.ts`). Com
+  dados reais do dono, essa regra passa a valer para cada item: só o que pode
+  ser afirmado. Se a seção entrar antes do conteúdo real, os itens levam
+  `mock: true` e a trava de build cobre.
+
+### Seção de ferramentas
+
+As ferramentas agrupadas em front-end, back-end e cloud/delivery.
+
+- **Decidir no desenho:** a seção absorve a lista "Working with" de `about.stack`?
+  O objetivo é não repetir a mesma lista em dois lugares. Decidir também se
+  cada ferramenta liga aos projetos que a usam (`project.stack`) ou fica só
+  como lista.
+- **Restrição:** só ferramentas que o dono usa de fato. Nada de nível em
+  porcentagem ou barra de proficiência. Seria afirmação sem prova, e a
+  `SPEC.md` §4.3 proíbe afirmação falsa.
+
+### About no hero, ao lado do nome
+
+Levar o texto do About para o hero, ao lado de "André Arcodaci".
+
+- **Afeta:**
+  - A entrada do nome e o afastamento ("André" vai para a esquerda,
+    "Arcodaci" para a direita). É preciso decidir o que o texto faz durante
+    esse movimento e com reduced motion.
+  - O primeiro viewport em 390, 768 e 1440, nos dois idiomas. Nome, função e
+    caminho para trabalhos e contato continuam visíveis sem gesto.
+  - A seção About da home e a entrada dela no índice: saem ou encolhem.
+  - O texto que acende (`LitText`), se o About usar.
+- **Resolve:** a decisão D-About (`docs/DESIGN_DECISIONS.md`). Se o About vai
+  para o hero, ele não vira página própria.
+
+### Para as três
+
+- Textos nos dois idiomas, no mesmo shape (teste de paridade).
+- Prerender, head e rotas não mudam: são seções da home.
+- O que precisa ser refeito:
+  - a auditoria de acessibilidade das seções novas e do hero;
+  - as baselines da regressão visual (`pnpm test:visual:update`, olhando as
+    diferenças);
+  - as capturas OG (`e2e/publish.capture.ts`), se o hero mudar.
+- **Quando:** depois do Gate 4, antes da Fase 5. Primeiro desenho e protótipo
+  aprovados pelo dono, depois plano e implementação.
+
 ## Fase 5 — Conteúdo real e publicação
 
 Regra de deploy: publicar só um `dist/` gerado por `pnpm build` com
