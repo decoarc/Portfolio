@@ -105,3 +105,49 @@ em `docs/gate-1/` permanecem como registro.
   efeitos); CSS `animation-timeline: scroll()` (suporte desigual no Safari na
   data).
 - Ficha de cada efeito: `docs/MOTION_SPEC.md`
+
+## D-About — `/about` como página dedicada
+
+- **Status:** aguardando o dono (decide no Gate 4)
+- **Origem:** spec mãe §10 deixou a decisão adiada; a Fase 4 a trouxe para o
+  fechamento (`docs/superpowers/specs/2026-10-27-fase-4-acabamento-design.md` §10).
+- **Recomendação do Claude: não promover.**
+  - A seção About da home é curta.
+  - O conteúdo dela ainda é mock; uma página nova teria de ser escrita e
+    revista duas vezes.
+  - Uma página separada quebra a leitura de cima para baixo que a abertura
+    constrói (nome, índice, trabalhos, abordagem, sobre, contato).
+  - Custa uma rota a mais em cada idioma: arquivo prerenderizado, head,
+    testes e baseline visual.
+- **Se o dono promover:** vira rota `/about` e `/pt/about` (ou o nome em PT que
+  ele escolher), com o índice da home apontando para ela. A seção About da
+  home seria reduzida a um resumo com link. Entra como tarefa da Fase 5, com o
+  conteúdo real.
+
+## D-Prerender — HTML estático por rota, sem framework
+
+- **Status:** decidida na Fase 4 (2026-10-27)
+- **Decisão:** `vite build --ssr` mais `scripts/prerender.ts`, que grava um HTML
+  por rota no formato do Cloudflare Pages (`pt.html`, `work/<slug>.html`,
+  `404.html`, `pt/404.html`). O React hidrata o HTML. Sem Next, sem Astro.
+- **Motivo:** o site é estático e já usa React Router; o necessário era
+  conteúdo e head por rota para buscadores e pré-visualização de links, e
+  nome visível antes do JS. Um framework traria um segundo modelo de rotas.
+- **Consequências:** `VITE_SITE_ORIGIN` obrigatório no `build` de produção;
+  CSP com hash do único script inline; o preview imita o Pages
+  (`vite-pages-preview.ts`). Detalhes em `docs/ARCHITECTURE.md`, "Prerender".
+
+## D-Fraunces — Instância latin sem `SOFT`, com `wght` inteiro
+
+- **Status:** decidida na Fase 4 (2026-10-27)
+- **Decisão:** a Fraunces latin é gerada por `scripts/fonts/instance-fraunces.py`
+  com `SOFT` fixado em 0 e `wght`, `opsz` e `WONK` inteiros: 66 964 B contra
+  121 016 B (−44,7%).
+- **Motivo:** o critério era "mais de 30% menor e sem diferença visual". Fixar
+  `wght` em 600 daria −71,3%, mas o instancer recalcula os deltas e muda o
+  antialias: as 24 capturas da regressão visual falharam. A variante adotada
+  passa nas 252 comparações com `threshold: 0`.
+- **Em aberto com o dono:** o `wght` fixo em 600 muda o visual e exige regravar
+  as baselines (ver o Gate 4). Medidas: `docs/gate-4/PERFORMANCE.md`.
+- **Preload das fontes:** testado e recusado; piorou o LCP das homes em +156 a
+  +444 ms.

@@ -1,7 +1,7 @@
 # Fase 4 — Acabamento
 
 - **Data:** 2026-10-27
-- **Status:** aguardando revisão do dono
+- **Status:** implementado; aguardando o Gate 4
 - **Branch:** `fase-4-acabamento`
 - **Depende de:** Fase 3 encerrada (`1320f8d`); spec mãe
   `docs/superpowers/specs/2026-10-26-portfolio-visual-redesign-design.md` §3

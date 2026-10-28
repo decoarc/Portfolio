@@ -38,6 +38,12 @@ estilo inline, não script inline).
 | Reduced motion no meio da sessão | `emulateMedia` + `goBack` | 2 | 4 | Fade padrão de 250 ms da View Transition (correção 6) |
 | **Total** | | **41/52** | **51/52** | **Antes: bom, corrigir P1 e P2. Depois: P0–P2 corrigidos; resta a decisão do dono sobre os filetes** |
 
+**Para o dono:** a 200% de texto em 320 px, o nome do hero e algumas palavras
+longas (títulos de seção, convite do contato) quebram no meio da palavra
+("Arcoda/ci"). É o efeito de `overflow-wrap: anywhere`, a correção mínima dos
+achados 3, 4 e 8: sem ela a palavra era cortada ou passava da tela. Com texto
+normal nada quebra.
+
 ## O que já vale
 
 - **Ordem do Tab (2.4.3).** Home: skip link → marca → idioma → os dois CTAs →

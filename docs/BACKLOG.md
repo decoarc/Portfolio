@@ -9,16 +9,11 @@ reação da lista de trabalhos, texto que acende com o scroll e título que viaj
 da ficha ao case study; ver `docs/MOTION_SPEC.md`). O que foi calibrado sobre
 o texto mock é revisto na Fase 5.
 
-## Fase 4 — Acabamento
+## Fase 4 — Acabamento (encerrada, aguardando o Gate 4)
 
-Este backlog guarda só o que foi adiado; o escopo da fase está na §3 de
-`docs/superpowers/specs/2026-10-26-portfolio-visual-redesign-design.md`.
-
-### Metadados por idioma
-
-Hoje só `<title>` e `lang` mudam com o locale (Fase 2). Faltam `hreflang`,
-`description` e Open Graph por idioma. O mecanismo entra na Fase 4; os textos
-de `description` e Open Graph são revistos na Fase 5, com o conteúdo real.
+A Fase 4 terminou em 2026-10-27 (`docs/gate-4/README.md`). Metadados por idioma
+e reduced motion no meio da sessão foram entregues; o que ela adiou está abaixo,
+cada item com o momento certo.
 
 ### Acessibilidade — P3 da auditoria da Fase 4
 
@@ -26,11 +21,13 @@ Achados menores de `docs/gate-4/A11Y_AUDIT.md`, sem falha de critério AA:
 
 - **"sem captura" cortado na miniatura com texto a 200%** (até 334 px em
   320). A miniatura é decorativa (`aria-hidden`) e repete o tipo e o título da
-  ficha. **Por quê adiado:** some com as capturas reais da Fase 5.
+  ficha. **Por quê adiado:** some com as capturas reais. **Quando:** Fase 5,
+  com as capturas.
 - **Alto contraste: o traço dos CTAs e dos canais e o círculo do monograma do
   cartão somem.** O link segue identificado por `LinkText` e pelo foco; o
   monograma é decorativo. **Fazer, se quiser:** `border-bottom` em
   `CanvasText` no traço, dentro de `@media (forced-colors: active)`.
+  **Quando:** se o dono quiser, na Fase 5.
 - **Tipo da ficha encosta na miniatura com texto a 200%** em 320 px (o
   espaçamento de letra final de "CONCEPT" toca a moldura). Nada some.
 - **Números de seção e de ficha lidos como texto solto** ("01" antes do `h2`,
@@ -43,6 +40,42 @@ O conteúdo mock fica até o fim e só é trocado quando o repositório for
 publicado (decisão do dono, 2026-10-27). Hoje são 12 itens `mock: true`: três
 projetos (Atlas Ledger, Field Notes, Token Killer) e os três princípios da
 Abordagem, cada um em pt e en.
+
+### Textos de `description` e Open Graph
+
+O mecanismo de metadados por idioma está pronto (Fase 4). Os textos de
+`site.meta.description` e `site.meta.ogImageAlt` são mock e as imagens
+`public/og/home-en.png` e `home-pt.png` mostram o texto de hoje.
+
+- **Fazer:** revisar os textos com o conteúdo real e regravar as imagens OG.
+- **Quando:** Fase 5, junto da troca dos mocks.
+
+### Domínio e `VITE_SITE_ORIGIN`
+
+`canonical`, `hreflang` e `og:url` usam `VITE_SITE_ORIGIN`, e `pnpm build`
+falha sem ela. O domínio ainda não existe.
+
+- **Fazer:** escolher o domínio e defini-lo no painel do Cloudflare Pages.
+- **Quando:** Fase 5, antes do primeiro deploy.
+
+### Baselines visuais de outra máquina
+
+As baselines de `e2e/visual.visual.ts-snapshots/` são só `win32`, geradas nesta
+máquina, sem tolerância por pixel.
+
+- **Fazer:** regravar com `pnpm test:visual:update` depois de trocar mocks e
+  capturas (olhando as diferenças); se o CI for Linux, gerar as baselines lá.
+- **Quando:** Fase 5.
+
+### Folga do LCP do case
+
+O case Map Areas mede 2344 ms no preview sem gzip (156 ms de folga sobre o
+orçamento de 2,5 s). O LCP é a capa de 103 kB disputando banda com o JS.
+
+- **Fazer:** medir de novo com a capa real; se passar do orçamento, comprimir
+  ou redimensionar a capa, ou dividir o JS por rota (design da Fase 4, §8,
+  item 3).
+- **Quando:** Fase 5, com a capa real.
 
 ### `pnpm validate` falha por desenho enquanto houver mock
 
@@ -162,6 +195,18 @@ estava relatado; o comentário para o #2809 está redigido e aguarda o
 **Quando revisitar:** ao atualizar o rtk, se #2809 e #2878 estiverem
 fechados, testar de novo com sonda de erro antes de remover as exclusões.
 
+## Ferramental — preview
+
+### O preview não comprime (gzip) como o Pages
+
+`vite-pages-preview.ts` serve sem compressão; o Cloudflare Pages comprime. As
+medidas de `docs/gate-4/PERFORMANCE.md` foram feitas nas duas condições, mas o
+e2e roda sem gzip.
+
+- **Fazer:** se um teste passar a depender do tamanho no fio, comprimir no
+  plugin ou medir com `npx wrangler pages dev dist`.
+- **Quando:** só se isso aparecer; hoje nenhum teste depende.
+
 ## Decidido e recusado
 
 Não são pendências: registram decisões do dono para que o tema não volte sem
@@ -188,3 +233,18 @@ entrou nenhuma das duas partes. Se voltar ao tema, partir de outra ideia.
 A prévia com um círculo "View" que acompanha o cursor sobre a lista de
 trabalhos (dennissnellenberg.com) foi vista no protótipo da segunda leva da
 Fase 3 e não entrou.
+
+### Preload das fontes
+
+Testado na Fase 4 (Fraunces e Instrument Sans, no `<head>` das três páginas
+medidas): o LCP das homes piorou de 156 a 444 ms, porque as fontes disputam a
+banda com o CSS e o JS no começo. O LCP delas é um parágrafo que já pinta com
+`font-display: swap`. Medidas em `docs/gate-4/PERFORMANCE.md`. Se voltar ao
+tema, partir de outra ideia (por exemplo, um LCP que dependa da fonte).
+
+### Fraunces com `wght` fixo em 600 (o dono pode rever)
+
+Daria −71,3% no arquivo (34,7 kB em vez de 66,9 kB), mas muda o desenho dos
+títulos (antialias) e as 24 capturas da regressão visual falham. A Fase 4
+ficou com o `wght` inteiro (−44,7%, sem diferença visual). A decisão de aceitar
+o visual novo e regravar as baselines é do dono (`docs/gate-4/README.md`).
