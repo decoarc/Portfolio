@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'
-import { useLocation } from 'react-router'
+import { useEffect, useLayoutEffect, useState } from 'react'
+import { useLocation, useNavigationType } from 'react-router'
 import { wantsInstantScroll } from '../../app/navigationState.ts'
 import type { Locale, Project, SiteContent } from '../../content/types.ts'
 import { caseStudyHref, listProjects } from '../../content/publication.ts'
@@ -30,9 +30,18 @@ const WAKE_EVENTS = ['pointermove', 'keydown', 'wheel', 'touchstart'] as const
 export function Work({ index, copy, projects, locale, labels }: WorkProps) {
   // Na volta de um case, a ficha pousa em repouso: o cursor parado sobre
   // outra ficha não a esmaece nem desloca o título que chega. A reação volta
-  // no primeiro gesto.
-  const { state } = useLocation()
-  const [settling, setSettling] = useState(() => wantsInstantScroll(state))
+  // no primeiro gesto. A primeira renderização é sempre a do HTML
+  // pré-renderizado (o estado do histórico sobrevive à recarga e o servidor não
+  // o vê); o repouso liga num efeito de layout, antes da pintura, e só em
+  // navegação do cliente (PUSH), nunca na carga nem na recarga (POP).
+  const { state, key } = useLocation()
+  const navigationType = useNavigationType()
+  const [settling, setSettling] = useState(false)
+
+  useLayoutEffect(() => {
+    if (navigationType === 'PUSH' && wantsInstantScroll(state))
+      setSettling(true)
+  }, [navigationType, state, key])
 
   useEffect(() => {
     if (!settling) return

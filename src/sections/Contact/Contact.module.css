@@ -20,6 +20,9 @@
   font-size: var(--text-title);
   line-height: 1.1;
   letter-spacing: -0.02em;
+  /* Com texto a 200% em 320 px, "collaborations," não cabe na medida e
+     passava da tela (WCAG 1.4.4, 1.4.10): só então a palavra quebra. */
+  overflow-wrap: anywhere;
 }
 
 .channels {
@@ -70,6 +73,7 @@
 .address {
   font-size: 0.95rem;
   font-weight: 600;
+  overflow-wrap: anywhere;
 }
 
 .note {
@@ -89,5 +93,11 @@
 
   .channels > li > span {
     position: static;
+  }
+
+  /* Nunca mais largo que a lista: em 320 px os 280 px passavam da tela, e o
+     cartão, mesmo escondido, abria rolagem horizontal (WCAG 1.4.10). */
+  .card {
+    max-width: 100%;
   }
 }

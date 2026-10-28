@@ -69,6 +69,10 @@
   letter-spacing: -0.025em;
   /* Medida curta deliberada: o nome quebra em duas linhas e isso é o desenho. */
   max-width: 9ch;
+  /* Com texto a 200% em 320 px, "Arcodaci" (295 px) não cabe na coluna e o
+     `overflow-x: clip` do hero cortava o fim (WCAG 1.4.4): só então a palavra
+     quebra. No tamanho normal ela cabe e nada muda. */
+  overflow-wrap: anywhere;
 }
 
 /* A fenda: cada linha corta só na vertical; na horizontal a palavra pode sair
@@ -87,7 +91,11 @@
 }
 
 /* Entrada: o nome sobe de trás da fenda. `data-entrance` só existe quando o
-   script vai animar (nunca com reduced motion nem sem JS). */
+   script vai animar (nunca com reduced motion nem sem JS). No HTML
+   pré-renderizado, o script inline do `<head>` esconde o nome antes do JS com
+   `data-entrance-early` no `<html>` (src/app/entranceEarly.ts); o `Opening`
+   tira a marca ao montar. */
+:global(html[data-entrance-early='pending']) .word,
 [data-entrance='pending'] .word {
   transform: translateY(105%);
 }
@@ -226,6 +234,15 @@
 
 .ghost {
   color: var(--ink-muted);
+}
+
+/* O `ActionLink` não quebra linha (`nowrap`). Com texto a 200% em 320 px,
+   "Trabalhos selecionados" passava da coluna e o `overflow-x: clip` do hero o
+   cortava (WCAG 1.4.4): aqui o CTA quebra quando não cabe. No tamanho normal
+   ele cabe numa linha e nada muda. Dois seletores, para não depender da ordem
+   do CSS no bundle. */
+.actions .action {
+  white-space: normal;
 }
 
 /* Tira de capas do CTA primário. Só a partir de 1200px há espaço livre: acima

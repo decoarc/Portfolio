@@ -111,4 +111,4 @@ Não são afirmações sobre trabalho, mas o dono deve revisar o texto:
 ## Pendente
 
 `pnpm build` e `pnpm validate` falham enquanto houver mock (critério 8 da
-spec, funcionando). O critério 9 fecha na Fase 4, com conteúdo real.
+spec, funcionando). O critério 9 fecha na Fase 5, com conteúdo real.

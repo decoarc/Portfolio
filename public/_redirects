@@ -1,2 +1,5 @@
-# Cloudflare Pages — SPA fallback for client routes (/work/:slug, 404)
-/*    /index.html   200
+# Cloudflare Pages: a regra do _redirects vence o arquivo que casa com a URL.
+# Por isso não há fallback SPA aqui (`/* /index.html 200` mandaria tudo para a
+# home); cada rota tem o próprio HTML pré-renderizado (design §5.2).
+# URLs sem barra no fim: /pt/ vai para /pt.
+/pt/    /pt    301

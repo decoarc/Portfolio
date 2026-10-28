@@ -1,9 +1,13 @@
+/* Uma linha de `--masthead-h`. Com texto a 200% em 320 px, a marca e o
+   seletor não cabem lado a lado ("Português" passava 2 px da tela, WCAG
+   1.4.10): só então o seletor desce e a barra cresce. */
 .masthead {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  height: var(--masthead-h);
+  min-height: var(--masthead-h);
   padding: 0 var(--gutter);
   background: var(--bg);
   border-bottom: 1px solid var(--rule);

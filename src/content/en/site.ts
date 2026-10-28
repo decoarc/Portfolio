@@ -10,6 +10,10 @@ export const siteEn: SiteContent = {
   meta: {
     homeTitle: 'André Arcodaci — Full Stack Developer',
     titleSuffix: ' — André Arcodaci',
+    // Revisar na Fase 5 com o conteúdo real
+    description:
+      'Portfolio of André Arcodaci, a full stack developer in Brazil: interfaces, APIs and automation, with case studies of verified work.',
+    ogImageAlt: 'André Arcodaci — Full Stack Developer, portfolio',
   },
   shell: {
     skipToContent: 'Skip to content',

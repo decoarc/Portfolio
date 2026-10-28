@@ -29,6 +29,9 @@
   font-weight: 600;
   font-size: var(--text-heading);
   line-height: 1.1;
+  /* Com texto a 200% em 320 px, "selecionados" sozinho não cabe ao lado do
+     número (WCAG 1.4.4, 1.4.10): só então a palavra quebra. */
+  overflow-wrap: anywhere;
 }
 
 .intro {

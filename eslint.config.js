@@ -7,7 +7,7 @@ import globals from 'globals'
 import tseslint from 'typescript-eslint'
 
 export default tseslint.config(
-  { ignores: ['dist', 'coverage', 'docs'] },
+  { ignores: ['dist', 'dist-ssr', 'coverage', 'docs'] },
   {
     extends: [
       js.configs.recommended,
@@ -31,5 +31,11 @@ export default tseslint.config(
         { allowConstantExport: true },
       ],
     },
+  },
+  {
+    // O módulo do servidor exporta funções e constantes de render, não
+    // componentes; Fast Refresh não se aplica a ele.
+    files: ['src/entry-server.tsx'],
+    rules: { 'react-refresh/only-export-components': 'off' },
   },
 )

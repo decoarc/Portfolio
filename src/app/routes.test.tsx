@@ -1,6 +1,6 @@
-import { render, screen, within } from '@testing-library/react'
+import { act, render, screen, within } from '@testing-library/react'
 import { createMemoryRouter, RouterProvider } from 'react-router'
-import { describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it } from 'vitest'
 import { createRoutes } from './routes.tsx'
 
 function renderAt(url: string) {
@@ -95,5 +95,73 @@ describe('rotas por locale', () => {
     expect(
       within(footer).getByText('André Arcodaci — Full Stack Developer'),
     ).toBeVisible()
+  })
+})
+
+describe('head por rota na navegação', () => {
+  beforeEach(() => {
+    document.head
+      .querySelectorAll('[data-head], title')
+      .forEach((node) => node.remove())
+  })
+
+  it('navegar da home ao case troca o head sem duplicar', async () => {
+    const router = createMemoryRouter(createRoutes(), {
+      initialEntries: ['/pt'],
+    })
+    render(<RouterProvider router={router} />)
+    await screen.findByRole('banner')
+    expect(
+      document.querySelector('link[rel="canonical"]')?.getAttribute('href'),
+    ).toBe('http://localhost:5173/pt')
+    await act(() => router.navigate('/pt/work/map-areas'))
+    expect(document.querySelectorAll('link[rel="canonical"]')).toHaveLength(1)
+    expect(
+      document.querySelector('link[rel="canonical"]')?.getAttribute('href'),
+    ).toBe('http://localhost:5173/pt/work/map-areas')
+    await act(() => router.navigate('/pt/nada'))
+    expect(
+      document.querySelector('meta[name="robots"]')?.getAttribute('content'),
+    ).toBe('noindex')
+    expect(document.querySelector('link[rel="canonical"]')).toBeNull()
+  })
+
+  it('slug inválido recebe o head de 404', async () => {
+    renderAt('/work/nao-existe')
+    await screen.findByRole('heading', { name: 'Page not found' })
+    expect(
+      document.querySelector('meta[name="robots"]')?.getAttribute('content'),
+    ).toBe('noindex')
+    expect(document.querySelector('link[rel="canonical"]')).toBeNull()
+  })
+
+  it.each([
+    ['/', 'André Arcodaci — Full Stack Developer'],
+    ['/work/token-killer', 'Token Killer — André Arcodaci'],
+    ['/nada', 'Page not found — André Arcodaci'],
+  ])('%s deixa um só <title> no documento', async (url, title) => {
+    renderAt(url)
+    await screen.findByRole('main')
+    await act(async () => {})
+    expect(document.querySelectorAll('title').length).toBeLessThanOrEqual(1)
+    expect(document.title).toBe(title)
+  })
+})
+
+describe('rotas sem <title> próprio', () => {
+  // React 19 eleva `<title>` para o head, mas `applyHead` só remove o que tem
+  // `[data-head]`: um `<title>` a mais no DOM não é garantido de aparecer ou
+  // sumir. A guarda real é este teste do fonte das rotas.
+  const sources = import.meta.glob('./*Route.tsx', {
+    query: '?raw',
+    import: 'default',
+    eager: true,
+  }) as Record<string, string>
+
+  it('nenhum componente de rota declara <title>', () => {
+    expect(Object.keys(sources)).toHaveLength(3)
+    for (const [file, source] of Object.entries(sources)) {
+      expect(source, file).not.toMatch(/<title[\s>]/)
+    }
   })
 })

@@ -1,4 +1,4 @@
-import '@fontsource-variable/fraunces/full.css'
+import './styles/fonts.css'
 import '@fontsource-variable/instrument-sans'
 import '@fontsource-variable/geist-mono'
 import './styles/tokens.css'
@@ -6,7 +6,7 @@ import './styles/global.css'
 import './motion/titleFlight.css'
 import 'lenis/dist/lenis.css'
 import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
+import { createRoot, hydrateRoot } from 'react-dom/client'
 import { App } from '@/app/App.tsx'
 import { startSmoothScroll } from '@/motion/smoothScroll.ts'
 import { forgetTitleFlightOnTraversal } from '@/motion/titleFlight.ts'
@@ -17,8 +17,13 @@ if (!root) throw new Error('Elemento #root ausente em index.html')
 startSmoothScroll()
 forgetTitleFlightOnTraversal()
 
-createRoot(root).render(
+const app = (
   <StrictMode>
     <App />
-  </StrictMode>,
+  </StrictMode>
 )
+
+// O build grava o HTML de cada rota em #root (scripts/prerender.ts): hidrata.
+// No dev, #root só tem o comentário <!--app--> do molde: renderiza do zero.
+if (root.firstElementChild) hydrateRoot(root, app)
+else createRoot(root).render(app)

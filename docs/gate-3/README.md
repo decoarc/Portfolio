@@ -102,7 +102,7 @@ Performance → gravar enquanto rola a abertura; não deve haver frames longos
 Typecheck, lint, 122 testes unitários e 62 e2e passam. O passo `build` sai
 com 1 porque 12 itens de conteúdo ainda têm `mock: true` — a trava do critério
 8 funcionando, registrada em `docs/BACKLOG.md` ("`pnpm validate` falha por
-desenho enquanto houver mock"). Fecha na Fase 4. `pnpm build:preview` passa.
+desenho enquanto houver mock"). O critério 9 fecha na Fase 5, com conteúdo real. `pnpm build:preview` passa.
 
 ## Testes da fase
 

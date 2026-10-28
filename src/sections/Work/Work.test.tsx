@@ -1,6 +1,8 @@
-import { fireEvent, render, screen, within } from '@testing-library/react'
+import { act, fireEvent, render, screen, within } from '@testing-library/react'
+import { hydrateRoot } from 'react-dom/client'
+import { renderToString } from 'react-dom/server'
 import { createMemoryRouter, RouterProvider } from 'react-router'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { INSTANT_SCROLL } from '../../app/navigationState.ts'
 import { siteEn } from '../../content/en/site.ts'
 import { sitePt } from '../../content/pt/site.ts'
@@ -26,14 +28,14 @@ function makeProjects(
   }))
 }
 
-function renderWork(
+function makeRouter(
   projects: Project[],
-  locale: Locale = 'en',
-  site: SiteContent = siteEn,
-  state: unknown = null,
+  locale: Locale,
+  site: SiteContent,
+  state: unknown,
 ) {
   // Data router: as fichas usam `useViewTransitionState`, que exige um.
-  const router = createMemoryRouter(
+  return createMemoryRouter(
     [
       {
         path: '*',
@@ -50,7 +52,25 @@ function renderWork(
     ],
     { initialEntries: [{ pathname: '/', state }] },
   )
-  return render(<RouterProvider router={router} />)
+}
+
+function renderWork(
+  projects: Project[],
+  locale: Locale = 'en',
+  site: SiteContent = siteEn,
+  state: unknown = null,
+) {
+  return render(
+    <RouterProvider router={makeRouter(projects, locale, site, state)} />,
+  )
+}
+
+/** Como a volta de um case: navegação do cliente (PUSH) com o estado. */
+async function renderWorkAfterReturn(projects: Project[]) {
+  const router = makeRouter(projects, 'en', siteEn, null)
+  const view = render(<RouterProvider router={router} />)
+  await act(() => router.navigate('/', { state: INSTANT_SCROLL }))
+  return view
 }
 
 function slipNumbers(): string[] {
@@ -106,8 +126,8 @@ describe('Work', () => {
     expect(screen.getByText(siteEn.work.intro)).toBeVisible()
   })
 
-  it('vindo de um case (rolagem imediata), a lista pousa em repouso até o primeiro gesto', () => {
-    renderWork(makeProjects(2), 'en', siteEn, INSTANT_SCROLL)
+  it('vindo de um case (rolagem imediata), a lista pousa em repouso até o primeiro gesto', async () => {
+    await renderWorkAfterReturn(makeProjects(2))
     const list = screen.getByRole('list')
     expect(list).toHaveAttribute('data-settling')
     fireEvent.pointerMove(window)
@@ -115,14 +135,43 @@ describe('Work', () => {
   })
 
   for (const type of ['keyDown', 'wheel', 'touchStart'] as const) {
-    it(`o repouso também acaba com ${type}`, () => {
-      renderWork(makeProjects(2), 'en', siteEn, INSTANT_SCROLL)
+    it(`o repouso também acaba com ${type}`, async () => {
+      await renderWorkAfterReturn(makeProjects(2))
       const list = screen.getByRole('list')
       expect(list).toHaveAttribute('data-settling')
       fireEvent[type](window)
       expect(list).not.toHaveAttribute('data-settling')
     })
   }
+
+  it('recarga com o estado do histórico: hidrata igual ao HTML, sem repouso', async () => {
+    const projects = makeProjects(2)
+    const html = renderToString(
+      <RouterProvider
+        router={makeRouter(projects, 'en', siteEn, null)}
+        // O servidor nunca vê o estado do histórico.
+      />,
+    )
+    const host = document.createElement('div')
+    host.innerHTML = html
+    document.body.append(host)
+    const errors = vi.spyOn(console, 'error').mockImplementation(() => {})
+    try {
+      await act(async () => {
+        hydrateRoot(
+          host,
+          <RouterProvider
+            router={makeRouter(projects, 'en', siteEn, INSTANT_SCROLL)}
+          />,
+        )
+      })
+      expect(errors).not.toHaveBeenCalled()
+      expect(host.querySelector('ol')).not.toHaveAttribute('data-settling')
+    } finally {
+      errors.mockRestore()
+      host.remove()
+    }
+  })
 
   it('numa visita comum, a lista não fica em repouso', () => {
     renderWork(makeProjects(2))

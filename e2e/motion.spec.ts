@@ -133,14 +133,27 @@ test.describe('prefers-reduced-motion: no-preference', () => {
   })
 })
 
-test('a Fraunces completa foi carregada', async ({ page }) => {
+test('a Fraunces latin própria (wght, opsz e WONK) vem de /assets/ com cache imutável', async ({
+  page,
+  request,
+}) => {
   await page.goto('/')
   await page.evaluate(() => document.fonts.ready.then(() => true))
   const names = await page.evaluate(() =>
-    performance.getEntriesByType('resource').map((entry) => entry.name),
+    performance
+      .getEntriesByType('resource')
+      .map((entry) => new URL(entry.name).pathname),
   )
-  expect(
-    names.some((name) => name.includes('fraunces-latin-full-normal')),
-    names.join('\n'),
-  ).toBe(true)
+  // O latin, não o latin-ext do fontsource.
+  const fraunces = names.filter(
+    (name) =>
+      name.includes('/fraunces-latin') && !name.includes('fraunces-latin-ext'),
+  )
+  expect(fraunces, names.join('\n')).toHaveLength(1)
+  expect(fraunces[0]).toMatch(/^\/assets\/fraunces-latin-[\w-]+\.woff2$/)
+  const response = await request.get(fraunces[0])
+  expect(response.status()).toBe(200)
+  expect(response.headers()['cache-control']).toBe(
+    'public, max-age=31536000, immutable',
+  )
 })

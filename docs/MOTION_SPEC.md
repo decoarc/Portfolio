@@ -26,6 +26,10 @@ Valem para todo efeito, este e os próximos. Vêm de `docs/SPEC.md` §5.
 - **Reduced motion** (`prefers-reduced-motion: reduce`): sem scroll suave, sem
   entrada, sem afastamento, escala, sombra ou curva. Sem movimento: os estados
   de hover e foco aparecem na hora.
+  Cada declaração de movimento fica em `no-preference`. A única exceção é um
+  bloco `reduce` em `titleFlight.css` com `animation: none` nos
+  `::view-transition-*`, para o reduced motion ligado no meio da sessão (a
+  guarda de motion aceita `animation: none`).
 - **Hover só com ponteiro fino:** todo estado de hover fica sob
   `(hover: hover) and (pointer: fine)`, para um toque não deixar nada preso. Os
   estados de foco (`:focus-visible`, e `:has(:focus-visible)` no lugar de
@@ -91,6 +95,8 @@ Valem para todo efeito, este e os próximos. Vêm de `docs/SPEC.md` §5.
 | Duração e easing | 1,1 s, `cubic-bezier(0.2, 0.7, 0, 1)`; a segunda linha atrasa 120 ms |
 | Reduced motion | Sem entrada: o nome aparece no lugar no primeiro frame |
 | Sem JS | O atributo não existe; o nome está no lugar |
+| HTML pré-renderizado | O nome já vem no HTML. Um script inline no `<head>` das homes (`src/app/entranceEarly.ts`, hash no CSP) marca `<html data-entrance-early="pending">` no topo, sem hash e sem reduced motion; o CSS do hero esconde o nome na fenda como em `data-entrance="pending"`. O `Opening` tira a marca ao assumir a entrada. Se em 3 s ela ainda é `pending` (JS lento), vira `expired`: o nome aparece parado, sem entrada |
+| Evidência da marca | `src/app/entranceEarly.test.ts`, `e2e/entrance-early.spec.ts` (sequência de visibilidade por frame) |
 | Página aberta rolada | Deep link (`/#work`), recarregar no meio: sem entrada |
 | Evidência | `docs/gate-3/` |
 
@@ -245,10 +251,10 @@ Valem para todo efeito, este e os próximos. Vêm de `docs/SPEC.md` §5.
 | Volta, posição e foco | A volta vai para `#work-<slug>` (em PT, `/pt#work-<slug>`), com rolagem instantânea, e a ficha pousa no topo da janela (no protótipo era a ~30 %). O foco vai para o link do título da ficha (na prévia, para o `h3`). Ao abrir um case o foco vai para o `h1` (`tabIndex={-1}`, sem contorno) |
 | Reação da lista | Depois da volta, `data-settling` na lista suprime a reação tipográfica (hover/foco) até o primeiro `pointermove`, `keydown`, `wheel` ou `touchstart`; sem isso o cursor parado sobre a ficha a deslocaria e esmaeceria as outras ao pousar |
 | Toque | Igual. A reação da lista continua só com ponteiro fino |
-| Reduced motion | O `Link` não pede a transição (`canFly` falso): troca direta, mesmos URL, foco e posição. Toda declaração fica em `@media (prefers-reduced-motion: no-preference)` (guarda de motion) |
+| Reduced motion | O `Link` não pede a transição (`canFly` falso): troca direta, mesmos URL, foco e posição. Toda declaração de movimento fica em `@media (prefers-reduced-motion: no-preference)` (guarda de motion); o bloco `reduce` só zera animações (próxima linha) |
 | Sem JS | Links comuns; troca direta de página |
 | Navegação | Sem transição: voltar/avançar do navegador, troca de idioma, masthead, 404, primeira carga e a volta de um case em prévia. O router repete a View Transition ao voltar/avançar entre caminhos já percorridos; `forgetTitleFlightOnTraversal()` apaga a marca no `popstate` e o CSS deixa a transição sem marca com `animation: none` (só a foto nova). No POP, a posição volta à que o router gravou antes de sair da página (`src/app/scrollMemory.ts`, via `enableScrollRestoration`), aplicada pelo `ScrollManager`: com a troca de página adiada para dentro dessa transição repetida, a restauração nativa acontecia ainda sobre o case e cortava a posição (prova: `e2e/journey.spec.ts`, "devolve a home na posição de antes"). No POP com mudança de caminho, o foco vai para `#main`. Segundo clique durante a viagem: o router pula a em curso e vale o último clique |
-| Limite conhecido | Ligar o reduced motion no meio da sessão, depois de uma viagem, deixa o fade padrão de 250 ms do navegador ao voltar/avançar. Adiado (`docs/BACKLOG.md`) |
+| Reduced motion no meio da sessão | Ligado depois de uma viagem, voltar/avançar não anima: `titleFlight.css` zera as animações dos `::view-transition-*` também sob `reduce` (Fase 4, `e2e/a11y-audit.spec.ts`) |
 | Evidência | `e2e/title-flight.spec.ts` e, para a pasta `docs/fase-3/segunda-leva/`, as 12 capturas `titulo-viaja-<1440\|390>-<ida\|volta>-<0\|50\|100>.png` (`e2e/title-flight.capture.ts`, com os helpers de `e2e/title-flight.helpers.ts`, que congelam as animações do navegador) |
 
 ## Próximos efeitos

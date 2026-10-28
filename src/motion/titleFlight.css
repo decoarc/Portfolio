@@ -103,3 +103,19 @@
     }
   }
 }
+
+/* Reduced motion ligado no meio da sessão: o `Link` já não pede a viagem
+   (`canFly`), mas voltar/avançar entre páginas que viajaram ainda passa pela
+   View Transition do router. Sem animação nenhuma, como a troca direta acima:
+   o navegador mostraria o fade padrão de 250 ms. */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none;
+  }
+
+  ::view-transition-old(*) {
+    opacity: 0;
+  }
+}

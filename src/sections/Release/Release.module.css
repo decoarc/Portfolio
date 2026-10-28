@@ -24,6 +24,18 @@
   pointer-events: none;
 }
 
+/* Alto contraste: a folha e o hero viram `Canvas` e a curva sumia (o filete do
+   hero fica por baixo da folha). Uma linha de sistema marca a borda; em
+   repouso (altura 0) ela cai sobre o filete do hero. `content-box`: a altura
+   continua 0 em repouso e a linha fica por fora (com `border-box` a caixa
+   teria 2px e o axe não saberia o fundo do índice). */
+@media (forced-colors: active) {
+  .release::before {
+    box-sizing: content-box;
+    border-top: 2px solid CanvasText;
+  }
+}
+
 .list {
   margin: 0;
   padding: 0;
@@ -50,6 +62,12 @@
 
 .link:hover .label {
   color: var(--accent);
+}
+
+/* Com texto a 200% em 320 px, "SELECIONADOS" sozinho não cabe ao lado do
+   número (WCAG 1.4.4, 1.4.10): só então a palavra quebra. */
+.label {
+  overflow-wrap: anywhere;
 }
 
 .index {

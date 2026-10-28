@@ -6,14 +6,22 @@ import {
   findProject,
   workAnchor,
 } from '../content/publication.ts'
+import type { Locale } from '../content/types.ts'
 import { localePath } from '../lib/locale.ts'
 import { canFly, markTitleFlight } from '../motion/titleFlight.ts'
 import styles from './CaseStudyRoute.module.css'
 import { INSTANT_SCROLL } from './navigationState.ts'
 import { useContent, useLocale } from './LocaleContext.ts'
 import { NotFoundRoute } from './NotFoundRoute.tsx'
+import { useRouteHead } from './useRouteHead.ts'
 
 const HEADING_ID = 'case-study-title'
+
+/** Só monta com case acessível: `routeHead` falha para slug sem acesso. */
+function CaseHead({ locale, slug }: { locale: Locale; slug: string }) {
+  useRouteHead({ locale, page: 'case', slug })
+  return null
+}
 
 /**
  * Case study: a ficha aberta. A ficha técnica fica no trilho de margem a
@@ -30,7 +38,7 @@ export function CaseStudyRoute() {
   const copy = site.caseStudy
   return (
     <Sheet tone="sheet" labelledBy={HEADING_ID} className={styles.page}>
-      <title>{`${project.title}${site.meta.titleSuffix}`}</title>
+      <CaseHead locale={locale} slug={project.slug} />
       <Link
         to={localePath(locale, `/#${workAnchor(project.slug)}`)}
         state={INSTANT_SCROLL}

@@ -35,6 +35,10 @@ export function findProject(
   projects: Project[],
   slug: string | undefined,
 ): Project | undefined {
-  if (slug === undefined || !isValidSlug(slug)) return undefined
-  return projects.find((project) => project.slug === slug)
+  if (slug === undefined) return undefined
+  // O Pages serve /work/X do arquivo em minúsculas; o app casa igual, ou a
+  // hidratação trocaria o case pré-renderizado pelo 404.
+  const normal = slug.toLowerCase()
+  if (!isValidSlug(normal)) return undefined
+  return projects.find((project) => project.slug === normal)
 }

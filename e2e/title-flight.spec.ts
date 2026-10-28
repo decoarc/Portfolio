@@ -317,3 +317,32 @@ test.describe('título que viaja · case em preview', () => {
     await expect(page.locator('#work-map-areas h3')).toBeFocused()
   })
 })
+
+test.describe('título que viaja · recarga depois da volta', () => {
+  test.use({ reducedMotion: 'no-preference' })
+
+  test('recarregar depois de voltar de um case hidrata igual ao HTML: sem repouso', async ({
+    page,
+  }) => {
+    const errors: string[] = []
+    page.on('pageerror', (error) => errors.push(error.message))
+    page.on('console', (message) => {
+      if (message.type() === 'error') errors.push(message.text())
+    })
+
+    await open(page)
+    await slipLink(page).click()
+    await landed(page)
+    await backLink(page).click()
+    await landed(page)
+    // Na volta por navegação do cliente, a lista pousa em repouso.
+    await expect(page.locator('#work [data-settling]')).toHaveCount(1)
+
+    await page.reload()
+    await page.waitForLoadState('networkidle')
+    // O estado do histórico sobrevive à recarga; o HTML pré-renderizado não
+    // sabe dele. A primeira renderização precisa casar com o HTML.
+    await expect(page.locator('#work [data-settling]')).toHaveCount(0)
+    expect(errors).toEqual([])
+  })
+})

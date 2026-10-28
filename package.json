@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "node scripts/assert-no-mock.ts && tsc -b && vite build",
-    "build:preview": "node scripts/assert-no-mock.ts --allow-mock && tsc -b && vite build",
+    "build": "node scripts/assert-no-mock.ts && tsc -b && vite build && vite build --ssr src/entry-server.tsx --outDir dist-ssr && node scripts/prerender.ts",
+    "build:preview": "node scripts/assert-no-mock.ts --allow-mock && tsc -b && vite build --mode preview && vite build --ssr src/entry-server.tsx --outDir dist-ssr --mode preview && node scripts/prerender.ts",
     "preview": "vite preview",
     "typecheck": "tsc -b --pretty false",
     "lint": "eslint .",
@@ -14,9 +14,11 @@
     "format:check": "prettier --check .",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:e2e": "playwright test --project=chromium",
+    "test:e2e": "playwright test --project=chromium --project=visual",
+    "test:visual:update": "playwright test --project=visual --update-snapshots",
     "capture": "playwright test --project=capture",
-    "validate": "pnpm typecheck && pnpm lint && pnpm test && pnpm build && pnpm test:e2e"
+    "validate:preview": "pnpm typecheck && pnpm lint && pnpm format:check && pnpm test && pnpm build:preview && pnpm test:e2e",
+    "validate": "pnpm typecheck && pnpm lint && pnpm format:check && pnpm test && pnpm test:e2e && pnpm build"
   },
   "dependencies": {
     "@fontsource-variable/fraunces": "^5.3.0",

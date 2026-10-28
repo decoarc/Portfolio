@@ -10,17 +10,18 @@ import { Release } from '../sections/Release/index.ts'
 import { Work } from '../sections/Work/index.ts'
 import { homeSections } from './homeSections.ts'
 import { useContent, useLocale } from './LocaleContext.ts'
+import { useRouteHead } from './useRouteHead.ts'
 
 /** A home: frontispício, índice e as seções numeradas na ordem do índice. */
 export function HomeRoute() {
   const locale = useLocale()
+  useRouteHead({ locale, page: 'home' })
   const { site, projects } = useContent()
   const sections = homeSections(site)
   /** O número de uma seção é a sua posição em `homeSections` mais um. */
   const numberOf = (id: HomeSectionId) => sections.indexOf(id) + 1
   return (
     <>
-      <title>{site.meta.homeTitle}</title>
       <Opening>
         <Hero
           person={site.person}

@@ -22,6 +22,7 @@
   },
   "include": [
     "vite.config.ts",
+    "vite-pages-preview*.ts",
     "eslint.config.js",
     /* Trava de mock (Node) e seus testes; importam src/lib/mock.ts, sem DOM. */
     "scripts/**/*.ts"
