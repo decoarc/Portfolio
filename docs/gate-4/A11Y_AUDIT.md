@@ -303,6 +303,9 @@ Cada linha: critério, antes → depois, propriedade. O teste está em
   palavra ou a barra não cabem (`overflow-wrap`, `flex-wrap`, `max-width`,
   `pre-wrap`) ou dentro de `@media (forced-colors: active)` e
   `@media (prefers-reduced-motion: reduce)`. As suítes de regressão do hover,
-  da abertura, da entrada e do responsivo seguem verdes.
+  da abertura, da entrada e do responsivo seguem verdes. Essa afirmação vale
+  pela conferência manual de 320 a 1440 px, não pela regressão visual: as
+  baselines de `e2e/visual.visual.ts` foram capturadas depois das correções,
+  então não provam que o modo normal ficou igual a antes delas.
 - Pendente do dono no Gate 4: NVDA real nos pontos críticos e a decisão sobre
   os filetes (acima).

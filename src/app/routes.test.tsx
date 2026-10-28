@@ -149,8 +149,9 @@ describe('head por rota na navegação', () => {
 })
 
 describe('rotas sem <title> próprio', () => {
-  // React 19 eleva `<title>` para o head e `applyHead` apaga os extras, então
-  // a presença não aparece no DOM: a checagem é no fonte das rotas.
+  // React 19 eleva `<title>` para o head, mas `applyHead` só remove o que tem
+  // `[data-head]`: um `<title>` a mais no DOM não é garantido de aparecer ou
+  // sumir. A guarda real é este teste do fonte das rotas.
   const sources = import.meta.glob('./*Route.tsx', {
     query: '?raw',
     import: 'default',

@@ -146,7 +146,7 @@ em `docs/gate-1/` permanecem como registro.
 - **Motivo:** o critério era "mais de 30% menor e sem diferença visual". Fixar
   `wght` em 600 daria −71,3%, mas o instancer recalcula os deltas e muda o
   antialias: as 24 capturas da regressão visual falharam. A variante adotada
-  passa nas 252 comparações com `threshold: 0`.
+  passa nas 24 comparações visuais (de 252 testes e2e) com `threshold: 0`.
 - **Em aberto com o dono:** o `wght` fixo em 600 muda o visual e exige regravar
   as baselines (ver o Gate 4). Medidas: `docs/gate-4/PERFORMANCE.md`.
 - **Preload das fontes:** testado e recusado; piorou o LCP das homes em +156 a
