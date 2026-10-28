@@ -1,12 +1,17 @@
 # Fontes
 
-## `public/fonts/fraunces-latin.woff2`
+## `src/styles/fonts/fraunces-latin.woff2`
 
 A Fraunces latin do site. É o `fraunces-latin-full-normal.woff2` do
 `@fontsource-variable/fraunces` com o eixo `SOFT` fixado em 0 e subsetada para
 o mesmo `unicode-range` do latin do fontsource. Os eixos `wght`, `opsz` e
 `WONK` ficam inteiros. O `src/styles/fonts.css` declara esse arquivo para o
 latin e os arquivos do fontsource para vietnamese e latin-ext.
+
+O arquivo fica em `src/` (e não em `public/`) para o Vite pôr hash no nome: o
+build o publica como `/assets/fraunces-latin-<hash>.woff2`, sob a regra de
+cache `immutable` de `/assets/*` (`scripts/headers.ts`). O
+`e2e/motion.spec.ts` confere o caminho e o `Cache-Control`.
 
 Licença: SIL OFL 1.1, em `public/fonts/LICENSE-Fraunces.txt` (cópia do
 `LICENSE` do pacote). A OFL da Fraunces não declara Reserved Font Name, então a

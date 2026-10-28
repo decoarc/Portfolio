@@ -41,6 +41,11 @@ linha de base atual aparece duas vezes:
 
 Fontes e imagens já são comprimidas e não mudam entre os dois.
 
+Atenção: a linha "antes do prerender (`1320f8d`, gzip)" vem do `vite preview`
+daquele commit; as linhas "Fase 4, com gzip" vêm do servidor de rascunho
+(gzip do Node, `zlib.gzipSync` padrão). O nível e o modo da compressão podem
+diferir entre os dois.
+
 ## Linha de base
 
 Mediana de 3 rodadas (as três rodadas entre parênteses).
@@ -122,7 +127,8 @@ elemento LCP das homes é um parágrafo em Instrument Sans e o do case é a capa
 ## Mudança 2: preload das fontes — sai
 
 Teste: `<link rel="preload" as="font" type="font/woff2" crossorigin>` do latin
-da Fraunces (`/fonts/fraunces-latin.woff2`) e do latin da Instrument Sans
+da Fraunces (na época `/fonts/fraunces-latin.woff2`; hoje
+`/assets/fraunces-latin-<hash>.woff2`) e do latin da Instrument Sans
 (`/assets/instrument-sans-latin-wght-normal-<hash>.woff2`) no head das três
 páginas medidas, logo depois do `viewport`. Critério: o LCP mediano melhora em
 alguma rota sem piorar outra. Mediana de 3; "sem" é a Fraunces instanciada sem

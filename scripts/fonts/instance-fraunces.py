@@ -1,4 +1,4 @@
-"""Gera public/fonts/fraunces-latin.woff2: a Fraunces latin do fontsource
+"""Gera src/styles/fonts/fraunces-latin.woff2: a Fraunces latin do fontsource
 (`full`) com SOFT fixado em 0, mantendo wght, opsz e WONK.
 
 Ferramenta só de desenvolvimento (design §8). Rode num venv fora do repo:
@@ -27,7 +27,7 @@ SOURCE = (
     ROOT
     / "node_modules/@fontsource-variable/fraunces/files/fraunces-latin-full-normal.woff2"
 )
-OUTPUT = ROOT / "public/fonts/fraunces-latin.woff2"
+OUTPUT = ROOT / "src/styles/fonts/fraunces-latin.woff2"
 
 # O mesmo unicode-range do latin do fontsource (unicode.json do pacote).
 LATIN_RANGE = (
