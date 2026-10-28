@@ -13,6 +13,8 @@ const LOCALES = [
 
 const PARTS = [
   { part: 'hero', selector: 'section[aria-labelledby="hero-name"]' },
+  { part: 'trajectory', selector: '#trajectory' },
+  { part: 'tools', selector: '#tools' },
   { part: 'work', selector: '#work' },
   { part: 'contact', selector: '#contact' },
 ] as const

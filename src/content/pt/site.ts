@@ -27,7 +27,7 @@ export const sitePt: SiteContent = {
   hero: {
     statement:
       'Construo interfaces, APIs e automação — sistemas que você consegue rodar, ler e entender.',
-    ctaPrimary: 'Trabalhos selecionados',
+    ctaPrimary: 'Projetos pessoais',
     ctaSecondary: 'Entrar em contato',
     metaLeft: 'BR · Remoto',
     metaRight: 'Portfólio 2026',
@@ -35,7 +35,9 @@ export const sitePt: SiteContent = {
   release: {
     label: 'Sumário',
     entries: {
-      work: 'Trabalhos selecionados',
+      trajectory: 'Trajetória',
+      tools: 'Ferramentas',
+      work: 'Projetos pessoais',
       approach: 'Abordagem',
       about: 'Sobre',
       interests: 'Interesses',
@@ -50,8 +52,72 @@ export const sitePt: SiteContent = {
     labels: { live: 'Demo ao vivo', repo: 'Repositório' },
     externalHint: 'abre em nova aba',
   },
+  // Dados do LinkedIn e da lista de ferramentas do dono (2026-10-28).
+  trajectory: {
+    label: 'Trajetória',
+    intro: 'Da engenharia mecânica ao desenvolvimento de software.',
+    experienceLabel: 'Experiência',
+    educationLabel: 'Formação',
+    experience: [
+      {
+        period: 'Out 2025 — hoje',
+        start: '2025-10',
+        current: true,
+        mode: 'Remoto',
+        role: 'Software Developer',
+        company: 'Witek',
+        contract: 'Tempo integral',
+        summary:
+          'Desenvolvimento full stack para o setor imobiliário e registral, em escala nacional: novas features, melhorias, correções e otimização de serviços críticos usados por cartórios.',
+        tech: ['PHP', 'JavaScript', 'MySQL', 'Git', 'Docker', 'Scrum', 'Azure'],
+      },
+    ],
+    education: [
+      {
+        period: '2023 — 2024',
+        course:
+          'Pós-graduação, Engenharia de Confiabilidade e Gestão de Ativos',
+        institution: 'PUC Minas',
+      },
+      {
+        period: '2015 — 2022',
+        course: 'Bacharelado em Engenharia Mecânica',
+        institution: 'Universidade Salvador',
+      },
+    ],
+  },
+  tools: {
+    label: 'Ferramentas',
+    groups: [
+      {
+        name: 'Frontend',
+        items: [
+          'JavaScript',
+          'TypeScript',
+          'React',
+          'Next.js',
+          'Tailwind CSS',
+          'Material UI',
+          'Vite',
+        ],
+      },
+      {
+        name: 'Backend',
+        items: ['Node.js', 'Express', 'Python', 'PHP', 'REST APIs'],
+      },
+      {
+        name: 'Bancos de dados',
+        items: ['MySQL', 'PostgreSQL', 'SQLite', 'MongoDB'],
+      },
+      {
+        name: 'Cloud, DevOps e entrega',
+        items: ['GCP', 'Azure', 'Docker', 'Git'],
+      },
+      { name: 'Desktop e sistemas', items: ['Rust', 'Tauri', 'C++', 'C#'] },
+    ],
+  },
   work: {
-    label: 'Trabalhos selecionados',
+    label: 'Projetos pessoais',
     intro:
       'Cada entrada é honesta sobre o que é: trabalho verificado ou estudo conceitual.',
     previewNote: 'Estudo de caso em breve',
@@ -83,17 +149,6 @@ export const sitePt: SiteContent = {
     label: 'Sobre',
     lead: 'Sou desenvolvedor full stack no Brasil e construo software onde interfaces encontram dados e automação.',
     body: 'Me importo com sistemas claros: APIs em que dá para confiar, interfaces que continuam compreensíveis e ferramentas que ajudam desenvolvedores a avançar com segurança. Meus interesses passam por stacks web, arquitetura, aplicativos desktop, programação gráfica e ferramentas de desenvolvimento assistidas por IA local — sempre com os pés em entregas reais, não em currículo de fachada.',
-    stackLabel: 'Trabalho com',
-    stack: [
-      'PHP',
-      'JavaScript',
-      'TypeScript',
-      'React',
-      'APIs REST',
-      'MySQL',
-      'Git',
-      'Docker',
-    ],
   },
   interests: {
     label: 'Interesses',
@@ -118,7 +173,7 @@ export const sitePt: SiteContent = {
     ],
   },
   caseStudy: {
-    backToWork: 'Voltar aos trabalhos selecionados',
+    backToWork: 'Voltar aos projetos pessoais',
     roleLabel: 'Papel',
     yearLabel: 'Período',
     stackLabel: 'Stack',

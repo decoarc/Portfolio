@@ -14,6 +14,11 @@ a performance foi medida.
 - Performance: [`PERFORMANCE.md`](PERFORMANCE.md)
 - Arquitetura do prerender: `docs/ARCHITECTURE.md`, "Prerender"
 
+> **Depois da Fase 4 (2026-10-28):** a home ganhou Trajetória e Ferramentas
+> no topo, a lista de trabalhos virou "Projetos pessoais" e o About passou
+> para depois de Interesses. As capturas e as imagens OG foram regravadas;
+> ver `docs/superpowers/specs/2026-10-28-trajetoria-ferramentas-design.md`.
+
 ## Como avaliar
 
 ```bash

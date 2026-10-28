@@ -10,8 +10,7 @@
 }
 
 .lead,
-.body,
-.stack {
+.body {
   margin: 0;
 }
 
@@ -24,25 +23,4 @@
 .body {
   max-width: 60ch;
   color: var(--ink-muted);
-}
-
-/* Rótulo e stack dividem a linha e quebram juntos, entre filetes de 1px. */
-.stack {
-  display: flex;
-  flex-wrap: wrap;
-  column-gap: 2ch;
-  row-gap: 4px;
-  max-width: 60ch;
-  padding: 12px 0;
-  border-top: 1px solid var(--rule);
-  border-bottom: 1px solid var(--rule);
-  font-family: var(--font-mono);
-  font-size: var(--text-meta);
-  color: var(--ink-muted);
-}
-
-.stackLabel {
-  letter-spacing: var(--track-label);
-  text-transform: uppercase;
-  color: var(--accent);
 }

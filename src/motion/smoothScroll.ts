@@ -57,8 +57,12 @@ export function scrollToTarget(
   target: HTMLElement,
   options: { immediate?: boolean } = {},
 ): void {
-  if (lenis) lenis.scrollTo(target, { immediate: options.immediate })
-  else target.scrollIntoView({ block: 'start' })
+  // A rolagem anda em pixels inteiros e o topo do alvo pode cair numa fração
+  // (seções com altura fracionária acima dele). Arredondar para baixo deixa o
+  // topo dentro da janela, em vez de 0,4 px acima dela.
+  const y = Math.floor(window.scrollY + target.getBoundingClientRect().top)
+  if (lenis) lenis.scrollTo(y, { immediate: options.immediate })
+  else window.scrollTo(0, y)
 }
 
 export function scrollToTop(): void {

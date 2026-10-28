@@ -34,57 +34,6 @@ Achados menores de `docs/gate-4/A11Y_AUDIT.md`, sem falha de critério AA:
   parágrafo "01" na ficha). **Quando:** confirmar com o NVDA do Gate 4; se
   incomodar, `aria-hidden` no número.
 
-## Antes da Fase 5 — Trajetória e ferramentas
-
-Ideias do dono (2026-10-28), para entrar depois do Gate 4 e antes da troca de
-conteúdo. São duas seções novas na home, e elas mexem na sequência e no índice
-aprovados. Por isso passam por desenho e protótipo antes de código, como na
-Fase 3.
-
-O About não vai para o hero: fica como está e passou a vir depois de
-Interests (decisão do dono, 2026-10-28; ordem atual: Trabalhos, Abordagem,
-Interesses, Sobre, Contato).
-
-### Seção "Trajetória"
-
-Escolaridade resumida e experiência profissional como dev, em ordem de tempo.
-
-- **Decidir no desenho:**
-  - O formato: linha do tempo, lista por período ou fichas como as dos
-    trabalhos.
-  - O lugar na sequência da home e no índice (`homeSections`, números de
-    seção).
-  - Quanto detalhe cada item leva: período, papel, lugar e uma linha do que
-    fez.
-- **Atenção:** o conteúdo atual evita citar empregador, métrica e prêmio, porque
-  não havia dado verificado (comentário em `src/content/en/site.ts`). Com
-  dados reais do dono, essa regra passa a valer para cada item: só o que pode
-  ser afirmado. Se a seção entrar antes do conteúdo real, os itens levam
-  `mock: true` e a trava de build cobre.
-
-### Seção de ferramentas
-
-As ferramentas agrupadas em front-end, back-end e cloud/delivery.
-
-- **Decidir no desenho:** a seção absorve a lista "Working with" de `about.stack`?
-  O objetivo é não repetir a mesma lista em dois lugares. Decidir também se
-  cada ferramenta liga aos projetos que a usam (`project.stack`) ou fica só
-  como lista.
-- **Restrição:** só ferramentas que o dono usa de fato. Nada de nível em
-  porcentagem ou barra de proficiência. Seria afirmação sem prova, e a
-  `SPEC.md` §4.3 proíbe afirmação falsa.
-
-### Para as duas
-
-- Textos nos dois idiomas, no mesmo shape (teste de paridade).
-- Prerender, head e rotas não mudam: são seções da home.
-- O que precisa ser refeito:
-  - a auditoria de acessibilidade das seções novas;
-  - as baselines da regressão visual (`pnpm test:visual:update`, olhando as
-    diferenças).
-- **Quando:** depois do Gate 4, antes da Fase 5. Primeiro desenho e protótipo
-  aprovados pelo dono, depois plano e implementação.
-
 ## Fase 5 — Conteúdo real e publicação
 
 Regra de deploy: publicar só um `dist/` gerado por `pnpm build` com

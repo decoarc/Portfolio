@@ -1,0 +1,164 @@
+/* Trajetória: linha do tempo da experiência e formação em linhas entre
+   filetes. Primeira seção da folha, logo depois do índice: sem o filete de
+   2px que separa as seções seguintes. */
+
+/* Rótulo "Experiência" / "Formação": o mesmo corte do tipo da ficha. */
+.label {
+  margin: 0 0 16px;
+  font-family: var(--font-mono);
+  font-size: var(--text-micro);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+/* O fio: 1px de --rule à esquerda dos itens. */
+.timeline {
+  margin: 0 0 0 4px;
+  padding: 0 0 0 28px;
+  list-style: none;
+  border-left: 1px solid var(--rule);
+}
+
+/* Coluna `minmax(0, 1fr)` e quebra em qualquer ponto: com texto a 200% em
+   320px, "Desenvolvimento" e a linha de tecnologias não cabem na largura
+   que sobra ao lado do fio (WCAG 1.4.4, 1.4.10). Em tamanho normal nada
+   quebra no meio da palavra. */
+.job {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 4px;
+  padding-bottom: 28px;
+  overflow-wrap: anywhere;
+}
+
+.job:last-child {
+  padding-bottom: 4px;
+}
+
+/* Marcador decorativo; o "hoje"/"present" no período é quem diz que é atual. */
+.job::before {
+  content: '';
+  position: absolute;
+  top: 0.35em;
+  left: -33px;
+  width: 9px;
+  height: 9px;
+  box-sizing: border-box;
+  border: 1px solid var(--ink);
+  border-radius: 50%;
+  background: var(--surface);
+}
+
+.job[data-current]::before {
+  border-color: var(--accent);
+  background: var(--accent);
+}
+
+.when {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-micro);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+.role {
+  margin: 0;
+  font-family: var(--font-display);
+  font-variation-settings: var(--fraunces-title);
+  font-weight: 600;
+  font-size: var(--text-title);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  overflow-wrap: anywhere;
+}
+
+.org {
+  margin: 0;
+  color: var(--ink-muted);
+}
+
+.summary {
+  margin: 4px 0 0;
+  max-width: 60ch;
+}
+
+.tech {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  margin: 6px 0 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--font-mono);
+  font-size: var(--text-micro);
+  letter-spacing: var(--track-meta);
+  color: var(--ink-muted);
+}
+
+.eduLabel {
+  margin-top: 40px;
+}
+
+.education {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Abaixo de 768px o período sobe para cima do curso. */
+.course {
+  display: grid;
+  gap: 2px;
+  padding: 12px 0;
+  border-top: 1px solid var(--rule);
+}
+
+.course:last-child {
+  border-bottom: 1px solid var(--rule);
+}
+
+.period {
+  font-family: var(--font-mono);
+  font-size: var(--text-micro);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+.courseName {
+  font-weight: 500;
+}
+
+.institution {
+  color: var(--ink-muted);
+}
+
+@media (min-width: 768px) {
+  .course {
+    grid-template-columns: 150px minmax(0, 1fr);
+    gap: 16px;
+    align-items: baseline;
+  }
+}
+
+/* Alto contraste: o fio, os marcadores e os filetes em cor de sistema. */
+@media (forced-colors: active) {
+  .timeline,
+  .course {
+    border-color: CanvasText;
+  }
+
+  .job::before {
+    border-color: CanvasText;
+    background: Canvas;
+  }
+
+  .job[data-current]::before {
+    background: Highlight;
+    border-color: Highlight;
+  }
+}

@@ -54,7 +54,12 @@ export function Work({ index, copy, projects, locale, labels }: WorkProps) {
   }, [settling])
 
   return (
-    <Sheet tone="sheet" id="work" labelledBy={HEADING_ID}>
+    <Sheet
+      tone="sheet"
+      id="work"
+      labelledBy={HEADING_ID}
+      className={styles.work}
+    >
       <SectionHead
         index={index}
         headingId={HEADING_ID}

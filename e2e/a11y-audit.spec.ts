@@ -234,6 +234,24 @@ test.describe('alto contraste do Windows (forced-colors: active)', () => {
     ).toBe('ok')
   })
 
+  test('o fio da trajetória e o marcador do cargo atual aparecem', async ({
+    page,
+  }) => {
+    expect(await line(page, '#trajectory ol', 'border-left')).toBe('ok')
+    expect(
+      await line(
+        page,
+        '#trajectory li[data-current]',
+        'border-top',
+        '::before',
+      ),
+    ).toBe('ok')
+  })
+
+  test('as bordas das etiquetas de ferramentas aparecem', async ({ page }) => {
+    expect(await line(page, '#tools li', 'border-top')).toBe('ok')
+  })
+
   test('a borda da folha aparece enquanto ela sobe sobre o hero', async ({
     page,
   }) => {
@@ -295,4 +313,16 @@ test.describe('reduced motion ligado no meio da sessão', () => {
     expect(await seen).toBe(0)
     await expect(page).toHaveURL(/\/$/)
   })
+})
+
+test.describe('1.4.4 / 1.4.10 · trajetória e ferramentas com texto a 200%', () => {
+  for (const route of ['/', '/pt']) {
+    test(`320 px · ${route}`, async ({ page }) => {
+      await open(page, route, 320, TEXT_200)
+      expect(await textPastEdge(page, '#trajectory')).toEqual([])
+      expect(await textPastEdge(page, '#tools')).toEqual([])
+      const { scrollWidth: sw, clientWidth } = await scrollWidth(page)
+      expect(sw).toBeLessThanOrEqual(clientWidth)
+    })
+  }
 })

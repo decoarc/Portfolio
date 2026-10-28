@@ -41,6 +41,20 @@ test.describe('HTML pré-renderizado (sem navegador)', () => {
   })
 })
 
+test.describe('ordem da home no HTML pré-renderizado', () => {
+  for (const route of ['/', '/pt']) {
+    test(`${route}: trajetória, ferramentas e projetos, nessa ordem`, async ({
+      request,
+    }) => {
+      const html = await (await request.get(route)).text()
+      const at = (id: string) => html.indexOf(`id="${id}"`)
+      expect(at('trajectory')).toBeGreaterThan(-1)
+      expect(at('trajectory')).toBeLessThan(at('tools'))
+      expect(at('tools')).toBeLessThan(at('work'))
+    })
+  }
+})
+
 test.describe('sem JS', () => {
   test.use({ javaScriptEnabled: false })
 
