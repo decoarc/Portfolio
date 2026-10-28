@@ -36,6 +36,10 @@ Achados menores de `docs/gate-4/A11Y_AUDIT.md`, sem falha de critério AA:
 
 ## Fase 5 — Conteúdo real e publicação
 
+Regra de deploy: publicar só um `dist/` gerado por `pnpm build` com
+`VITE_SITE_ORIGIN` definida; nunca um `dist/` que sobrou do e2e (o webServer do
+Playwright roda `build:preview` e deixa canonicals e OG em localhost).
+
 O conteúdo mock fica até o fim e só é trocado quando o repositório for
 publicado (decisão do dono, 2026-10-27). Hoje são 12 itens `mock: true`: três
 projetos (Atlas Ledger, Field Notes, Token Killer) e os três princípios da
@@ -82,7 +86,7 @@ orçamento de 2,5 s). O LCP é a capa de 103 kB disputando banda com o JS.
 `validate` encadeia `build`, e `build` roda a trava de mock
 (`scripts/assert-no-mock.ts`) antes de `tsc -b`. Enquanto algum item tiver
 `mock: true`, `validate` sai com 1 — é o critério 8 da spec funcionando. O
-critério 9 (`validate` verde) fecha na Fase 5, com conteúdo real no lugar dos
+critério 9 (`validate` verde; o `build` de produção roda por último, depois do e2e) fecha na Fase 5, com conteúdo real no lugar dos
 mocks.
 
 ### Miniaturas com mídia real
