@@ -46,13 +46,16 @@ Valem para todo efeito, este e os próximos. Vêm de `docs/SPEC.md` §5.
   pseudo-elemento da curva. Um laço de `requestAnimationFrame` só (o do Lenis);
   nenhum estado React por frame.
 - **Exceção ao §5.3 da SPEC:** scroll suave e o hero preso sob a folha foram
-  autorizados pelo dono em 2026-10-26.
+  autorizados pelo dono em 2026-10-26. Em 2026-10-28 o dono tirou o hero preso
+  e o trocou pelo Contato preso sob o Sobre, no fim da home.
 
 ### Onde o motion vive no código
 
 - `src/motion/opening.ts` — valores aprovados e as contas de um frame.
-- `src/motion/Opening.tsx` — envolve Hero e Release na home; escreve as
-  `--opening-*` e conduz a entrada por `data-entrance`.
+- `src/motion/Opening.tsx` — envolve Hero e Release na home; escreve
+  `--opening-drift` e conduz a entrada por `data-entrance`.
+- `src/motion/reveal.ts` e `src/motion/Reveal.tsx` — o fim da home: envolve
+  Sobre e Contato, marca `data-reveal` e escreve as `--reveal-*`.
 - `src/motion/smoothScroll.ts` — a instância única do Lenis.
 - `src/motion/magnet.ts` — o `useMagnet` e a conta do puxão do magnético.
 - `src/components/ActionLink/` — o link de ação (traço que corre, magnético e
@@ -105,29 +108,32 @@ Valem para todo efeito, este e os próximos. Vêm de `docs/SPEC.md` §5.
 | | |
 |---|---|
 | Objetivo | O primeiro gesto de scroll separa o nome, abrindo a página |
-| Elemento | "André" vai para a esquerda, "Arcodaci" para a direita; o bloco de baixo do hero (função, statement, CTAs, localização) sobe e apaga |
+| Elemento | "André" vai para a esquerda, "Arcodaci" para a direita. O hero rola no fluxo; o resto dele fica parado (desde 2026-10-28, opção B de `docs/fase-3/prototipo/hero-e-contato.html`) |
 | Gatilho | Scroll, nos dois sentidos; `p = clamp(scrollY / innerHeight, 0, 1)` |
 | Estado inicial | `p = 0`: tudo no lugar |
-| Estado final | `p = 1`: palavras a `easeOutCubic(p) × 25 vw` (≥ 768 px) ou `× 40 vw` (< 768 px); bloco de baixo `p × 6 vh` acima, opacidade `1 − 1,4p` (mínimo 0) |
+| Estado final | `p = 1`: palavras a `easeOutCubic(p) × 25 vw` (≥ 768 px) ou `× 40 vw` (< 768 px) |
 | Duração e easing | Acompanha o scroll; o Lenis suaviza (`lerp 0.09`) |
 | Reduced motion | Nada se move |
 | Sem JS | As propriedades não são escritas; padrões neutros |
 | Evidência | `docs/gate-3/` |
 
-### Folha com borda curva
+### Contato que sai de baixo do Sobre
 
 | | |
 |---|---|
-| Objetivo | A virada de página: o índice sobe por cima do hero (D-Release) |
-| Elemento | O Release (folha `--surface`) sobe no fluxo; o hero fica preso no topo (`[data-opening]`; com `top` negativo se não couber na janela, para rolar até o fim antes de parar), encolhe e escurece; em volta dele aparece `--ink` |
-| Gatilho | Scroll, nos dois sentidos |
-| Estado inicial | Borda reta, hero em `scale(1)`, sem sombra |
-| Estado final | Curva `sin(π·p) × 14 vh` (≥ 768 px) ou `× 7 vh` (< 768 px): zero no começo e no fim, máxima no meio; hero até `scale(0.94)`; sombra de `--ink` transparente → 55 %, até opacidade 0,9 |
+| Objetivo | A última virada: o Sobre sobe como uma folha e revela o Contato por baixo. Substitui, em 2026-10-28, a folha que subia sobre o hero preso (aprovado no protótipo `docs/fase-3/prototipo/hero-e-contato.html`) |
+| Elemento | O Contato (folha `--bg`) fica preso no pé da janela (`[data-reveal] .contact`, `position: sticky; bottom: 0`); o Sobre passa por cima com a borda de baixo curvada para baixo (`.about::after`, com o filete de 2px) |
+| Gatilho | Scroll, nos dois sentidos. `p = clamp((innerHeight − base do Sobre) / altura do Contato, 0, 1)`: 0 com a base do Sobre na base da janela, 1 com o Contato todo à vista |
+| Estado inicial | Borda reta; Contato coberto, com sombra de `--ink` a 55 %, opacidade 0,9 |
+| Estado final | Curva `sin(π·p) × 14 vh` (≥ 768 px) ou `× 7 vh` (< 768 px): zero no começo e no fim, máxima no meio; sombra `(1 − p) × 0,9` |
 | Duração e easing | Acompanha o scroll |
-| Reduced motion | Sem curva, escala nem sombra, e o hero no fluxo normal, como no Gate 2 (preso, um Shift+Tab deixaria o foco sob a folha) |
+| Preso só perto do fim | `data-reveal` liga com a base do Sobre a até duas alturas de janela do topo, ainda com o Contato escondido atrás do Sobre. Longe dali o Contato fica no fluxo, e nada da página está coberto (o axe mede o contraste dele no topo da home) |
+| Contato mais alto que a janela | Não fica preso (parte dele ficaria escondida): sem curva nem sombra |
+| Âncora `#contact` | O `scrollToTarget` mede um alvo preso como se estivesse no fluxo, para a âncora parar com o Contato todo à vista |
+| Teclado | Foco por teclado no Contato ainda coberto rola até ele inteiro |
+| Reduced motion | Nada fica preso; borda reta, sem sombra |
 | Sem JS | Igual ao reduced motion |
-| Limitação aceita | A folha cobre o nome antes do afastamento terminar (ver `docs/BACKLOG.md`) |
-| Evidência | `docs/gate-3/` |
+| Evidência | `src/motion/reveal.test.ts`, `src/motion/Reveal.test.tsx`, `e2e/reveal.spec.ts`; em alto contraste, `e2e/a11y-audit.spec.ts` |
 
 ### Scroll suave
 
@@ -163,7 +169,7 @@ Valem para todo efeito, este e os próximos. Vêm de `docs/SPEC.md` §5.
 | | |
 |---|---|
 | Objetivo | O link é levemente atraído pelo cursor |
-| Elemento | O `<a>` do `ActionLink` (`data-motion="action-link"`), nunca o bloco `.actions` do hero, que tem o `transform` da abertura |
+| Elemento | O `<a>` do `ActionLink` (`data-motion="action-link"`), nunca o bloco `.actions` do hero |
 | Gatilho | `pointermove` com `pointerType === 'mouse'` sobre o link; `pointerleave` devolve |
 | Estado inicial | `--magnet-x/--magnet-y` em 0 |
 | Estado final | `x = 0,25 × dx`, `y = 0,35 × dy` (px), com dx e dy a distância do cursor ao centro do link. O `getBoundingClientRect` inclui a translação do próprio link, então o puxão efetivo fica um pouco abaixo de 0,25/0,35 (igual ao protótipo aprovado) |
