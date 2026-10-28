@@ -77,3 +77,17 @@ test('Enter no CTA primário leva #work ao viewport', async ({ page }) => {
   await page.keyboard.press('Enter')
   await expect(page.locator('#work')).toBeInViewport()
 })
+
+// O alvo da âncora recebe foco programático (tabindex -1), como o `main` do
+// skip link e o h1 do case: sem contorno, ou a seção inteira ganha um filete
+// vermelho em cima e embaixo enquanto o foco fica nela.
+test('Enter no CTA foca #work sem contorno', async ({ page }) => {
+  await page.goto('/')
+  await page
+    .getByRole('region', { name: site.person.name })
+    .getByRole('link', { name: site.hero.ctaPrimary })
+    .focus()
+  await page.keyboard.press('Enter')
+  await expect.poll(async () => (await focused(page))?.id).toBe('work')
+  expect((await focused(page))?.outlineStyle).toBe('none')
+})
