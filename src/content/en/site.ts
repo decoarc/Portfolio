@@ -146,7 +146,7 @@ export const siteEn: SiteContent = {
   about: {
     label: 'About',
     lead: 'I’m a full stack developer based in Brazil, building software where interfaces meet data and automation.',
-    body: 'I care about clear systems: APIs you can trust, UIs that stay understandable, and tooling that helps developers move with confidence. Interests span web stacks, architecture, desktop apps, graphics programming, and local AI–assisted developer tools — always grounded in real delivery, not résumé theater.',
+    body: 'I care about clear systems: APIs you can trust, UIs that stay understandable, and tooling that helps developers move with confidence. Interests span web stacks, architecture, desktop apps, graphics programming, and local AI–assisted developer tools, always grounded in real delivery and not résumé theater.',
   },
   interests: {
     label: 'Interests',
