@@ -106,6 +106,36 @@ falha sem ela. O domínio ainda não existe.
 - **Fazer:** escolher o domínio e defini-lo no painel do Cloudflare Pages.
 - **Quando:** Fase 5, antes do primeiro deploy.
 
+### Publicação no GitHub Pages — rever ao migrar para domínio próprio
+
+Subida provisória em `https://decoarc.github.io/Portfolio/` (workflow
+`.github/workflows/pages.yml`, Source = GitHub Actions). Ela exige caminhos
+com prefixo `/Portfolio/`, que não valem num domínio próprio na raiz.
+
+- **Fazer, ao ter o domínio:**
+  - Trocar `VITE_BASE_PATH` para `/` e `VITE_SITE_ORIGIN` para o domínio, no
+    `pages.yml` (ou no painel do host, se a hospedagem mudar).
+  - Remover o `base` provisório: confirmar que `/favicon.svg`, `/og/*` e
+    `/images/*` voltam a resolver na raiz.
+  - Decidir o host final: Cloudflare Pages (previsto no `docs/ARCHITECTURE.md`)
+    ou VPS. Se for Cloudflare, o workflow do Pages sai.
+- **Headers de segurança:** `dist/_headers` (CSP com hash do script de
+  entrada, `X-Frame-Options`, etc.) é gerado pelo prerender, mas o GitHub Pages
+  ignora esse arquivo. Hoje o site vai sem CSP e sem esses headers. Ao migrar,
+  conferir se o host aplica o `_headers`; se não, configurar os headers no
+  servidor (VPS: Nginx/Caddy).
+- **`public/_redirects`:** regra `/pt/ → /pt` só para Cloudflare. No GitHub
+  Pages não tem efeito: `/pt/` (com barra) dá 404, porque a rota é `pt.html` e
+  não existe `pt/index.html`. Só `/pt` funciona.
+- **Página 404:** o workflow não gera `404.html` próprio; o prerender grava o
+  `404.html` (raiz e `pt/`), e é o que o GitHub Pages serve para caminhos
+  inexistentes. Conferir o comportamento no host final.
+- **Testes:** a suíte e2e (Playwright) ainda não rodou contra o build do
+  GitHub Pages. Só foi feito um smoke test manual com o `dist` servido em
+  `/Portfolio/`. Rodar `pnpm test:e2e` ao migrar (com `base` `/`) para
+  confirmar que nada regrediu.
+- **Quando:** antes de apontar o domínio próprio para o site.
+
 ### Baselines visuais de outra máquina
 
 As baselines de `e2e/visual.visual.ts-snapshots/` são só `win32`, geradas nesta

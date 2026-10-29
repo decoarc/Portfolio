@@ -1,6 +1,7 @@
 import { useLayoutEffect, useRef } from 'react'
 import { Link, useLocation } from 'react-router'
 import { useContent, useLocale } from '../../app/LocaleContext.ts'
+import { BASE_PATH } from '../../lib/basePath.ts'
 import { htmlLang, localePath, switchLocalePath } from '../../lib/locale.ts'
 import styles from './Masthead.module.css'
 
@@ -9,7 +10,8 @@ export function Masthead() {
   const { site } = useContent()
   const { pathname, hash } = useLocation()
   const target = locale === 'en' ? 'pt' : 'en'
-  const href = switchLocalePath(pathname, hash, target)
+  // Link de página inteira: o `pathname` do router não tem o prefixo do site.
+  const href = BASE_PATH + switchLocalePath(pathname, hash, target)
   const switchRef = useRef<HTMLAnchorElement>(null)
 
   // O HTML pré-renderizado não sabe o hash nem o caminho pedido (o 404 é um

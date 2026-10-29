@@ -1,4 +1,5 @@
 import type { Project } from '../../content/types.ts'
+import { assetUrl } from '../../lib/basePath.ts'
 import styles from './ProjectThumb.module.css'
 
 interface ProjectThumbProps {
@@ -27,7 +28,7 @@ export function ProjectThumb({
         <img
           className={styles.media}
           data-motion="thumb"
-          src={cover.thumbSrc ?? cover.src}
+          src={assetUrl(cover.thumbSrc ?? cover.src)}
           alt=""
           // A versão de 800px é sempre 800×600; sem ela, as medidas da capa.
           width={cover.thumbSrc ? 800 : cover.width}

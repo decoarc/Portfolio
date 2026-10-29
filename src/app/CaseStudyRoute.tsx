@@ -7,6 +7,7 @@ import {
   workAnchor,
 } from '../content/publication.ts'
 import type { Locale } from '../content/types.ts'
+import { assetUrl } from '../lib/basePath.ts'
 import { localePath } from '../lib/locale.ts'
 import { canFly, markTitleFlight } from '../motion/titleFlight.ts'
 import styles from './CaseStudyRoute.module.css'
@@ -106,7 +107,7 @@ export function CaseStudyRoute() {
           {project.cover && (
             <img
               className={styles.cover}
-              src={project.cover.src}
+              src={assetUrl(project.cover.src)}
               alt={project.cover.alt}
               width={project.cover.width}
               height={project.cover.height}

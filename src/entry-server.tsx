@@ -18,6 +18,7 @@ import {
 } from 'react-router'
 import { createRoutes } from './app/routes.tsx'
 import { siteOrigin } from './app/siteOrigin.ts'
+import { BASE_PATH } from './lib/basePath.ts'
 
 export { ENTRANCE_EARLY_SCRIPT } from './app/entranceEarly.ts'
 export { renderHeadTags, routeHead } from './app/head.ts'
@@ -28,8 +29,12 @@ export { htmlLang } from './lib/locale.ts'
 
 /** HTML do `#root` para `url` (caminho do app, como `/pt/work/x`). */
 export async function render(url: string): Promise<string> {
-  const handler = createStaticHandler(createRoutes())
-  const context = await handler.query(new Request(siteOrigin() + url))
+  const handler = createStaticHandler(createRoutes(), {
+    basename: BASE_PATH || '/',
+  })
+  // `url` não tem o prefixo do site: ele entra aqui, como no navegador.
+  const origin = new URL(siteOrigin()).origin
+  const context = await handler.query(new Request(origin + BASE_PATH + url))
   if (context instanceof Response) {
     throw new Error(`render(${url}): o router respondeu ${context.status}`)
   }

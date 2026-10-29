@@ -8,6 +8,8 @@ const rootDir = path.dirname(fileURLToPath(import.meta.url))
 
 export default defineConfig({
   // Preview mirrors how Cloudflare Pages serves dist; Vite dev already has history fallback.
+  // `VITE_BASE_PATH` só é definido no deploy do GitHub Pages (`/Portfolio/`).
+  base: process.env.VITE_BASE_PATH ?? '/',
   plugins: [react(), pagesPreviewPlugin()],
   resolve: {
     alias: {
