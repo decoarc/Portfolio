@@ -112,6 +112,14 @@ Subida provisória em `https://decoarc.github.io/Portfolio/` (workflow
 `.github/workflows/pages.yml`, Source = GitHub Actions). Ela exige caminhos
 com prefixo `/Portfolio/`, que não valem num domínio próprio na raiz.
 
+- **Branch de publicação:** o site sai da branch remota `pages`, não da `main`.
+  O workflow dispara em `push` para `pages`. A `origin/main` não foi alterada.
+- **Histórico divergente:** a `main` local e a `origin/main` não têm ancestral
+  comum (raízes diferentes). A `origin/main` tem o trabalho de motion/hover da
+  Fase 3 e 8 itens mock, que travariam a trava `assert-no-mock`. A `main` local
+  tem o conteúdo real da Fase 5. Falta decidir qual linha vira a definitiva
+  antes de qualquer merge ou force push.
+
 - **Fazer, ao ter o domínio:**
   - Trocar `VITE_BASE_PATH` para `/` e `VITE_SITE_ORIGIN` para o domínio, no
     `pages.yml` (ou no painel do host, se a hospedagem mudar).
