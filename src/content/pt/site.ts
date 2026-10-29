@@ -119,7 +119,7 @@ export const sitePt: SiteContent = {
   work: {
     label: 'Projetos pessoais',
     intro:
-      'Cada entrada é honesta sobre o que é: trabalho verificado ou estudo conceitual.',
+      'Trabalho verificado ou estudo conceitual.',
     previewNote: 'Estudo de caso em breve',
     noCapture: 'sem captura',
   },
@@ -144,7 +144,7 @@ export const sitePt: SiteContent = {
   about: {
     label: 'Sobre',
     lead: 'Sou desenvolvedor full stack no Brasil e construo software onde interfaces encontram dados e automação.',
-    body: 'Me importo com sistemas claros: APIs em que dá para confiar, interfaces que continuam compreensíveis e ferramentas que ajudam desenvolvedores a avançar com segurança. Meus interesses passam por stacks web, arquitetura, aplicativos desktop, programação gráfica e ferramentas de desenvolvimento assistidas por IA local — sempre com os pés em entregas reais, não em currículo de fachada.',
+    body: 'Me importo com sistemas claros: APIs em que se pode confiar, interfaces que continuam fáceis de entender e ferramentas que ajudam desenvolvedores a avançar com confiança. Tenho interesse em stacks web, arquitetura, aplicativos desktop, programação gráfica e ferramentas de desenvolvimento assistidas por IA local, sempre ancorado em entregas reais, e não em currículo de fachada.',
   },
   interests: {
     label: 'Interesses',

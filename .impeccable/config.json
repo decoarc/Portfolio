@@ -20,6 +20,132 @@
         "value": "geist mono",
         "createdAt": "2026-10-26T23:29:09.985Z",
         "reason": "Par tipográfico D2 aprovado pelo dono no Gate 1: docs/DESIGN_DECISIONS.md"
+      },
+      {
+        "rule": "gray-on-color",
+        "value": "*",
+        "files": [
+          ".superpowers/brainstorm/920-1793111275/content/hover-ideias.html"
+        ],
+        "createdAt": "2026-10-27T14:30:15.893Z",
+        "reason": "Claude: throwaway brainstorm prototype (gitignored), panel chrome only; site tokens unchanged"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          ".superpowers/brainstorm/920-1793111275/content/hover-ideias.html"
+        ],
+        "createdAt": "2026-10-27T14:30:16.124Z",
+        "reason": "Claude: throwaway brainstorm prototype (gitignored), panel chrome only; site tokens unchanged"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          ".superpowers/brainstorm/920-1793111275/content/hover-ideias.html"
+        ],
+        "createdAt": "2026-10-27T14:30:37.075Z",
+        "reason": "Claude: throwaway brainstorm prototype (gitignored); display leading mirrors the shipped site, tiny labels are placeholder covers"
+      },
+      {
+        "rule": "tight-leading",
+        "value": "*",
+        "files": [
+          ".superpowers/brainstorm/920-1793111275/content/hover-ideias.html"
+        ],
+        "createdAt": "2026-10-27T14:30:37.277Z",
+        "reason": "Claude: throwaway brainstorm prototype (gitignored); display leading mirrors the shipped site, tiny labels are placeholder covers"
+      },
+      {
+        "rule": "undersized-ui-text",
+        "value": "*",
+        "files": [
+          ".superpowers/brainstorm/920-1793111275/content/hover-ideias.html"
+        ],
+        "createdAt": "2026-10-27T14:30:37.502Z",
+        "reason": "Claude: throwaway brainstorm prototype (gitignored); display leading mirrors the shipped site, tiny labels are placeholder covers"
+      },
+      {
+        "rule": "gray-on-color",
+        "value": "*",
+        "files": [
+          "docs/fase-3/prototipo/cortina.html"
+        ],
+        "createdAt": "2026-10-27T18:03:10.663Z",
+        "reason": "Claude: protótipo descartável; o texto cinza é o placeholder 'sem captura' copiado de hover.html, já aprovado pelo dono até a Fase 5"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "docs/fase-3/prototipo/cortina.html"
+        ],
+        "createdAt": "2026-10-27T18:07:34.302Z",
+        "reason": "Claude: protótipo descartável de transição; estilos do mock copiados de hover.html (placeholder 'sem captura' e lista aprovados), não vão para o produto"
+      },
+      {
+        "rule": "undersized-ui-text",
+        "value": "*",
+        "files": [
+          "docs/fase-3/prototipo/cortina.html"
+        ],
+        "createdAt": "2026-10-27T18:07:34.566Z",
+        "reason": "Claude: protótipo descartável de transição; estilos do mock copiados de hover.html (placeholder 'sem captura' e lista aprovados), não vão para o produto"
+      },
+      {
+        "rule": "skipped-heading",
+        "value": "*",
+        "files": [
+          "docs/fase-3/prototipo/cortina.html"
+        ],
+        "createdAt": "2026-10-27T18:07:34.824Z",
+        "reason": "Claude: protótipo descartável de transição; estilos do mock copiados de hover.html (placeholder 'sem captura' e lista aprovados), não vão para o produto"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          ".superpowers/brainstorm/120-1793194181/content/trajetoria-mescla.html"
+        ],
+        "createdAt": "2026-10-28T13:33:00.996Z",
+        "reason": "Claude: mockup descartável do brainstorm; o item esmaecido é a experiência fictícia de exemplo, de propósito"
+      },
+      {
+        "rule": "gray-on-color",
+        "value": "*",
+        "files": [
+          "docs/fase-3/prototipo/hero-e-contato.html"
+        ],
+        "createdAt": "2026-10-28T14:50:52.456Z",
+        "reason": "Claude: painel de controle de protótipo descartável, mesmo estilo dos outros protótipos da fase 3"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "docs/fase-3/prototipo/hero-e-contato.html"
+        ],
+        "createdAt": "2026-10-28T15:02:56.663Z",
+        "reason": "Claude: protótipo descartável da fase 3; painel de controle e nome display (line-height 0.92, igual ao site) são intencionais"
+      },
+      {
+        "rule": "tight-leading",
+        "value": "*",
+        "files": [
+          "docs/fase-3/prototipo/hero-e-contato.html"
+        ],
+        "createdAt": "2026-10-28T15:02:56.913Z",
+        "reason": "Claude: protótipo descartável da fase 3; painel de controle e nome display (line-height 0.92, igual ao site) são intencionais"
+      },
+      {
+        "rule": "skipped-heading",
+        "value": "*",
+        "files": [
+          "docs/fase-3/prototipo/hero-e-contato.html"
+        ],
+        "createdAt": "2026-10-28T15:02:57.156Z",
+        "reason": "Claude: protótipo descartável da fase 3; painel de controle e nome display (line-height 0.92, igual ao site) são intencionais"
       }
     ]
   }

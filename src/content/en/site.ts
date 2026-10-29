@@ -121,8 +121,7 @@ export const siteEn: SiteContent = {
   },
   work: {
     label: 'Personal projects',
-    intro:
-      'Each entry is honest about what it is: verified work, or a concept study.',
+    intro: 'Verified work or concept study.',
     previewNote: 'Case study soon',
     noCapture: 'no capture',
   },
