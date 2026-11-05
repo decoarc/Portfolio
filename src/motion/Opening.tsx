@@ -39,6 +39,35 @@ function measureFadeDistance(root: HTMLElement, driftVw: number): number {
   return (left + rect.width * OPENING.fadePastEdge) / vw
 }
 
+/** Faixa em que o nome fica centralizado (Hero.module.css). */
+const CENTERED_NAME_MEDIA = '(max-width: 767.98px)'
+
+/**
+ * Escala do afastamento de "Arcodaci" (`data-drift="1"`) em relação ao de
+ * "André". No celular o nome é centralizado e "Arcodaci" é mais largo, então
+ * está mais perto da borda direita do que "André" da esquerda: com a mesma
+ * velocidade chegaria antes. A escala é a razão entre as duas folgas, medidas
+ * sem o afastamento atual, para as duas palavras tocarem as bordas juntas.
+ * Fora do celular o nome é alinhado à esquerda e as duas andam igual (1).
+ */
+function measureRightScale(
+  root: HTMLElement,
+  driftVw: number,
+  currentScale: number,
+): number {
+  if (!window.matchMedia?.(CENTERED_NAME_MEDIA).matches) return 1
+  const vw = window.innerWidth / 100
+  const first = root.querySelector<HTMLElement>('[data-drift="-1"]')
+  const second = root.querySelector<HTMLElement>('[data-drift="1"]')
+  if (!first || !second || vw <= 0) return 1
+  const gapLeft = first.getBoundingClientRect().left + driftVw * vw
+  const right =
+    second.getBoundingClientRect().right - driftVw * currentScale * vw
+  const gapRight = document.documentElement.clientWidth - right
+  if (gapLeft <= 0 || gapRight <= 0) return 1
+  return gapRight / gapLeft
+}
+
 /**
  * A abertura da home: envolve o hero e o índice, que rolam no fluxo. Escreve
  * `--opening-drift` (o afastamento do nome, que o Hero lê no CSS) e
@@ -63,6 +92,7 @@ export function Opening({ children }: { children: ReactNode }) {
     let written = -1
     let driftVw = 0
     let fadeDistance = Infinity
+    let rightScale = 1
     const write = () => {
       const progress = openingProgress(window.scrollY, window.innerHeight)
       if (progress === written) return
@@ -78,6 +108,8 @@ export function Opening({ children }: { children: ReactNode }) {
       // A largura muda os valores (celular × desktop) e a posição do nome
       // mesmo no mesmo progresso.
       fadeDistance = measureFadeDistance(root, driftVw)
+      rightScale = measureRightScale(root, driftVw, rightScale)
+      root.style.setProperty('--opening-drift-right-scale', round(rightScale))
       written = -1
       write()
     }

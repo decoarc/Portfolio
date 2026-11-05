@@ -49,6 +49,15 @@
   overflow-wrap: anywhere;
 }
 
+/* No celular o nome fica centralizado na coluna; a partir de 768px ele volta
+   a alinhar à esquerda no grid. */
+@media (max-width: 767.98px) {
+  .name {
+    margin-inline: auto;
+    text-align: center;
+  }
+}
+
 /* A fenda: cada linha corta só na vertical; na horizontal a palavra pode sair
    da coluna e da tela quando se afasta. O padding guarda os descendentes. */
 .line {
@@ -90,7 +99,12 @@
 }
 
 .drift[data-drift='1'] {
-  transform: translateX(calc(var(--opening-drift, 0) * 1vw));
+  /* No celular (nome centralizado) "Arcodaci" anda mais devagar, na razão das
+     folgas até as bordas, para chegar junto com "André"
+     (`--opening-drift-right-scale`, escrita pelo `Opening`). */
+  transform: translateX(
+    calc(var(--opening-drift, 0) * var(--opening-drift-right-scale, 1) * 1vw)
+  );
   opacity: var(--opening-fade, 1);
 }
 
