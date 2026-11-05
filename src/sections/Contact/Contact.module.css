@@ -128,3 +128,28 @@
     max-width: 100%;
   }
 }
+
+/* Experimento: o "AA" em pontos no vazio à direita (`DotField`). Fora do
+   fluxo, para não mexer na altura da folha (o `Reveal` mede o Contato), e só
+   onde sobra espaço ao lado do lead. Abaixo do `::after`: a sombra da
+   revelação cobre os pontos também. */
+.field {
+  display: none;
+}
+
+/* Largura e altura explícitas: o canvas é elemento substituído, e com `auto`
+   o tamanho viria dos atributos `width/height` que o `DotField` escreve (px
+   CSS × devicePixelRatio). Com o ResizeObserver isso vira um laço: cresce com
+   dpr > 1 e encolhe até sumir com dpr < 1 (zoom reduzido). */
+@media (min-width: 1100px) {
+  .field {
+    --field-inset: clamp(24px, 5vh, 64px);
+    display: block;
+    position: absolute;
+    top: var(--field-inset);
+    right: var(--gutter);
+    width: min(680px, calc(44% - var(--gutter)));
+    height: calc(100% - 2 * var(--field-inset));
+    pointer-events: none;
+  }
+}

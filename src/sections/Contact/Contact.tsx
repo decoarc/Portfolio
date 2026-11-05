@@ -3,6 +3,7 @@ import type { SiteContent } from '../../content/types.ts'
 import { ActionLink } from '../../components/ActionLink/ActionLink.tsx'
 import { SectionHead } from '../../components/SectionHead/SectionHead.tsx'
 import { Sheet } from '../../components/Sheet/Sheet.tsx'
+import { DotField } from '../../motion/DotField.tsx'
 import styles from './Contact.module.css'
 
 interface ContactProps {
@@ -70,6 +71,7 @@ export function Contact({ index, copy, externalHint }: ContactProps) {
           </li>
         ))}
       </ul>
+      <DotField text="AA" className={styles.field} />
     </Sheet>
   )
 }

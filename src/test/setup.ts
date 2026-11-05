@@ -54,6 +54,14 @@ if (typeof window !== 'undefined') {
     }),
   })
 
+  // O jsdom não desenha: sem contexto 2D, o `DotField` não faz nada (e o
+  // jsdom não loga "not implemented" a cada render do Contato).
+  Object.defineProperty(HTMLCanvasElement.prototype, 'getContext', {
+    writable: true,
+    configurable: true,
+    value: () => null,
+  })
+
   Object.defineProperty(window, 'scrollTo', {
     writable: true,
     configurable: true,
