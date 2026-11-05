@@ -15,6 +15,9 @@
      `Opening`, src/motion/): o hero corta na horizontal. */
   position: relative;
   overflow-x: clip;
+  /* O cubo de fundo (abaixo de 1200px) fica atrás do texto com z-index -1,
+     mas à frente do fundo da folha. */
+  isolation: isolate;
 }
 
 .meta {
@@ -227,29 +230,52 @@
   }
 }
 
-/* Experimento: um cubo de pontos girando no vazio à direita do nome
-   (`CubeField`). Só a partir de 1200px, onde as colunas 9–12 da linha do nome
-   estão livres. A célula não tem tamanho próprio (o canvas está fora do fluxo),
-   então não mexe na altura da linha `1fr`. Largura e altura explícitas no
-   canvas, pelo mesmo motivo do `DotField` no Contato: com `auto`, o
-   ResizeObserver entraria em laço com o devicePixelRatio. */
+/* Experimento: um cubo de pontos girando (`CubeField`). Abaixo de 1200px não
+   há vazio ao lado do nome: o cubo vira fundo do hero inteiro, fraco e atrás
+   do texto, sem botão (a forma troca sozinha, `autoCycleMedia` no Hero.tsx).
+   Largura e altura explícitas no canvas, pelo mesmo motivo do `DotField` no
+   Contato: com `auto`, o ResizeObserver entraria em laço com o
+   devicePixelRatio. */
 .cube {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  opacity: 0.18;
+  pointer-events: none;
+}
+
+.cubeButton {
   display: none;
 }
 
+.cubeCanvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  /* Some junto com o nome: o mesmo fade que o `Opening` escreve para ele. */
+  opacity: var(--opening-fade, 1);
+}
+
+/* A partir de 1200px as colunas 9–12 da linha do nome estão livres: o cubo
+   mora ali, inteiro, e o clique troca a forma. A célula não tem tamanho
+   próprio (o canvas está fora do fluxo), então não mexe na altura da linha
+   `1fr`. */
 @media (min-width: 1200px) {
   .cube {
-    display: block;
     grid-row: 2;
     grid-column: 9 / -1;
     position: relative;
+    inset: auto;
+    z-index: auto;
+    opacity: 1;
     min-height: 0;
-    pointer-events: none;
   }
 
   /* O botão cobre só a célula (não a sobra do canvas): clicar troca a forma
      dos pontos. Invisível; o foco usa o contorno global. */
   .cubeButton {
+    display: block;
     position: absolute;
     inset: 0;
     padding: 0;
@@ -266,13 +292,11 @@
   .cubeCanvas {
     --cube-bleed-x: 30%;
     --cube-bleed-y: 18%;
-    position: absolute;
+    inset: auto;
     top: calc(-1 * var(--cube-bleed-y));
     left: calc(-1 * var(--cube-bleed-x));
     width: calc(100% + var(--cube-bleed-x) + var(--gutter));
     height: calc(100% + 2 * var(--cube-bleed-y));
-    /* Some junto com o nome: o mesmo fade que o `Opening` escreve para ele. */
-    opacity: var(--opening-fade, 1);
     mask-image: radial-gradient(closest-side, #000 62%, transparent 100%);
   }
 }

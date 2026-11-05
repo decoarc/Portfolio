@@ -25,6 +25,11 @@ interface CubeFieldProps {
   buttonClassName?: string
   /** Rótulo do botão para leitores de tela. */
   label: string
+  /**
+   * Media query em que a forma troca sozinha, de tempos em tempos (onde o
+   * cubo é só fundo e não há botão para clicar). Sem ela, só o clique troca.
+   */
+  autoCycleMedia?: string
 }
 
 /** Raio de cada ponto, em px CSS. */
@@ -46,6 +51,8 @@ const LAYERS = [0.16, 0.32, 0.6, 1] as const
 const MODEL_SCALE = 1.45
 /** Quanto se rola até o cubo se desfazer de todo, em alturas da janela. */
 const SCATTER_SPAN = 0.7
+/** Intervalo entre as trocas automáticas de forma, em ms. */
+const CYCLE_MS = 7000
 
 function cssVar(el: Element, name: string, fallback: string) {
   return getComputedStyle(el).getPropertyValue(name).trim() || fallback
@@ -67,11 +74,16 @@ function cssVar(el: Element, name: string, fallback: string) {
  * O canvas é `aria-hidden` e não recebe eventos; quem recebe é o botão sobre a
  * célula. Com reduced motion, um quadro parado, e a troca de forma é
  * instantânea. O laço só roda com o canvas na tela.
+ *
+ * Com `autoCycleMedia` casando (e sem reduced motion), a forma troca sozinha a
+ * cada `CYCLE_MS` enquanto o canvas está na tela; as nuvens são baixadas na
+ * primeira troca.
  */
 export function CubeField({
   className,
   buttonClassName,
   label,
+  autoCycleMedia,
 }: CubeFieldProps) {
   const ref = useRef<HTMLCanvasElement>(null)
   // Ligam o botão (JSX) ao estado do efeito.
@@ -126,6 +138,12 @@ export function CubeField({
     let visible = false
     let last = 0
     let tracker: PointerTracker | null = null
+    let cycleTimer = 0
+    let disposed = false
+    const auto =
+      autoCycleMedia && typeof window.matchMedia === 'function'
+        ? window.matchMedia(autoCycleMedia)
+        : null
 
     const view = () => ({
       yaw,
@@ -197,6 +215,17 @@ export function CubeField({
       lattice = snapshot(lattice)
       start()
     }
+    /** Agenda a próxima troca automática (ou cancela, se não cabe agora). */
+    const schedule = () => {
+      window.clearTimeout(cycleTimer)
+      cycleTimer = 0
+      if (disposed || reduced || !visible || !auto?.matches) return
+      cycleTimer = window.setTimeout(() => {
+        cycleTimer = 0
+        void goNext().then(schedule)
+      }, CYCLE_MS)
+    }
+
     nextShape.current = () => void goNext()
     preload.current = () => void ensureClouds()
 
@@ -301,8 +330,10 @@ export function CubeField({
     const io = new IntersectionObserver(([entry]) => {
       visible = !!entry?.isIntersecting
       if (visible) start()
+      schedule()
     })
     io.observe(canvas)
+    auto?.addEventListener('change', schedule)
 
     let resizeTimer = 0
     const ro = new ResizeObserver(() => {
@@ -315,13 +346,16 @@ export function CubeField({
     build()
 
     return () => {
+      disposed = true
       cancelAnimationFrame(frame)
       window.clearTimeout(resizeTimer)
+      window.clearTimeout(cycleTimer)
+      auto?.removeEventListener('change', schedule)
       io.disconnect()
       ro.disconnect()
       tracker?.dispose()
     }
-  }, [])
+  }, [autoCycleMedia])
 
   return (
     <>

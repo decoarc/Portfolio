@@ -47,6 +47,9 @@ export function Hero({ person, copy, ctaPeek }: HeroProps) {
           className={styles.cubeCanvas}
           buttonClassName={styles.cubeButton}
           label={copy.shapeLabel}
+          // Abaixo de 1200px o cubo é fundo, sem botão: troca sozinho. O mesmo
+          // corte do `.cube` no Hero.module.css.
+          autoCycleMedia="(max-width: 1199px)"
         />
       </div>
       <p className={styles.role}>{person.role}</p>

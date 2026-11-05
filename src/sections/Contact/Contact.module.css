@@ -10,6 +10,9 @@
   --sheet-pad-block-end: max(clamp(48px, 10vh, 112px), 9.25rem);
   border-top: 2px solid var(--ink);
   position: relative;
+  /* O "AA" de fundo (abaixo de 1100px) fica atrás do texto com z-index -1,
+     mas à frente do fundo da folha. */
+  isolation: isolate;
 }
 
 /* Fim da home: preso no pé da janela enquanto o Sobre sobe e o revela
@@ -129,12 +132,20 @@
   }
 }
 
-/* Experimento: o "AA" em pontos no vazio à direita (`DotField`). Fora do
-   fluxo, para não mexer na altura da folha (o `Reveal` mede o Contato), e só
-   onde sobra espaço ao lado do lead. Abaixo do `::after`: a sombra da
-   revelação cobre os pontos também. */
+/* Experimento: o "AA" em pontos (`DotField`). Fora do fluxo, para não mexer
+   na altura da folha (o `Reveal` mede o Contato). Abaixo de 1100px não sobra
+   espaço ao lado do lead: o "AA" vira fundo da folha, fraco e atrás do texto.
+   Abaixo do `::after`: a sombra da revelação cobre os pontos também. */
 .field {
-  display: none;
+  --field-inset: var(--gutter);
+  position: absolute;
+  top: var(--field-inset);
+  left: var(--field-inset);
+  width: calc(100% - 2 * var(--field-inset));
+  height: calc(100% - 2 * var(--field-inset));
+  z-index: -1;
+  opacity: 0.14;
+  pointer-events: none;
 }
 
 /* Largura e altura explícitas: o canvas é elemento substituído, e com `auto`
@@ -144,12 +155,10 @@
 @media (min-width: 1100px) {
   .field {
     --field-inset: clamp(24px, 5vh, 64px);
-    display: block;
-    position: absolute;
-    top: var(--field-inset);
+    left: auto;
     right: var(--gutter);
     width: min(680px, calc(44% - var(--gutter)));
-    height: calc(100% - 2 * var(--field-inset));
-    pointer-events: none;
+    z-index: auto;
+    opacity: 1;
   }
 }
