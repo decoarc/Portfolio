@@ -4,8 +4,8 @@ import {
   sampleSilhouette,
   stepParticles,
   type Particles,
-  type Pointer,
 } from './dotField.ts'
+import { trackPointer, type PointerTracker } from './pointerField.ts'
 
 interface DotFieldProps {
   /** O texto que os pontos desenham. */
@@ -56,9 +56,7 @@ export function DotField({ text, className }: DotFieldProps) {
     let visible = false
     let last = 0
     let disposed = false
-    const pointer: Pointer = { x: -1e4, y: -1e4, vx: 0, vy: 0, presence: 0 }
-    let presenceTarget = 0
-    let lastMove = { x: 0, y: 0, t: 0 }
+    let tracker: PointerTracker | null = null
 
     const build = async () => {
       const rect = canvas.getBoundingClientRect()
@@ -130,19 +128,16 @@ export function DotField({ text, className }: DotFieldProps) {
 
     const tick = (now: number) => {
       frame = 0
-      if (!visible || !particles) return
+      if (!visible || !particles || !tracker) return
       const dt = last ? Math.min((now - last) / (1000 / 60), 3) : 1
       last = now
-      pointer.presence += (presenceTarget - pointer.presence) * 0.08 * dt
-      // A velocidade do cursor decai quando ele para.
-      pointer.vx *= 0.85
-      pointer.vy *= 0.85
-      const energy = stepParticles(particles, pointer, now, dt)
+      tracker.ease(dt)
+      const energy = stepParticles(particles, tracker.pointer, now, dt)
       draw()
       // Assentou e o cursor foi embora: o laço dorme até ele voltar.
       if (
-        presenceTarget === 0 &&
-        pointer.presence < 0.01 &&
+        tracker.target === 0 &&
+        tracker.pointer.presence < 0.01 &&
         energy / particles.count < 0.002
       )
         return
@@ -153,50 +148,6 @@ export function DotField({ text, className }: DotFieldProps) {
       if (reduced || frame || !visible) return
       last = 0
       frame = requestAnimationFrame(tick)
-    }
-
-    const onMove = (event: PointerEvent) => {
-      const rect = canvas.getBoundingClientRect()
-      const px = event.clientX - rect.left
-      const py = event.clientY - rect.top
-      const margin = 80
-      presenceTarget =
-        px > -margin &&
-        py > -margin &&
-        px < rect.width + margin &&
-        py < rect.height + margin
-          ? 1
-          : 0
-      const t = event.timeStamp
-      const elapsed = Math.max(t - lastMove.t, 1)
-      if (lastMove.t && elapsed < 100) {
-        const scale = 1000 / 60 / elapsed
-        pointer.vx = (event.clientX - lastMove.x) * scale
-        pointer.vy = (event.clientY - lastMove.y) * scale
-      }
-      lastMove = { x: event.clientX, y: event.clientY, t }
-      pointer.x = px
-      pointer.y = py
-      if (presenceTarget) start()
-    }
-    const onLeave = () => {
-      presenceTarget = 0
-      // Sem isso, o próximo toque em outro lugar viraria um "salto" de
-      // velocidade e arrastaria os pontos.
-      lastMove = { x: 0, y: 0, t: 0 }
-    }
-    // Toque e caneta não têm hover: o dedo só "existe" enquanto encosta. No
-    // `pointerdown` o ponto empurra na hora (um tap sozinho não gera
-    // `pointermove`); no `pointerup`/`pointercancel` (o navegador assumiu a
-    // rolagem) a presença solta, senão os pontos ficariam afastados do último
-    // toque. O mouse segue só com `pointermove`/`pointerleave`.
-    const onDown = (event: PointerEvent) => {
-      if (event.pointerType === 'mouse') return
-      onMove(event)
-      if (presenceTarget) pointer.presence = Math.max(pointer.presence, 0.6)
-    }
-    const onUp = (event: PointerEvent) => {
-      if (event.pointerType !== 'mouse') onLeave()
     }
 
     const io = new IntersectionObserver(([entry]) => {
@@ -212,13 +163,7 @@ export function DotField({ text, className }: DotFieldProps) {
     })
     ro.observe(canvas)
 
-    if (!reduced) {
-      window.addEventListener('pointermove', onMove, { passive: true })
-      window.addEventListener('pointerdown', onDown, { passive: true })
-      window.addEventListener('pointerup', onUp, { passive: true })
-      window.addEventListener('pointercancel', onUp, { passive: true })
-      document.documentElement.addEventListener('pointerleave', onLeave)
-    }
+    if (!reduced) tracker = trackPointer(canvas, start)
     void build()
 
     return () => {
@@ -227,11 +172,7 @@ export function DotField({ text, className }: DotFieldProps) {
       window.clearTimeout(resizeTimer)
       io.disconnect()
       ro.disconnect()
-      window.removeEventListener('pointermove', onMove)
-      window.removeEventListener('pointerdown', onDown)
-      window.removeEventListener('pointerup', onUp)
-      window.removeEventListener('pointercancel', onUp)
-      document.documentElement.removeEventListener('pointerleave', onLeave)
+      tracker?.dispose()
     }
   }, [text])
 

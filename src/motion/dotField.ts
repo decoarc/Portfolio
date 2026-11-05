@@ -139,3 +139,23 @@ export function stepParticles(
   }
   return energy
 }
+
+/**
+ * Troca as casas por outras (a forma se moveu, como o cubo que gira) e leva
+ * cada ponto junto pelo mesmo deslocamento. Assim a mola só vê o que o cursor
+ * desarrumou: sem isso, os pontos correriam atrás da casa e a forma borraria.
+ */
+export function moveHomes(
+  p: Particles,
+  homeX: ArrayLike<number>,
+  homeY: ArrayLike<number>,
+): void {
+  for (let i = 0; i < p.count; i++) {
+    const nx = homeX[i]!
+    const ny = homeY[i]!
+    p.x[i] = p.x[i]! + nx - p.homeX[i]!
+    p.y[i] = p.y[i]! + ny - p.homeY[i]!
+    p.homeX[i] = nx
+    p.homeY[i] = ny
+  }
+}

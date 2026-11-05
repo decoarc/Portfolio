@@ -2,6 +2,7 @@ import { Fragment, type ReactNode } from 'react'
 import type { SiteContent } from '../../content/types.ts'
 import { ActionLink } from '../../components/ActionLink/ActionLink.tsx'
 import { Sheet } from '../../components/Sheet/Sheet.tsx'
+import { CubeField } from '../../motion/CubeField.tsx'
 import styles from './Hero.module.css'
 
 interface HeroProps {
@@ -60,6 +61,9 @@ export function Hero({ person, copy, ctaPeek }: HeroProps) {
         </ActionLink>
       </div>
       <p className={styles.location}>{person.location}</p>
+      <div className={styles.cube}>
+        <CubeField className={styles.cubeCanvas} />
+      </div>
     </Sheet>
   )
 }

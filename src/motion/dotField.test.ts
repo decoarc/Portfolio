@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import {
   FIELD,
   createParticles,
+  moveHomes,
   sampleSilhouette,
   stepParticles,
   type Pointer,
@@ -52,5 +53,16 @@ describe('stepParticles', () => {
     stepParticles(p, sweep, 0)
     stepParticles(still, pushOnly, 0)
     expect(p.y[0]!).toBeLessThan(still.y[0]!)
+  })
+})
+
+describe('moveHomes', () => {
+  it('leva o ponto junto com a casa, sem perder o desvio', () => {
+    const p = createParticles({ x: [50], y: [50] })
+    p.x[0] = 55
+    moveHomes(p, [80], [40])
+    expect(p.homeX[0]).toBe(80)
+    expect(p.x[0]).toBe(85)
+    expect(p.y[0]).toBe(40)
   })
 })
