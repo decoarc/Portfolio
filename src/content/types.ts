@@ -105,6 +105,8 @@ export interface SiteContent {
     ctaSecondary: string
     metaLeft: string
     metaRight: string
+    /** Rótulo do cubo de pontos, que troca de forma a cada clique. */
+    shapeLabel: string
   }
   release: { label: string; entries: Record<HomeSectionId, string> }
   projectType: Record<ProjectType, string>

@@ -17,6 +17,7 @@
     "test:e2e": "playwright test --project=chromium --project=visual",
     "test:visual:update": "playwright test --project=visual --update-snapshots",
     "capture": "playwright test --project=capture",
+    "models": "node scripts/models.ts",
     "validate:preview": "pnpm typecheck && pnpm lint && pnpm format:check && pnpm test && pnpm build:preview && pnpm test:e2e",
     "validate": "pnpm typecheck && pnpm lint && pnpm format:check && pnpm test && pnpm test:e2e && pnpm build"
   },

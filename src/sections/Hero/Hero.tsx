@@ -40,6 +40,15 @@ export function Hero({ person, copy, ctaPeek }: HeroProps) {
           </Fragment>
         ))}
       </h1>
+      {/* Logo depois do nome: a ordem do Tab segue a leitura (o cubo fica ao
+          lado do nome); o lugar na tela vem do grid. */}
+      <div className={styles.cube}>
+        <CubeField
+          className={styles.cubeCanvas}
+          buttonClassName={styles.cubeButton}
+          label={copy.shapeLabel}
+        />
+      </div>
       <p className={styles.role}>{person.role}</p>
       <p className={styles.statement}>{copy.statement}</p>
       <div className={styles.actions}>
@@ -61,9 +70,6 @@ export function Hero({ person, copy, ctaPeek }: HeroProps) {
         </ActionLink>
       </div>
       <p className={styles.location}>{person.location}</p>
-      <div className={styles.cube}>
-        <CubeField className={styles.cubeCanvas} />
-      </div>
     </Sheet>
   )
 }

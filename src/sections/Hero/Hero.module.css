@@ -247,6 +247,18 @@
     pointer-events: none;
   }
 
+  /* O botão cobre só a célula (não a sobra do canvas): clicar troca a forma
+     dos pontos. Invisível; o foco usa o contorno global. */
+  .cubeButton {
+    position: absolute;
+    inset: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    pointer-events: auto;
+  }
+
   /* O canvas passa da célula para os pontos espalhados no scroll terem onde
      ir: avança sobre a coluna 8 e até a borda da página (o hero corta na
      horizontal), e a máscara apaga as bordas, sem corte reto. O cubo continua

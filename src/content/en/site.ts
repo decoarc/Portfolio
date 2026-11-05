@@ -34,6 +34,7 @@ export const siteEn: SiteContent = {
     ctaSecondary: 'Get in touch',
     metaLeft: 'BR · Remote',
     metaRight: 'Portfolio 2026',
+    shapeLabel: 'Change the dot shape',
   },
   release: {
     label: 'Contents',

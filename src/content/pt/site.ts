@@ -31,6 +31,7 @@ export const sitePt: SiteContent = {
     ctaSecondary: 'Entrar em contato',
     metaLeft: 'BR · Remoto',
     metaRight: 'Portfólio 2026',
+    shapeLabel: 'Trocar a forma dos pontos',
   },
   release: {
     label: 'Sumário',
@@ -118,8 +119,7 @@ export const sitePt: SiteContent = {
   },
   work: {
     label: 'Projetos pessoais',
-    intro:
-      'Trabalho verificado ou estudo conceitual.',
+    intro: 'Trabalho verificado ou estudo conceitual.',
     previewNote: 'Estudo de caso em breve',
     noCapture: 'sem captura',
   },

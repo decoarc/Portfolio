@@ -165,3 +165,36 @@ export function applyScatter(
     homeY[i] = view.cy + (homeY[i]! - view.cy) * radial + s.dy[i]! * drift
   }
 }
+
+/** Duração da troca de forma, em ms. */
+export const MORPH_MS = 1100
+/** Quanto do tempo da troca cabe na espera de cada ponto: chegam em onda. */
+const MORPH_STAGGER = 0.35
+/** Quanto a forma incha no meio da troca, em frações do raio. */
+const MORPH_SWELL = 0.35
+
+/**
+ * Um quadro da troca de forma: cada ponto `i` vai da posição em `from` à
+ * posição em `to`, com sua própria espera (pelo índice) e uma curva que
+ * acelera e freia. No meio do caminho a nuvem incha um pouco, para os pontos
+ * passarem por fora em vez de atravessarem o centro. `t` de 0 a 1.
+ */
+export function blendLattice(
+  from: Lattice,
+  to: Lattice,
+  t: number,
+  out: Lattice,
+): void {
+  for (let i = 0; i < out.count; i++) {
+    const delay = (((i * 2654435761) >>> 0) % 1000) / 1000
+    const local = Math.min(
+      1,
+      Math.max(0, (t - delay * MORPH_STAGGER) / (1 - MORPH_STAGGER)),
+    )
+    const e = local < 0.5 ? 4 * local ** 3 : 1 - (-2 * local + 2) ** 3 / 2
+    const swell = 1 + MORPH_SWELL * Math.sin(Math.PI * local)
+    out.x[i] = (from.x[i]! + (to.x[i]! - from.x[i]!) * e) * swell
+    out.y[i] = (from.y[i]! + (to.y[i]! - from.y[i]!) * e) * swell
+    out.z[i] = (from.z[i]! + (to.z[i]! - from.z[i]!) * e) * swell
+  }
+}

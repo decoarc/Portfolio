@@ -1,6 +1,8 @@
 import { useEffect, useRef } from 'react'
 import {
+  MORPH_MS,
   applyScatter,
+  blendLattice,
   createScatter,
   cubeLattice,
   projectLattice,
@@ -13,10 +15,16 @@ import {
   stepParticles,
   type Particles,
 } from './dotField.ts'
+import { fitCloud, loadClouds } from './pointClouds.ts'
 import { trackPointer, type PointerTracker } from './pointerField.ts'
 
 interface CubeFieldProps {
+  /** Classe do canvas (que passa da célula para os pontos espalhados). */
   className?: string
+  /** Classe do botão que cobre a célula do cubo. */
+  buttonClassName?: string
+  /** Rótulo do botão para leitores de tela. */
+  label: string
 }
 
 /** Raio de cada ponto, em px CSS. */
@@ -31,6 +39,11 @@ const TURN = 18000
 const PITCH = 0.32
 /** Opacidade por faixa de profundidade, do fundo para a frente. */
 const LAYERS = [0.16, 0.32, 0.6, 1] as const
+/**
+ * Escala dos modelos em relação ao cubo: com a maior medida igual à aresta do
+ * cubo, uma figura alta e estreita parece pequena ao lado dele.
+ */
+const MODEL_SCALE = 1.45
 /** Quanto se rola até o cubo se desfazer de todo, em alturas da janela. */
 const SCATTER_SPAN = 0.7
 
@@ -44,12 +57,26 @@ function cssVar(el: Element, name: string, fallback: string) {
  * mexe no giro, que é sempre constante. Rolando a página para baixo, o cubo se
  * desfaz em pontos soltos; voltando ao Hero, ele se refaz (o avanço segue o
  * scroll, então é reversível por construção). Quem apaga os pontos é o CSS do
- * Hero, com o mesmo `--opening-fade` do nome: os dois somem juntos. Decorativo: `aria-hidden`, sem
- * eventos no canvas e, com reduced motion, um quadro parado. O laço só roda
- * com o canvas na tela.
+ * Hero, com o mesmo `--opening-fade` do nome: os dois somem juntos.
+ *
+ * Um clique (ou Enter/Espaço no botão) troca a forma: os pontos voam do cubo
+ * para o primeiro modelo de `public/models/` (gerados por `pnpm models`), e
+ * assim por diante, até voltar ao cubo. As nuvens só são baixadas quando o
+ * cursor ou o foco chega ao botão.
+ *
+ * O canvas é `aria-hidden` e não recebe eventos; quem recebe é o botão sobre a
+ * célula. Com reduced motion, um quadro parado, e a troca de forma é
+ * instantânea. O laço só roda com o canvas na tela.
  */
-export function CubeField({ className }: CubeFieldProps) {
+export function CubeField({
+  className,
+  buttonClassName,
+  label,
+}: CubeFieldProps) {
   const ref = useRef<HTMLCanvasElement>(null)
+  // Ligam o botão (JSX) ao estado do efeito.
+  const nextShape = useRef<() => void>(() => {})
+  const preload = useRef<() => void>(() => {})
 
   useEffect(() => {
     const canvas = ref.current
@@ -65,7 +92,18 @@ export function CubeField({ className }: CubeFieldProps) {
       typeof window.matchMedia === 'function' &&
       window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
+    /** O cubo, para o tamanho atual. */
+    let cube: Lattice | null = null
+    /** Modelos baixados (na escala da nuvem) e o que está em andamento. */
+    let clouds: Lattice[] | null = null
+    let loading: Promise<Lattice[]> | null = null
+    /** 0 é o cubo; 1… são os modelos, na ordem do manifesto. */
+    let shapeIndex = 0
+    /** As formas com o mesmo número de pontos do cubo, ponto a ponto. */
+    let shapes: Lattice[] = []
+    /** O que é projetado: a forma atual, ou a mistura durante a troca. */
     let lattice: Lattice | null = null
+    let morph: { from: Lattice; to: Lattice; start: number } | null = null
     let scatter: Scatter | null = null
     /** Topo do canvas no documento: a referência do avanço do scroll. */
     let docTop = 0
@@ -112,6 +150,56 @@ export function CubeField({ className }: CubeFieldProps) {
       applyScatter(homeX, homeY, scatter, progress, v)
     }
 
+    /** Refaz `shapes` para o número de pontos do cubo atual. */
+    const fitShapes = () => {
+      if (!cube) return
+      const count = cube.count
+      shapes = [
+        cube,
+        ...(clouds ?? []).map((c) => fitCloud(c, count, MODEL_SCALE)),
+      ]
+      if (shapeIndex >= shapes.length) shapeIndex = 0
+    }
+
+    const ensureClouds = () => {
+      loading ??= loadClouds(import.meta.env.BASE_URL)
+        .catch(() => [] as Lattice[])
+        .then((loaded) => {
+          clouds = loaded
+          fitShapes()
+          return loaded
+        })
+      return loading
+    }
+
+    /** Uma cópia do que está na tela, para a troca partir dali. */
+    const snapshot = (l: Lattice): Lattice => ({
+      x: l.x.slice(),
+      y: l.y.slice(),
+      z: l.z.slice(),
+      count: l.count,
+    })
+
+    const goNext = async () => {
+      await ensureClouds()
+      if (!cube || !lattice || !particles || shapes.length < 2) return
+      shapeIndex = (shapeIndex + 1) % shapes.length
+      const to = shapes[shapeIndex]!
+      if (reduced) {
+        morph = null
+        lattice = to
+        project()
+        moveHomes(particles, homeX, homeY)
+        draw()
+        return
+      }
+      morph = { from: snapshot(lattice), to, start: performance.now() }
+      lattice = snapshot(lattice)
+      start()
+    }
+    nextShape.current = () => void goNext()
+    preload.current = () => void ensureClouds()
+
     const build = () => {
       const rect = canvas.getBoundingClientRect()
       width = Math.round(rect.width)
@@ -136,11 +224,15 @@ export function CubeField({ className }: CubeFieldProps) {
 
       const edge = cell.min * 0.54
       const n = Math.max(8, Math.min(26, Math.round(edge / SPACING) + 1))
-      lattice = cubeLattice(n)
-      homeX = new Float32Array(lattice.count)
-      homeY = new Float32Array(lattice.count)
-      depth = new Float32Array(lattice.count)
-      scatter = createScatter(lattice.count)
+      cube = cubeLattice(n)
+      fitShapes()
+      // Mudou o tamanho no meio de uma troca: pula para a forma de destino.
+      morph = null
+      lattice = shapes[shapeIndex] ?? cube
+      homeX = new Float32Array(cube.count)
+      homeY = new Float32Array(cube.count)
+      depth = new Float32Array(cube.count)
+      scatter = createScatter(cube.count)
       progress = reduced ? 0 : readProgress()
       project()
       particles = createParticles({
@@ -183,6 +275,14 @@ export function CubeField({ className }: CubeFieldProps) {
       const dt = last ? Math.min((now - last) / (1000 / 60), 3) : 1
       last = now
       tracker.ease(dt)
+      if (morph) {
+        const t = Math.min(1, (now - morph.start) / MORPH_MS)
+        blendLattice(morph.from, morph.to, t, lattice)
+        if (t >= 1) {
+          lattice = morph.to
+          morph = null
+        }
+      }
       yaw = (yaw + ((Math.PI * 2) / TURN) * (1000 / 60) * dt) % (Math.PI * 2)
       progress = readProgress()
       project()
@@ -223,5 +323,17 @@ export function CubeField({ className }: CubeFieldProps) {
     }
   }, [])
 
-  return <canvas ref={ref} className={className} aria-hidden="true" />
+  return (
+    <>
+      <canvas ref={ref} className={className} aria-hidden="true" />
+      <button
+        type="button"
+        className={buttonClassName}
+        aria-label={label}
+        onClick={() => nextShape.current()}
+        onPointerEnter={() => preload.current()}
+        onFocus={() => preload.current()}
+      />
+    </>
+  )
 }

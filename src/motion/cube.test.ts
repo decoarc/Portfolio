@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import {
   applyScatter,
+  blendLattice,
   createScatter,
   cubeLattice,
   explosion,
@@ -123,5 +124,42 @@ describe('explosion', () => {
     x.forEach((v, i) => {
       expect(Math.hypot(v - 100, y[i]! - 100)).toBeGreaterThan(before[i]!)
     })
+  })
+})
+
+describe('blendLattice', () => {
+  const from = cubeLattice(3)
+  const to = {
+    x: from.x.map((v) => -v),
+    y: from.y.map((v) => v * 0.5),
+    z: from.z.slice(),
+    count: from.count,
+  }
+  const out = () => ({
+    x: new Float32Array(from.count),
+    y: new Float32Array(from.count),
+    z: new Float32Array(from.count),
+    count: from.count,
+  })
+
+  it('começa na forma de origem e termina na de destino', () => {
+    const a = out()
+    blendLattice(from, to, 0, a)
+    expect(Array.from(a.x)).toEqual(Array.from(from.x))
+    const b = out()
+    blendLattice(from, to, 1, b)
+    for (let i = 0; i < from.count; i++) {
+      expect(b.x[i]).toBeCloseTo(to.x[i]!)
+      expect(b.y[i]).toBeCloseTo(to.y[i]!)
+    }
+  })
+
+  it('no meio, os pontos estão entre uma forma e outra', () => {
+    const m = out()
+    blendLattice(from, to, 0.5, m)
+    const moved = Array.from(m.x).filter(
+      (v, i) => v !== from.x[i] && v !== to.x[i],
+    )
+    expect(moved.length).toBeGreaterThan(0)
   })
 })

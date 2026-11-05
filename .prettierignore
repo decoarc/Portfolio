@@ -6,3 +6,6 @@ docs
 *.md
 .impeccable
 dist-ssr
+
+# Gerados por `pnpm models` (scripts/models.ts).
+public/models/
