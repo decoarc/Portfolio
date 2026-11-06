@@ -1,0 +1,68 @@
+/* Camada das letras carimbadas: cobre o documento inteiro (a altura é
+   medida a cada batida) e corta o que passar da borda, para uma letra perto
+   do canto não criar rolagem. Nunca recebe clique. */
+.layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  overflow: clip;
+  pointer-events: none;
+  z-index: 60;
+}
+
+.stamp {
+  position: absolute;
+  /* Tipo de máquina de escrever: serifa slab com tinta falhada. Cada batida
+     sai com uma carga de tinta diferente (`--ink-load`, do hook) e um leve
+     borrão, como a fita batendo no papel. */
+  font-family: var(--font-typewriter);
+  font-size: clamp(2.25rem, 1.5rem + 1.9vw, 3.5rem);
+  font-weight: 400;
+  line-height: 1;
+  color: color-mix(
+    in srgb,
+    var(--ink) calc(var(--ink-load, 0.9) * 100%),
+    transparent
+  );
+  text-shadow: 0 0 0.6px currentcolor;
+  white-space: pre;
+  user-select: none;
+  transform: translate(-50%, -50%);
+}
+
+/* Com reduced motion a letra fica parada e reta, e sai de uma vez quando o
+   tempo acaba (o hook a remove). Sem reduce: a leve torção do tipo, a
+   batida (chega um pouco maior e assenta no papel) e o fade, que termina
+   junto com o tempo de vida (`--life`, escrito pelo hook a partir de
+   `STAMP_LIFETIME_MS`). Batida e fade têm duração fixa: mudar o tempo de
+   vida só alonga o trecho em que a letra fica parada. */
+@media (prefers-reduced-motion: no-preference) {
+  .stamp {
+    transform: translate(-50%, -50%) translate(var(--dx, 0px), var(--dy, 0px))
+      rotate(var(--rot, 0deg));
+    animation:
+      strike 100ms cubic-bezier(0.2, 0.7, 0.3, 1),
+      fade 1s ease-in calc(var(--life, 2500ms) - 1s) forwards;
+  }
+
+  @keyframes strike {
+    from {
+      opacity: 0;
+      scale: 1.25;
+    }
+    to {
+      opacity: 1;
+      scale: 1;
+    }
+  }
+
+  @keyframes fade {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+}

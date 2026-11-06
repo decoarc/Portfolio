@@ -6,6 +6,7 @@
 import './styles/fonts.css'
 import '@fontsource-variable/instrument-sans'
 import '@fontsource-variable/geist-mono'
+import '@fontsource/special-elite'
 import './styles/tokens.css'
 import './styles/global.css'
 import './motion/titleFlight.css'

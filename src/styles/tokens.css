@@ -11,6 +11,7 @@
   --font-body:
     'Instrument Sans Variable', 'Instrument Sans', system-ui, sans-serif;
   --font-mono: 'Geist Mono Variable', ui-monospace, monospace;
+  --font-typewriter: 'Special Elite', 'Courier New', Courier, monospace;
 
   --gutter: clamp(20px, 5vw, 80px);
   --margin-rail: clamp(0px, 8vw, 120px);

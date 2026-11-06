@@ -6,12 +6,14 @@ import { SkipLink } from '../components/SkipLink/SkipLink.tsx'
 import { getContent } from '../content/index.ts'
 import type { Locale } from '../content/types.ts'
 import { htmlLang } from '../lib/locale.ts'
+import { useTypewriter } from '../motion/typewriter.ts'
 import { LocaleContext } from './LocaleContext.ts'
 import styles from './LocaleLayout.module.css'
 import { ScrollManager } from './ScrollManager.tsx'
 
 export function LocaleLayout({ locale }: { locale: Locale }) {
   const { site } = getContent(locale)
+  useTypewriter()
 
   useEffect(() => {
     document.documentElement.lang = htmlLang(locale)
