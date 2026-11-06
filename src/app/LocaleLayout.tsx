@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { Outlet } from 'react-router'
+import { ScrollRail } from '../components/ScrollRail/ScrollRail.tsx'
 import { Masthead } from '../components/Masthead/Masthead.tsx'
 import { SkipLink } from '../components/SkipLink/SkipLink.tsx'
 import { getContent } from '../content/index.ts'
@@ -27,6 +28,7 @@ export function LocaleLayout({ locale }: { locale: Locale }) {
         <p className={styles.note}>{site.shell.footerNote}</p>
       </footer>
       <ScrollManager />
+      <ScrollRail />
     </LocaleContext>
   )
 }

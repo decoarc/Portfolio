@@ -1,0 +1,186 @@
+/* Trilho de rolagem: um filete de margem, como o das fichas. As marcas são as
+   seções numeradas; o marcador é uma barra de tinta que fica vermelha na mão.
+   Medidas vêm de --rail-size e --rail-offset (frações, escritas pelo JS). */
+.rail {
+  --rail-inset: 14px;
+  --thumb-w: 3px;
+
+  position: fixed;
+  top: var(--rail-inset);
+  right: 0;
+  bottom: var(--rail-inset);
+  z-index: 20;
+  width: 22px;
+  cursor: pointer;
+  touch-action: none;
+  user-select: none;
+}
+
+/* Só com mouse/trackpad; no toque a barra nativa (sobreposta) basta. */
+@media (pointer: coarse) {
+  .rail {
+    display: none;
+  }
+}
+
+.rail[data-scrollable='false'] {
+  display: none;
+}
+
+.line {
+  position: absolute;
+  top: 0;
+  right: 7px;
+  bottom: 0;
+  width: 1px;
+  background: var(--rule);
+  opacity: 0.55;
+}
+
+.mark {
+  position: absolute;
+  right: 7px;
+  width: 7px;
+  height: 1px;
+  background: var(--rule);
+}
+
+/* Área de clique maior que o traço. */
+.mark::before {
+  content: '';
+  position: absolute;
+  inset: -5px -7px -5px 0;
+}
+
+.mark[data-passed='true'] {
+  background: var(--ink-muted);
+}
+
+.markLabel {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translate(4px, -50%);
+  font-family: var(--font-mono);
+  font-size: var(--text-micro);
+  letter-spacing: var(--track-meta);
+  color: var(--ink-muted);
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.thumb {
+  position: absolute;
+  top: calc(var(--rail-offset, 0) * 100%);
+  right: calc(7px - (var(--thumb-w) - 1px) / 2);
+  width: var(--thumb-w);
+  height: calc(var(--rail-size, 1) * 100%);
+  background: var(--ink-muted);
+  cursor: grab;
+  opacity: 0.7;
+}
+
+/* A área de pega é mais larga que a tinta. */
+.thumb::before {
+  content: '';
+  position: absolute;
+  inset: 0 -8px;
+}
+
+.thumbLabel {
+  position: absolute;
+  top: 0;
+  right: calc(100% + 10px);
+  font-family: var(--font-mono);
+  font-size: var(--text-micro);
+  letter-spacing: var(--track-meta);
+  line-height: 1;
+  color: var(--accent);
+  opacity: 0;
+  transform: translateX(4px);
+  pointer-events: none;
+}
+
+.thumbLabel:empty {
+  display: none;
+}
+
+/* Rolando: o trilho acende. */
+.rail[data-active='true'] .line {
+  opacity: 1;
+}
+
+.rail[data-active='true'] .thumb {
+  opacity: 1;
+}
+
+/* Na mão: o marcador engrossa, vira acento e diz a seção. */
+.rail:hover {
+  --thumb-w: 5px;
+}
+
+.rail:hover .line {
+  opacity: 1;
+}
+
+.rail:hover .thumb,
+.rail[data-dragging='true'] .thumb {
+  opacity: 1;
+  background: var(--accent);
+}
+
+.rail[data-dragging='true'] {
+  --thumb-w: 5px;
+}
+
+.rail[data-dragging='true'] .thumb {
+  cursor: grabbing;
+}
+
+.rail:hover .thumbLabel,
+.rail[data-dragging='true'] .thumbLabel {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.rail:hover .mark {
+  width: 11px;
+}
+
+.mark:hover {
+  background: var(--accent);
+}
+
+.mark:hover .markLabel {
+  opacity: 1;
+  transform: translate(0, -50%);
+  color: var(--accent);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .line {
+    transition: opacity 400ms ease;
+  }
+
+  .mark {
+    transition:
+      width 240ms ease,
+      background-color 240ms ease;
+  }
+
+  .markLabel,
+  .thumbLabel {
+    transition:
+      opacity 240ms ease,
+      transform 240ms ease;
+  }
+
+  .thumb {
+    transition:
+      width 200ms ease,
+      right 200ms ease,
+      background-color 200ms ease,
+      opacity 400ms ease;
+  }
+}

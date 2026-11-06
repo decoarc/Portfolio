@@ -21,12 +21,17 @@ async function exercise(page: Page, path: string) {
   await interact(page)
 }
 
-/** Primeiro elemento com duração de transição ou animação; `allowMarked` ignora os que levam `data-motion`. */
+/**
+ * Primeiro elemento com duração de transição ou animação; `allowMarked` ignora
+ * os que levam `data-motion`. O trilho de rolagem (`data-motion="rail-*"`)
+ * existe em todas as páginas e é sempre ignorado: só anda sob o ponteiro.
+ */
 async function firstTimed(page: Page, allowMarked: boolean) {
   return page.evaluate((allowMarked) => {
     const durations = (value: string) =>
       value.split(',').some((part) => parseFloat(part) > 0)
     for (const el of document.querySelectorAll('*')) {
+      if (el.getAttribute('data-motion')?.startsWith('rail-')) continue
       if (allowMarked && el.hasAttribute('data-motion')) continue
       const style = getComputedStyle(el)
       if (

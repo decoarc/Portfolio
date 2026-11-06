@@ -82,7 +82,9 @@ Valem para todo efeito, este e os próximos. Vêm de `docs/SPEC.md` §5.
   `[data-entrance='run']`) e `e2e/motion.spec.ts` (com reduce, zero animação,
   inclusive depois de hover e foco; sem reduce, só elementos com `data-motion`
   têm duração e, em repouso, `getAnimations()` é zero). Valores de
-  `data-motion`: `action-link`, `trace`, `peek`, `thumb`, `slip`, `slip-title`.
+  `data-motion`: `action-link`, `trace`, `peek`, `thumb`, `slip`, `slip-title`,
+  e os do trilho de rolagem (`ScrollRail`, em todas as páginas): `rail-line`,
+  `rail-mark`, `rail-label`, `rail-thumb`.
 
 ## Fichas
 

@@ -19,6 +19,12 @@ const PARTS = [
   { part: 'contact', selector: '#contact' },
 ] as const
 
+/**
+ * O trilho de rolagem fica fora das capturas: a posição e o brilho do marcador
+ * dependem de quando a rolagem até o alvo termina. Ele tem testes próprios.
+ */
+const HIDE_RAIL = '[data-scroll-rail] { visibility: hidden !important; }'
+
 async function settle(page: Page) {
   // Hidratou de verdade: o React marca os nós do #root (o masthead) com `__reactFiber$`.
   // Sem isso a espera de fontes e de entrada passa sobre o HTML estático.
@@ -30,6 +36,7 @@ async function settle(page: Page) {
     )
   })
   await page.evaluate(() => document.fonts.ready.then(() => true))
+  await page.addStyleTag({ content: HIDE_RAIL })
   // Sem entrada nem texto que acende: a captura é do estado final.
   await expect(page.locator('[data-entrance]')).toHaveCount(0)
   await expect(page.locator('[data-lit]')).toHaveCount(0)

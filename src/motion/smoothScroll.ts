@@ -60,9 +60,14 @@ export function scrollToTarget(
   // A rolagem anda em pixels inteiros e o topo do alvo pode cair numa fração
   // (seções com altura fracionária acima dele). Arredondar para baixo deixa o
   // topo dentro da janela, em vez de 0,4 px acima dela.
-  const y = Math.floor(window.scrollY + flowTop(target))
+  const y = Math.floor(documentTop(target))
   if (lenis) lenis.scrollTo(y, { immediate: options.immediate })
   else window.scrollTo(0, y)
+}
+
+/** Topo do alvo no documento, como se estivesse no fluxo (ver `flowTop`). */
+export function documentTop(target: HTMLElement): number {
+  return window.scrollY + flowTop(target)
 }
 
 /**
@@ -87,5 +92,11 @@ export function scrollToTop(): void {
 /** Vai direto a uma posição, sem deslize (restaurar o voltar do navegador). */
 export function scrollToY(y: number): void {
   if (lenis) lenis.scrollTo(y, { immediate: true })
+  else window.scrollTo(0, y)
+}
+
+/** Desliza até uma posição (clique no trilho). Sem Lenis, salta. */
+export function glideToY(y: number): void {
+  if (lenis) lenis.scrollTo(y)
   else window.scrollTo(0, y)
 }
