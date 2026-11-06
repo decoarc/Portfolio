@@ -1,6 +1,9 @@
 {
   "points": 4096,
   "models": [
-    "cavaleiro_moba_otimizado.bin"
+    "01-sora.bin",
+    "02-pena.bin",
+    "03-livro.bin",
+    "04-aviao.bin"
   ]
 }
