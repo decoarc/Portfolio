@@ -91,3 +91,26 @@ test('Enter no CTA foca #work sem contorno', async ({ page }) => {
   await expect.poll(async () => (await focused(page))?.id).toBe('work')
   expect((await focused(page))?.outlineStyle).toBe('none')
 })
+
+// O cubo é um botão que fica na página depois do clique. Se o clique de
+// mouse deixasse o foco nele, a primeira tecla depois (a máquina de escrever
+// convida a digitar) acenderia o contorno vermelho em volta do cubo.
+test('clique de mouse no cubo não deixa foco; Tab ainda chega com contorno', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 })
+  await page.goto('/')
+  const cube = page.getByRole('button', { name: site.hero.shapeLabel })
+  await cube.click()
+  await page.keyboard.press('a')
+  expect(await cube.evaluate((el) => el === document.activeElement)).toBe(false)
+  expect(await cube.evaluate((el) => el.matches(':focus-visible'))).toBe(false)
+
+  await cube.focus()
+  await page.keyboard.press('Shift+Tab')
+  await page.keyboard.press('Tab')
+  expect(await cube.evaluate((el) => el === document.activeElement)).toBe(true)
+  expect(
+    await cube.evaluate((el) => getComputedStyle(el).outlineStyle),
+  ).not.toBe('none')
+})

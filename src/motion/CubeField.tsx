@@ -365,6 +365,10 @@ export function CubeField({
         className={buttonClassName}
         aria-label={label}
         onClick={() => nextShape.current()}
+        // Clique de mouse não deixa foco: o cubo fica na página, e a
+        // primeira tecla depois (a máquina de escrever convida a digitar)
+        // acenderia o contorno de foco em volta dele. O Tab foca normal.
+        onMouseDown={(event) => event.preventDefault()}
         onPointerEnter={() => preload.current()}
         onFocus={() => preload.current()}
       />
