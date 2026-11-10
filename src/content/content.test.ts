@@ -94,6 +94,33 @@ describe('projetos', () => {
     },
   )
 
+  it.each(all)(
+    '$locale/$project.slug: capa e figuras existem em public/',
+    ({ project }) => {
+      const files = [
+        project.cover?.src,
+        ...project.sections.flatMap(
+          (section) => section.figures?.map((figure) => figure.src) ?? [],
+        ),
+      ].filter((src): src is string => src !== undefined)
+      const missing = files.filter((src) => !existsSync(join('public', src)))
+      expect(missing).toEqual([])
+    },
+  )
+
+  it('o portfólio destaca o cubo e a máquina de escrever, com imagens', () => {
+    for (const locale of locales) {
+      const project = contentByLocale[locale].projects.find(
+        (p) => p.slug === 'portfolio',
+      )
+      const figures = project?.sections.flatMap((s) => s.figures ?? []) ?? []
+      expect(figures.map((figure) => figure.src)).toEqual([
+        '/images/projects/portfolio-cube.webp',
+        `/images/projects/portfolio-typewriter-${locale}.webp`,
+      ])
+    }
+  })
+
   it('Map Areas tem miniatura', () => {
     for (const locale of locales) {
       const map = contentByLocale[locale].projects.find(

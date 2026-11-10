@@ -61,6 +61,19 @@ describe('case study', () => {
     )
   })
 
+  it('/work/portfolio: figuras com legenda nas seções de destaque', async () => {
+    const project = projectOf('pt', 'portfolio')
+    renderAt('/pt/work/portfolio')
+    await screen.findByRole('heading', { level: 1, name: 'Portfólio' })
+    const figures = project.sections.flatMap((s) => s.figures ?? [])
+    expect(figures).toHaveLength(2)
+    for (const figure of figures) {
+      const img = screen.getByRole('img', { name: figure.alt })
+      expect(img).toHaveAttribute('loading', 'lazy')
+      expect(img.closest('figure')).toHaveTextContent(figure.caption)
+    }
+  })
+
   it('/work/map-areas: sem aviso, capa, demo e repositório', async () => {
     const { site } = contentByLocale.en
     const project = projectOf('en', 'map-areas')

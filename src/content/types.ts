@@ -23,11 +23,21 @@ export interface ProjectCover {
   /** Miniatura 800×600 (4:3); a capa guarda a proporção da captura. */
   thumbSrc?: string
 }
+/** Imagem dentro de uma seção do case study, com legenda. */
+export interface CaseFigure {
+  src: string
+  alt: string
+  caption: string
+  width: number
+  height: number
+}
 /** Ao menos um de `paragraphs`/`items` é não vazio. */
 export interface CaseSection {
   heading: string
   paragraphs?: string[]
   items?: string[]
+  /** Vêm depois do texto da seção. */
+  figures?: CaseFigure[]
 }
 
 export interface Project {

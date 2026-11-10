@@ -127,6 +127,18 @@ export function CaseStudyRoute() {
                   ))}
                 </ul>
               )}
+              {section.figures?.map((figure) => (
+                <figure key={figure.src} className={styles.figure}>
+                  <img
+                    src={assetUrl(figure.src)}
+                    alt={figure.alt}
+                    width={figure.width}
+                    height={figure.height}
+                    loading="lazy"
+                  />
+                  <figcaption>{figure.caption}</figcaption>
+                </figure>
+              ))}
             </section>
           ))}
         </div>
