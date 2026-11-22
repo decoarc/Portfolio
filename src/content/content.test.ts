@@ -169,11 +169,14 @@ describe('trajetória e ferramentas', () => {
         'Tailwind CSS',
         'Material UI',
         'Vite',
+        'Three.js',
+        'React Three Fiber',
+        'Leaflet',
       ],
-      ['Node.js', 'Express', 'Python', 'PHP', 'REST APIs'],
-      ['MySQL', 'PostgreSQL', 'SQLite', 'MongoDB'],
-      ['GCP', 'Azure', 'Docker', 'Git'],
-      ['Rust', 'Tauri', 'C++', 'C#'],
+      ['Node.js', 'Express', 'Python', 'PHP', 'Elixir', 'Phoenix', 'REST APIs'],
+      ['MySQL', 'PostgreSQL', 'PostGIS', 'SQLite', 'MongoDB'],
+      ['GCP', 'Azure', 'Docker', 'Git', 'Playwright'],
+      ['Rust', 'Tauri', 'C++', 'C#', '.NET', 'WPF'],
     ])
   })
 
