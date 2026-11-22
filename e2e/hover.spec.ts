@@ -6,7 +6,7 @@ const desktop = VIEWPORTS.find((v) => v.name === 'desktop')!
 
 test.use({ viewport: { width: desktop.width, height: desktop.height } })
 
-/** Ficha da lista de trabalhos, na ordem da home (1 = Local Email Client, publicada). */
+/** Ficha da lista de trabalhos, na ordem da home (0 = Portfolio, sempre em primeiro). */
 function slip(page: Page, index: number) {
   return page.locator('#work ol > li').nth(index)
 }
@@ -48,7 +48,7 @@ test.describe('reação da lista · sem reduce', () => {
     // O link abre nova aba: fecha a popup e segue na página da lista.
     context.on('page', (popup) => void popup.close())
     await open(page)
-    // A ficha 0 (Map Areas, verificada) é a que tem links externos.
+    // A ficha 0 (Portfolio) tem o link externo do repositório.
     const external = slip(page, 0).locator('a[target="_blank"]').first()
     await external.click()
     await page.mouse.move(0, 0)

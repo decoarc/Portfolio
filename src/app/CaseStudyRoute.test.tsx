@@ -119,13 +119,13 @@ describe('case study', () => {
     ).toHaveAttribute('href', '/pt#work-map-areas')
   })
 
-  it('/work/local-email-client: volta para a ficha do projeto', async () => {
-    renderAt('/work/local-email-client')
+  it('/work/portfolio (primeiro da lista): volta para a ficha na home', async () => {
+    renderAt('/work/portfolio')
     expect(
       await screen.findByRole('link', {
         name: contentByLocale.en.site.caseStudy.backToWork,
       }),
-    ).toHaveAttribute('href', '/#work-local-email-client')
+    ).toHaveAttribute('href', '/#work-portfolio')
   })
 
   it('/work/map-areas: volta para a ficha do projeto', async () => {
@@ -137,13 +137,13 @@ describe('case study', () => {
     ).toHaveAttribute('href', '/#work-map-areas')
   })
 
-  it('/work/portfolio (fora da home): volta para o cartão na galeria', async () => {
-    renderAt('/work/portfolio')
+  it('/work/local-email-client (fora da home): volta para o cartão na galeria', async () => {
+    renderAt('/work/local-email-client')
     expect(
       await screen.findByRole('link', {
         name: contentByLocale.en.site.caseStudy.backToWork,
       }),
-    ).toHaveAttribute('href', '/projects#work-portfolio')
+    ).toHaveAttribute('href', '/projects#work-local-email-client')
   })
 
   it('/pt/work/the-abyss: volta para a ficha em /pt', async () => {
@@ -155,13 +155,13 @@ describe('case study', () => {
     ).toHaveAttribute('href', '/pt#work-the-abyss')
   })
 
-  it('/pt/work/local-email-client: volta para a ficha em /pt', async () => {
+  it('/pt/work/local-email-client (fora da home): volta para o cartão na galeria em /pt', async () => {
     renderAt('/pt/work/local-email-client')
     expect(
       await screen.findByRole('link', {
         name: contentByLocale.pt.site.caseStudy.backToWork,
       }),
-    ).toHaveAttribute('href', '/pt#work-local-email-client')
+    ).toHaveAttribute('href', '/pt/projects#work-local-email-client')
   })
 
   it('o h1 recebe o foco ao abrir a página', async () => {

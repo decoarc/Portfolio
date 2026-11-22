@@ -20,13 +20,13 @@ test('a home mostra 3 projetos e "View all" abre a galeria com todos', async ({
 
 test('o case fora da home volta para o cartão na galeria', async ({ page }) => {
   await page.goto('/projects')
-  await page.locator('#work-portfolio a[data-anchor-focus]').click()
-  await expect(page).toHaveURL(/\/work\/portfolio$/)
+  await page.locator('#work-local-email-client a[data-anchor-focus]').click()
+  await expect(page).toHaveURL(/\/work\/local-email-client$/)
   await page.getByRole('link', { name: 'Back to personal projects' }).click()
-  await expect(page).toHaveURL(/\/projects#work-portfolio$/)
-  await expect(page.locator('#work-portfolio')).toBeInViewport()
+  await expect(page).toHaveURL(/\/projects#work-local-email-client$/)
+  await expect(page.locator('#work-local-email-client')).toBeInViewport()
   await expect(
-    page.locator('#work-portfolio a[data-anchor-focus]'),
+    page.locator('#work-local-email-client a[data-anchor-focus]'),
   ).toBeFocused()
 })
 

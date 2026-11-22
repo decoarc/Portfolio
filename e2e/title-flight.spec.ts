@@ -14,10 +14,10 @@ const desktop = VIEWPORTS.find((v) => v.name === 'desktop')!
 
 test.use({ viewport: { width: desktop.width, height: desktop.height } })
 
-const SLUG = 'local-email-client'
-const TITLE = 'Local Email Client'
+const SLUG = 'the-abyss'
+const TITLE = 'The Abyss'
 
-/** Link do título na ficha do Local Email Client. */
+/** Link do título na ficha do The Abyss. */
 function slipLink(page: Page) {
   return page.locator(`#work-${SLUG} a[data-anchor-focus]`)
 }

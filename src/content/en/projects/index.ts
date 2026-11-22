@@ -4,10 +4,13 @@ import { mapAreas } from './map-areas.ts'
 import { portfolio } from './portfolio.ts'
 import { theAbyss } from './the-abyss.ts'
 
-/** Ordem de exibição: a home mostra os primeiros (`homeProjects`); a galeria, todos. */
+/**
+ * Ordem de exibição: o próprio portfólio sempre em primeiro. A home mostra os
+ * primeiros (`homeProjects`); a galeria, todos.
+ */
 export const projectsEn: Project[] = [
+  portfolio,
   theAbyss,
   mapAreas,
   localEmailClient,
-  portfolio,
 ]

@@ -75,14 +75,14 @@ test.describe('sem JS', () => {
     page,
   }) => {
     await page.goto('/pt')
-    await page.getByRole('link', { name: /Local Email Client/ }).click()
-    await expect(page).toHaveURL(/\/pt\/work\/local-email-client$/)
+    await page.getByRole('link', { name: /The Abyss/ }).click()
+    await expect(page).toHaveURL(/\/pt\/work\/the-abyss$/)
     await expect(
-      page.getByRole('heading', { level: 1, name: 'Local Email Client' }),
+      page.getByRole('heading', { level: 1, name: 'The Abyss' }),
     ).toBeVisible()
 
     await page.getByRole('link', { name: pt.shell.localeSwitch }).click()
-    await expect(page).toHaveURL(/\/work\/local-email-client$/)
+    await expect(page).toHaveURL(/\/work\/the-abyss$/)
     await expect(page.locator('html')).toHaveAttribute('lang', 'en')
   })
 

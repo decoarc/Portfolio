@@ -46,14 +46,14 @@ test('Tab alcança CTA, Release e título publicado, em ordem, com contorno', as
     await page.keyboard.press('Tab')
     const el = await focused(page)
     if (el?.href) seen.push(el.href)
-    if (el?.href === '/work/local-email-client') {
+    if (el?.href === '/work/the-abyss') {
       expect(el.outlineStyle).not.toBe('none')
       break
     }
   }
   const cta = seen.indexOf(ctaHref)
   const release = seen.indexOf(releaseFirst ?? '', cta + 1)
-  const title = seen.indexOf('/work/local-email-client')
+  const title = seen.indexOf('/work/the-abyss')
   expect(cta, `CTA em ${seen.join(' ')}`).toBeGreaterThanOrEqual(0)
   expect(release, 'Release depois do CTA').toBeGreaterThan(cta)
   expect(title, 'título depois do Release').toBeGreaterThan(release)

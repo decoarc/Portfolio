@@ -213,16 +213,14 @@ test.describe('alto contraste do Windows (forced-colors: active)', () => {
   })
 
   test('o foco de teclado aparece', async ({ page }) => {
-    await page.locator('#work-local-email-client a[data-anchor-focus]').focus()
+    await page.locator('#work-the-abyss a[data-anchor-focus]').focus()
     await page.keyboard.press('Shift+Tab')
     await page.keyboard.press('Tab')
     expect(await line(page, ':focus-visible', 'outline')).toBe('ok')
   })
 
   test('os filetes da lista de trabalhos aparecem', async ({ page }) => {
-    expect(await line(page, '#work-local-email-client', 'border-top')).toBe(
-      'ok',
-    )
+    expect(await line(page, '#work-the-abyss', 'border-top')).toBe('ok')
   })
 
   test('o placeholder "sem captura" tem moldura', async ({ page }) => {
@@ -230,7 +228,7 @@ test.describe('alto contraste do Windows (forced-colors: active)', () => {
     expect(
       await line(
         page,
-        '#work-local-email-client [aria-hidden="true"]:has(> [data-motion="thumb"])',
+        '#work-the-abyss [aria-hidden="true"]:has(> [data-motion="thumb"])',
         'border-top',
       ),
     ).toBe('ok')
@@ -293,8 +291,8 @@ test.describe('reduced motion ligado no meio da sessão', () => {
     await expect(
       page.locator('[data-entrance]:not([data-entrance="done"])'),
     ).toHaveCount(0)
-    await page.locator('#work-local-email-client a[data-anchor-focus]').click()
-    await expect(page).toHaveURL(/\/work\/local-email-client$/)
+    await page.locator('#work-the-abyss a[data-anchor-focus]').click()
+    await expect(page).toHaveURL(/\/work\/the-abyss$/)
     await expect.poll(async () => (await flight(page)).length).toBe(0)
 
     await page.emulateMedia({ reducedMotion: 'reduce' })

@@ -72,8 +72,8 @@ test.describe('sem preferência de movimento', () => {
   }) => {
     await page.goto('/#about')
     expect(await settledScrollY(page)).toBeGreaterThan(0)
-    await page.getByRole('link', { name: /Local Email Client/ }).click()
-    await expect(page).toHaveURL(/\/work\/local-email-client$/)
+    await page.getByRole('link', { name: /The Abyss/ }).click()
+    await expect(page).toHaveURL(/\/work\/the-abyss$/)
     await expect.poll(() => settledScrollY(page)).toBe(0)
   })
 })

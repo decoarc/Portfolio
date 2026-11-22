@@ -6,8 +6,8 @@ import { theAbyss } from './the-abyss.ts'
 
 /** Mesma ordem de `en/projects/index.ts`; o teste de paridade confere. */
 export const projectsPt: Project[] = [
+  portfolio,
   theAbyss,
   mapAreas,
   localEmailClient,
-  portfolio,
 ]
