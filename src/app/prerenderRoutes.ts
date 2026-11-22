@@ -22,7 +22,7 @@ function fileFor(url: string): string {
 }
 
 /**
- * A lista sai do conteúdo: home e 404 de cada locale, mais o case de todo
+ * A lista sai do conteúdo: home, galeria e 404 de cada locale, mais o case de todo
  * projeto com `caseStudyAccess !== 'none'` (rascunho não gera arquivo).
  * Sem React nem DOM: o e2e e o `scripts/prerender.ts` importam no Node.
  */
@@ -36,6 +36,13 @@ export function prerenderRoutes(
       key: { locale, page: 'home' },
       url: home,
       file: fileFor(home),
+    })
+
+    const gallery = localePath(locale, '/projects')
+    routes.push({
+      key: { locale, page: 'projects' },
+      url: gallery,
+      file: fileFor(gallery),
     })
 
     for (const project of content[locale].projects) {

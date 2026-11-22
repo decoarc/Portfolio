@@ -130,7 +130,22 @@ export interface SiteContent {
     education: EducationItem[]
   }
   tools: { label: string; groups: ToolGroup[] }
-  work: { label: string; intro: string; previewNote: string; noCapture: string }
+  work: {
+    label: string
+    intro: string
+    previewNote: string
+    noCapture: string
+    /** Link da home para a galeria com todos os projetos. */
+    viewAll: string
+  }
+  /** Página `/projects`: a galeria com todos os projetos. */
+  gallery: {
+    title: string
+    intro: string
+    /** `description` do `<head>` da galeria. */
+    description: string
+    backToHome: string
+  }
   approach: { label: string; intro: string; items: ApproachItem[] }
   about: { label: string; lead: string; body: string }
   interests: { label: string; items: string[] }

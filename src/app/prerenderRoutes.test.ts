@@ -12,6 +12,9 @@ describe('prerenderRoutes', () => {
       expect.arrayContaining([
         ['/', 'index.html'],
         ['/pt', 'pt.html'],
+        ['/projects', 'projects.html'],
+        ['/pt/projects', 'pt/projects.html'],
+        ['/work/the-abyss', 'work/the-abyss.html'],
         ['/work/map-areas', 'work/map-areas.html'],
         ['/pt/work/map-areas', 'pt/work/map-areas.html'],
         ['/nao-encontrada', '404.html'],
@@ -21,6 +24,10 @@ describe('prerenderRoutes', () => {
     expect(routes.find((r) => r.file === 'pt.html')?.key).toEqual({
       locale: 'pt',
       page: 'home',
+    })
+    expect(routes.find((r) => r.file === 'pt/projects.html')?.key).toEqual({
+      locale: 'pt',
+      page: 'projects',
     })
     expect(routes.find((r) => r.file === 'pt/404.html')?.key).toEqual({
       locale: 'pt',

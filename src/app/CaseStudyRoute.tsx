@@ -2,13 +2,12 @@ import { Link, useParams } from 'react-router'
 import { ExternalLink } from '../components/ExternalLink/ExternalLink.tsx'
 import { Sheet } from '../components/Sheet/Sheet.tsx'
 import {
+  caseBackHref,
   caseStudyAccess,
   findProject,
-  workAnchor,
 } from '../content/publication.ts'
 import type { Locale } from '../content/types.ts'
 import { assetUrl } from '../lib/basePath.ts'
-import { localePath } from '../lib/locale.ts'
 import { canFly, markTitleFlight } from '../motion/titleFlight.ts'
 import styles from './CaseStudyRoute.module.css'
 import { INSTANT_SCROLL } from './navigationState.ts'
@@ -41,7 +40,7 @@ export function CaseStudyRoute() {
     <Sheet tone="sheet" labelledBy={HEADING_ID} className={styles.page}>
       <CaseHead locale={locale} slug={project.slug} />
       <Link
-        to={localePath(locale, `/#${workAnchor(project.slug)}`)}
+        to={caseBackHref(locale, projects, project.slug)}
         state={INSTANT_SCROLL}
         className={styles.back}
         // Só o case com ficha clicável volta voando: a do preview não tem

@@ -3,10 +3,12 @@ import { CaseStudyRoute } from './CaseStudyRoute.tsx'
 import { HomeRoute } from './HomeRoute.tsx'
 import { LocaleLayout } from './LocaleLayout.tsx'
 import { NotFoundRoute } from './NotFoundRoute.tsx'
+import { ProjectsRoute } from './ProjectsRoute.tsx'
 
 function children(): RouteObject[] {
   return [
     { index: true, element: <HomeRoute /> },
+    { path: 'projects', element: <ProjectsRoute /> },
     { path: 'work/:slug', element: <CaseStudyRoute /> },
     { path: '*', element: <NotFoundRoute /> },
   ]

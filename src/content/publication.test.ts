@@ -1,8 +1,11 @@
 import { describe, expect, it } from 'vitest'
 import {
+  caseBackHref,
   caseStudyAccess,
   caseStudyHref,
   findProject,
+  galleryHref,
+  homeProjects,
   isValidSlug,
   listProjects,
   workAnchor,
@@ -46,6 +49,38 @@ describe('listProjects', () => {
     const b = project({ slug: 'b', status: 'draft' })
     const c = project({ slug: 'c', status: 'published' })
     expect(listProjects([a, b, c])).toEqual([a, c])
+  })
+})
+
+describe('homeProjects', () => {
+  it('os 3 primeiros, sem rascunho, na ordem', () => {
+    const [a, b, c, d, e] = ['a', 'b', 'c', 'd', 'e'].map((slug) =>
+      project({ slug }),
+    )
+    const draft = project({ slug: 'x', status: 'draft' })
+    expect(homeProjects([a, draft, b, c, d, e])).toEqual([a, b, c])
+    expect(homeProjects([a, b])).toEqual([a, b])
+  })
+})
+
+describe('galleryHref', () => {
+  it('é /projects em cada locale', () => {
+    expect(galleryHref('en')).toBe('/projects')
+    expect(galleryHref('pt')).toBe('/pt/projects')
+  })
+})
+
+describe('caseBackHref', () => {
+  const list = ['a', 'b', 'c', 'd'].map((slug) => project({ slug }))
+
+  it('projeto da home volta para a ficha na home', () => {
+    expect(caseBackHref('en', list, 'b')).toBe('/#work-b')
+    expect(caseBackHref('pt', list, 'b')).toBe('/pt#work-b')
+  })
+
+  it('projeto só da galeria volta para o cartão na galeria', () => {
+    expect(caseBackHref('en', list, 'd')).toBe('/projects#work-d')
+    expect(caseBackHref('pt', list, 'd')).toBe('/pt/projects#work-d')
   })
 })
 

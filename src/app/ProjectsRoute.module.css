@@ -1,0 +1,81 @@
+/* A galeria: o mesmo "Voltar" do case study, o título grande e os cartões
+   numa grade que vai de uma coluna (celular) a três (desktop largo). */
+
+.page {
+  --sheet-pad-block-start: clamp(32px, 6vh, 64px);
+}
+
+.back {
+  display: inline-block;
+  margin-bottom: clamp(32px, 6vh, 64px);
+  font-family: var(--font-mono);
+  font-size: var(--text-meta);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.back::before {
+  content: '\2190';
+  content: '\2190' / '';
+  margin-right: 0.6em;
+}
+
+.back:hover {
+  text-decoration-line: underline;
+  text-underline-offset: 3px;
+}
+
+.head {
+  display: grid;
+  /* A coluna não cresce além do bloco: com texto a 200% em 320 px, a palavra
+     longa do título alargava a trilha e levava a introdução junto para fora
+     da tela (WCAG 1.4.4, 1.4.10). */
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+  padding-bottom: clamp(32px, 6vh, 56px);
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-variation-settings: var(--fraunces-title);
+  font-weight: 600;
+  font-size: min(var(--text-display), 6rem);
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  overflow-wrap: anywhere;
+}
+
+/* Recebe o foco ao abrir a página; mesma regra do `main:focus`. */
+.title:focus {
+  outline: none;
+}
+
+.intro {
+  margin: 0;
+  max-width: 48ch;
+  color: var(--ink-muted);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(40px, 6vh, 56px) clamp(24px, 3vw, 40px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 640px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1100px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

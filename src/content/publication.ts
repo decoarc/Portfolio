@@ -12,6 +12,35 @@ export function listProjects(projects: Project[]): Project[] {
   return projects.filter((project) => project.status !== 'draft')
 }
 
+/** Quantos projetos a lista da home mostra; a galeria mostra todos. */
+export const HOME_PROJECT_LIMIT = 3
+
+/** Os primeiros da lista (sem rascunhos), na ordem do conteúdo. */
+export function homeProjects(projects: Project[]): Project[] {
+  return listProjects(projects).slice(0, HOME_PROJECT_LIMIT)
+}
+
+/** A galeria com todos os projetos: `/projects` e `/pt/projects`. */
+export function galleryHref(locale: Locale): string {
+  return localePath(locale, '/projects')
+}
+
+/**
+ * Para onde o "Voltar" de um case leva: a ficha na home quando o projeto está
+ * entre os da home, senão o cartão dele na galeria. Depende só do conteúdo,
+ * para o HTML pré-renderizado e a hidratação concordarem.
+ */
+export function caseBackHref(
+  locale: Locale,
+  projects: Project[],
+  slug: string,
+): string {
+  const onHome = homeProjects(projects).some((p) => p.slug === slug)
+  return onHome
+    ? localePath(locale, `/#${workAnchor(slug)}`)
+    : `${galleryHref(locale)}#${workAnchor(slug)}`
+}
+
 export function caseStudyAccess(
   project: Project | undefined,
 ): 'full' | 'preview' | 'none' {

@@ -1,11 +1,11 @@
 import type { CSSProperties } from 'react'
 import type { Project, SiteContent } from '../../content/types.ts'
-import { listProjects } from '../../content/publication.ts'
+import { homeProjects } from '../../content/publication.ts'
 import { ProjectThumb } from '../ProjectThumb/ProjectThumb.tsx'
 import styles from './CoverStrip.module.css'
 
 interface CoverStripProps {
-  /** Todos os projetos do locale; rascunhos saem como na lista. */
+  /** Todos os projetos do locale; a tira mostra os mesmos da lista da home. */
   projects: Project[]
   labels: {
     projectType: SiteContent['projectType']
@@ -25,7 +25,7 @@ const TILTS = [-4, 2, -1, 3]
 export function CoverStrip({ projects, labels }: CoverStripProps) {
   return (
     <span className={styles.strip}>
-      {listProjects(projects).map((project, position) => (
+      {homeProjects(projects).map((project, position) => (
         <span
           key={project.slug}
           className={styles.cover}

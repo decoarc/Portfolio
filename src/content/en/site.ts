@@ -125,6 +125,14 @@ export const siteEn: SiteContent = {
     intro: 'Verified work or concept study.',
     previewNote: 'Case study soon',
     noCapture: 'no capture',
+    viewAll: 'View all',
+  },
+  gallery: {
+    title: 'Personal projects',
+    intro: 'Every project in the archive: verified work or concept study.',
+    description:
+      'All personal projects of André Arcodaci, a full stack developer in Brazil, with case studies of verified work.',
+    backToHome: 'Back to home',
   },
   approach: {
     label: 'Approach',

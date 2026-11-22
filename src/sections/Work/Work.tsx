@@ -1,8 +1,13 @@
 import { useEffect, useLayoutEffect, useState } from 'react'
-import { useLocation, useNavigationType } from 'react-router'
+import { Link, useLocation, useNavigationType } from 'react-router'
 import { wantsInstantScroll } from '../../app/navigationState.ts'
 import type { Locale, Project, SiteContent } from '../../content/types.ts'
-import { caseStudyHref, listProjects } from '../../content/publication.ts'
+import {
+  caseStudyHref,
+  galleryHref,
+  homeProjects,
+  listProjects,
+} from '../../content/publication.ts'
 import { ProjectSlip } from '../../components/ProjectSlip/ProjectSlip.tsx'
 import { SectionHead } from '../../components/SectionHead/SectionHead.tsx'
 import { Sheet } from '../../components/Sheet/Sheet.tsx'
@@ -12,7 +17,10 @@ interface WorkProps {
   /** Posição da seção na home: o mesmo número do índice. */
   index: number
   copy: SiteContent['work']
-  /** Todos os projetos do locale; rascunhos são removidos aqui. */
+  /**
+   * Todos os projetos do locale; rascunhos são removidos aqui. A lista mostra
+   * os primeiros (`homeProjects`) e linka para a galeria com todos.
+   */
   projects: Project[]
   locale: Locale
   labels: {
@@ -53,6 +61,7 @@ export function Work({ index, copy, projects, locale, labels }: WorkProps) {
     }
   }, [settling])
 
+  const total = listProjects(projects).length
   return (
     <Sheet
       tone="sheet"
@@ -67,7 +76,7 @@ export function Work({ index, copy, projects, locale, labels }: WorkProps) {
         intro={copy.intro}
       />
       <ol className={styles.list} data-settling={settling || undefined}>
-        {listProjects(projects).map((project, position) => (
+        {homeProjects(projects).map((project, position) => (
           <ProjectSlip
             key={project.slug}
             project={project}
@@ -82,6 +91,14 @@ export function Work({ index, copy, projects, locale, labels }: WorkProps) {
           />
         ))}
       </ol>
+      <p className={styles.more}>
+        <Link to={galleryHref(locale)} className={styles.viewAll}>
+          {copy.viewAll}
+          <span className={styles.count} aria-hidden="true">
+            {String(total).padStart(2, '0')}
+          </span>
+        </Link>
+      </p>
     </Sheet>
   )
 }

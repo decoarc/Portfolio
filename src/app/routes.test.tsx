@@ -97,6 +97,21 @@ describe('rotas por locale', () => {
     expect(fromSections).toEqual(fromIndex)
   })
 
+  it.each([
+    ['/projects', 'Personal projects', 'en'],
+    ['/pt/projects', 'Projetos pessoais', 'pt-BR'],
+  ])(
+    '%s é a galeria, com h1 e um cartão por projeto',
+    async (url, title, lang) => {
+      renderAt(url)
+      expect(
+        await screen.findByRole('heading', { level: 1, name: title }),
+      ).toBeVisible()
+      expect(document.documentElement.lang).toBe(lang)
+      expect(screen.getAllByRole('listitem')).toHaveLength(4)
+    },
+  )
+
   it('/ fecha com o rodapé do shell', async () => {
     renderAt('/')
     const footer = await screen.findByRole('contentinfo')
@@ -146,6 +161,8 @@ describe('head por rota na navegação', () => {
   it.each([
     ['/', 'André Arcodaci — Full Stack Developer'],
     ['/work/local-email-client', 'Local Email Client — André Arcodaci'],
+    ['/projects', 'Personal projects — André Arcodaci'],
+    ['/pt/projects', 'Projetos pessoais — André Arcodaci'],
     ['/nada', 'Page not found — André Arcodaci'],
   ])('%s deixa um só <title> no documento', async (url, title) => {
     renderAt(url)
@@ -167,7 +184,7 @@ describe('rotas sem <title> próprio', () => {
   }) as Record<string, string>
 
   it('nenhum componente de rota declara <title>', () => {
-    expect(Object.keys(sources)).toHaveLength(3)
+    expect(Object.keys(sources)).toHaveLength(4)
     for (const [file, source] of Object.entries(sources)) {
       expect(source, file).not.toMatch(/<title[\s>]/)
     }

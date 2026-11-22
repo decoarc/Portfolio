@@ -9,6 +9,7 @@ import { localePath } from '../lib/locale.ts'
 
 export type RouteKey =
   | { locale: Locale; page: 'home' }
+  | { locale: Locale; page: 'projects' }
   | { locale: Locale; page: 'case'; slug: string }
   | { locale: Locale; page: 'notFound' }
 
@@ -59,6 +60,12 @@ export function routeHead(
   let description = site.meta.description
   let ogType: 'website' | 'article' = 'website'
   const imagePath = `/og/home-${locale}.png`
+
+  if (key.page === 'projects') {
+    path = '/projects'
+    title = `${site.gallery.title}${site.meta.titleSuffix}`
+    description = site.gallery.description
+  }
 
   if (key.page === 'case') {
     const project = findProject(projects, key.slug)

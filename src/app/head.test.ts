@@ -47,6 +47,25 @@ describe('routeHead', () => {
     expect(cs.og?.type).toBe('article')
   })
 
+  it('galeria PT: título, descrição, canonical e alternates em /projects', () => {
+    const gallery = routeHead(
+      { locale: 'pt', page: 'projects' },
+      contentByLocale,
+      origin,
+    )
+    expect(gallery.title).toBe(
+      `${sitePt.gallery.title}${sitePt.meta.titleSuffix}`,
+    )
+    expect(gallery.description).toBe(sitePt.gallery.description)
+    expect(gallery.canonical).toBe('https://x.dev/pt/projects')
+    expect(gallery.alternates).toEqual([
+      { hreflang: 'en', href: 'https://x.dev/projects' },
+      { hreflang: 'pt-BR', href: 'https://x.dev/pt/projects' },
+      { hreflang: 'x-default', href: 'https://x.dev/projects' },
+    ])
+    expect(gallery.og?.type).toBe('website')
+  })
+
   it('404: noindex, sem canonical, alternates nem OG', () => {
     const nf = routeHead(
       { locale: 'en', page: 'notFound' },

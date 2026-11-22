@@ -122,6 +122,15 @@ export const sitePt: SiteContent = {
     intro: 'Trabalho verificado ou estudo conceitual.',
     previewNote: 'Estudo de caso em breve',
     noCapture: 'sem captura',
+    viewAll: 'Ver todos',
+  },
+  gallery: {
+    title: 'Projetos pessoais',
+    intro:
+      'Todos os projetos do arquivo: trabalho verificado ou estudo conceitual.',
+    description:
+      'Todos os projetos pessoais de André Arcodaci, desenvolvedor full stack no Brasil, com case studies de trabalhos verificados.',
+    backToHome: 'Voltar ao início',
   },
   approach: {
     label: 'Abordagem',

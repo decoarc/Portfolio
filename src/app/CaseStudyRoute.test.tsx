@@ -137,6 +137,24 @@ describe('case study', () => {
     ).toHaveAttribute('href', '/#work-map-areas')
   })
 
+  it('/work/portfolio (fora da home): volta para o cartão na galeria', async () => {
+    renderAt('/work/portfolio')
+    expect(
+      await screen.findByRole('link', {
+        name: contentByLocale.en.site.caseStudy.backToWork,
+      }),
+    ).toHaveAttribute('href', '/projects#work-portfolio')
+  })
+
+  it('/pt/work/the-abyss: volta para a ficha em /pt', async () => {
+    renderAt('/pt/work/the-abyss')
+    expect(
+      await screen.findByRole('link', {
+        name: contentByLocale.pt.site.caseStudy.backToWork,
+      }),
+    ).toHaveAttribute('href', '/pt#work-the-abyss')
+  })
+
   it('/pt/work/local-email-client: volta para a ficha em /pt', async () => {
     renderAt('/pt/work/local-email-client')
     expect(

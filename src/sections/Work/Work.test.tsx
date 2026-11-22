@@ -86,12 +86,36 @@ describe('Work', () => {
     expect(section).toHaveAttribute('id', 'work')
   })
 
-  it.each([2, 8])('com %i projetos, numera de 01 até o total', (count) => {
+  it.each([2, 3])('com %i projetos, numera de 01 até o total', (count) => {
     renderWork(makeProjects(count))
     expect(screen.getAllByRole('listitem')).toHaveLength(count)
     expect(slipNumbers()).toEqual(
       Array.from({ length: count }, (_, i) => String(i + 1).padStart(2, '0')),
     )
+  })
+
+  it('com mais de 3 projetos, mostra só os 3 primeiros', () => {
+    renderWork(makeProjects(8))
+    expect(slipNumbers()).toEqual(['01', '02', '03'])
+    expect(screen.queryByText('Projeto 4')).toBeNull()
+  })
+
+  it('"View all" leva à galeria e mostra o total, rascunho fora', () => {
+    const projects = [
+      ...makeProjects(5),
+      ...makeProjects(1, { slug: 'rascunho', status: 'draft' }),
+    ]
+    renderWork(projects)
+    const link = screen.getByRole('link', { name: siteEn.work.viewAll })
+    expect(link).toHaveAttribute('href', '/projects')
+    expect(link).toHaveTextContent('05')
+  })
+
+  it('em pt, "Ver todos" leva a /pt/projects', () => {
+    renderWork(makeProjects(4), 'pt', sitePt)
+    expect(
+      screen.getByRole('link', { name: sitePt.work.viewAll }),
+    ).toHaveAttribute('href', '/pt/projects')
   })
 
   it('rascunho não aparece', () => {

@@ -13,7 +13,10 @@ import { pathToFileURL } from 'node:url'
 import { buildHeaders, scriptHash } from './headers.ts'
 
 type Locale = 'en' | 'pt'
-type RouteKey = { locale: Locale; page: 'home' | 'case' | 'notFound' }
+type RouteKey = {
+  locale: Locale
+  page: 'home' | 'projects' | 'case' | 'notFound'
+}
 
 /** Forma do bundle `dist-ssr/entry-server.js` (ver `src/entry-server.tsx`). */
 interface ServerEntry {

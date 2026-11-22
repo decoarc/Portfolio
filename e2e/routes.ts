@@ -2,6 +2,8 @@
 export const GATE_ROUTES = [
   '/',
   '/pt',
+  '/projects',
+  '/pt/projects',
   '/work/local-email-client',
   '/pt/work/map-areas',
   '/nao-existe',
